@@ -20,3 +20,7 @@ npm run dev
 - Tema, intereses y favoritos se guardan localmente bajo `cuicoyan:v1`; no se almacenan datos personales.
 - Los formularios de participación permanecen pendientes hasta configurar un canal externo aprobado mediante `.env`.
 - Las rutas tienen `noindex,nofollow` mientras se verifica contenido, derechos y textos legales.
+
+## Publicación actual
+
+La fuente permanece en el repositorio privado `fershopool/cuicoyan-web`. La copia estática publicada se mantiene en [cuicoyan-site](https://github.com/fershopool/cuicoyan-site) y se sirve en [fershopool.github.io/cuicoyan-site](https://fershopool.github.io/cuicoyan-site/).
