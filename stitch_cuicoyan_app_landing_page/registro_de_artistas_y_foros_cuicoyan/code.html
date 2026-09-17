@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-fixed-dim": "#63d7e1",
+          "dark-blue": "#24C8EF",
+          "surface": "#FFFFFF",
+          "on-secondary-container": "#006e75",
+          "error": "#ba1a1a",
+          "text-secondary": "#5F6273",
+          "brand-gradient-end": "#00C7D4",
+          "inverse-primary": "#ffb2be",
+          "discipline-huapango": "#009BA5",
+          "primary-container": "#e40e5f",
+          "on-tertiary": "#ffffff",
+          "on-secondary-fixed-variant": "#004f54",
+          "on-surface": "#161a33",
+          "on-tertiary-container": "#fffbff",
+          "on-error": "#ffffff",
+          "primary": "#b8004a",
+          "inverse-on-surface": "#f0efff",
+          "on-primary-container": "#fffbff",
+          "on-background": "#161a33",
+          "on-primary-fixed": "#400014",
+          "on-tertiary-fixed-variant": "#753400",
+          "cultural-surface": "#FFF7EE",
+          "dark-border": "#292540",
+          "error-container": "#ffdad6",
+          "dark-red": "#FF506F",
+          "surface-container": "#edecff",
+          "dark-text": "#F9F7FC",
+          "surface-container-highest": "#dee0ff",
+          "primary-fixed-dim": "#ffb2be",
+          "surface-container-low": "#f4f2ff",
+          "dark-background": "#080817",
+          "status-jade": "#008F70",
+          "outline-variant": "#e4bdc2",
+          "on-primary": "#ffffff",
+          "dark-orange": "#FF9D2E",
+          "surface-container-high": "#e6e6ff",
+          "inverse-surface": "#2b2f49",
+          "on-error-container": "#93000a",
+          "background": "#fbf8ff",
+          "secondary-fixed": "#82f3fe",
+          "discipline-teatro": "#D62650",
+          "dark-primary": "#FF3D8D",
+          "dark-surface": "#101126",
+          "secondary": "#006970",
+          "dark-text-secondary": "#B6B2C2",
+          "brand-gradient-mid": "#8A3FFC",
+          "surface-tint": "#bc004c",
+          "tertiary-fixed": "#ffdbc8",
+          "surface-container-lowest": "#ffffff",
+          "dark-surface-raised": "#1D1735",
+          "primary-fixed": "#ffd9de",
+          "on-tertiary-fixed": "#321200",
+          "discipline-musica": "#008EB5",
+          "tertiary-fixed-dim": "#ffb68b",
+          "discipline-talleres": "#E91662",
+          "on-secondary": "#ffffff",
+          "outline": "#906f73",
+          "surface-variant": "#dee0ff",
+          "dark-cyan": "#17E0E4",
+          "on-primary-fixed-variant": "#900038",
+          "discipline-fandango": "#E96F00",
+          "surface-alt": "#FFF3F6",
+          "dark-purple": "#B45CFF",
+          "dark-green": "#20D5A7",
+          "surface-bright": "#fbf8ff",
+          "tertiary-container": "#bb5800",
+          "surface-dim": "#d5d8fa",
+          "dark-surface-alt": "#16132B",
+          "on-surface-variant": "#5c3f44",
+          "border-hairline": "#ECE4E7",
+          "brand-gradient-start": "#F21F6D",
+          "secondary-container": "#7ff1fb",
+          "on-secondary-fixed": "#002022",
+          "discipline-danza": "#7936D2",
+          "tertiary": "#954500"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-sm": "0.75rem",
+          "gutter-desktop": "5rem",
+          "space-2xs": "0.25rem",
+          "space-3xl": "4.5rem",
+          "space-lg": "1.5rem",
+          "space-2xl": "3rem",
+          "gutter-tablet": "2.5rem",
+          "space-4xl": "7rem",
+          "space-xl": "2rem",
+          "margin-desktop": "5rem",
+          "space-md": "1rem",
+          "margin-tablet": "2.5rem",
+          "gutter": "1.25rem",
+          "space-xs": "0.5rem",
+          "margin": "1.25rem"
+        },
+        "fontFamily": {
+          "display-hero": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "display-hero-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-md": [
+            "Manrope"
+          ],
+          "headline-lg-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-eyebrow": [
+            "Manrope"
+          ],
+          "headline-lg": [
+            "Bricolage Grotesque"
+          ],
+          "body-lg": [
+            "Manrope"
+          ],
+          "body-md": [
+            "Manrope"
+          ],
+          "body-sm": [
+            "Manrope"
+          ],
+          "headline-md-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "headline-md": [
+            "Bricolage Grotesque"
+          ],
+          "title-card": [
+            "Bricolage Grotesque"
+          ],
+          "label-lg": [
+            "Manrope"
+          ]
+        },
+        "fontSize": {
+          "display-hero": [
+            "72px",
+            {
+              "lineHeight": "76px",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "800"
+            }
+          ],
+          "headline-sm": [
+            "28px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-sm-mobile": [
+            "24px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "0em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-hero-mobile": [
+            "42px",
+            {
+              "lineHeight": "46px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "800"
+            }
+          ],
+          "label-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "36px",
+            {
+              "lineHeight": "42px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-eyebrow": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.08em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-lg": [
+            "56px",
+            {
+              "lineHeight": "62px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "20px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "16px",
+            {
+              "lineHeight": "26px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "letterSpacing": "0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md-mobile": [
+            "30px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "44px",
+            {
+              "lineHeight": "50px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "title-card": [
+            "22px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-lg": [
+            "16px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface antialiased transition-colors duration-200"><a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-space-md focus:py-space-xs focus:bg-primary focus:text-on-primary focus:rounded-xl focus:shadow-lg focus:outline-none font-label-md text-label-md" href="#main-content">Saltar al contenido</a><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 dark:bg-dark-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-colors duration-200"><div class="h-20 max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-xl"><a class="flex items-center gap-space-xs group focus:outline-none" data-path="inicio" href="#"><img alt="Logo.png" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><div class="flex flex-col"><span class="font-headline-sm text-title-card tracking-tight text-primary leading-none">Cuicoyan</span><span class="font-label-eyebrow text-[10px] tracking-widest uppercase text-text-secondary leading-tight">Cultura Viva CDMX</span></div></a><nav class="hidden xl:flex items-center gap-space-md" data-active-classes="text-primary font-bold"><a aria-current="page" class="transition-colors py-space-2xs text-primary font-bold" data-path="inicio" href="#">Inicio</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="explorar" href="#">Explorar</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="eventos" href="#">Eventos</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="artistas" href="#">Artistas</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="foros" href="#">Foros</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="mapa-cultural" href="#">Mapa</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="para-creadores" href="#para-creadores">Para creadores</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a></nav></div><div class="flex items-center gap-space-xs sm:gap-space-sm"><div class="relative hidden md:block w-44 lg:w-56"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px] pointer-events-none">search</span><input aria-label="Buscar contenido cultural" class="w-full h-10 pl-9 pr-3 rounded-xl bg-surface-container-lowest text-on-surface placeholder:text-text-secondary font-body-sm text-body-sm shadow-[0_1px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar talleres, sones, foros..." type="search"/></div><button aria-label="Alternar modo visual claro u oscuro" class="h-10 w-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors focus:outline-none" onclick="document.documentElement.classList.toggle('dark')" type="button"><span class="material-symbols-outlined text-[20px] dark:hidden">dark_mode</span><span class="material-symbols-outlined text-[20px] hidden dark:inline-block">light_mode</span></button><a class="inline-flex items-center justify-center px-space-md h-10 rounded-xl bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-all shadow-[0_4px_16px_rgba(184,0,74,0.18)] hover:scale-[1.02] active:scale-[0.98]" data-path="unete" href="#">Únete a Cuicoyan</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background transition-colors duration-200" id="main-content"><div class="flex flex-col w-full">
+<!-- Top Stepper & Progress Sub-bar -->
+<section class="w-full bg-surface shadow-sm">
+<div class="max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop py-space-sm flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-eyebrow text-label-eyebrow text-primary uppercase tracking-wider">Convocatoria Activa · Registro 2025</span>
+<span class="font-label-md text-label-md text-on-surface">Paso 3 de 4 · Perfil Artístico y Disciplinas</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="inline-flex items-center gap-1.5 px-space-sm py-1.5 rounded-xl bg-surface-container-low text-text-secondary hover:text-on-surface hover:bg-surface-container font-label-md text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+            Guardar borrador
+          </button>
+<button class="inline-flex items-center gap-1.5 px-space-sm py-1.5 rounded-xl text-text-secondary hover:text-error hover:bg-error-container/40 font-label-md text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+            Cancelar
+          </button>
+</div>
+</div>
+<!-- Linear Multi-stop Progress Gradient -->
+<div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+<div class="h-full w-3/4 rounded-full bg-gradient-to-r from-brand-gradient-start via-brand-gradient-mid to-brand-gradient-end transition-all duration-500"></div>
+</div>
+</div>
+</section>
+<!-- Main Registration Canvas -->
+<div class="w-full max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop py-space-xl">
+<!-- Editorial Header Block -->
+<header class="max-w-3xl mb-space-2xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary mb-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-eyebrow text-label-eyebrow tracking-widest uppercase">CONECTA TU PROYECTO CON LA CIUDAD</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-space-xs tracking-tight">
+        Súmate a la red cultural de Cuicoyan
+      </h1>
+<p class="font-body-lg text-body-lg text-text-secondary">
+        Completa tu información para crear tu perfil oficial, aparecer en el mapa cultural geolocalizado de CDMX y sincronizar tus próximas fechas con nuestro público y recintos independientes.
+      </p>
+</header>
+<!-- Role Switcher -->
+<section class="mb-space-2xl">
+<label class="font-label-lg text-label-lg text-on-surface block mb-space-sm">Tipo de registro cultural</label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md" id="role-selector">
+<!-- Role 1: Selected -->
+<div class="relative p-space-lg rounded-2xl bg-surface-alt shadow-sm cursor-pointer transition-all hover:scale-[1.01] flex items-start justify-between gap-space-md" id="role-artist">
+<div class="flex items-start gap-space-md">
+<div class="w-14 h-14 rounded-2xl bg-primary text-on-primary flex items-center justify-center flex-shrink-0 shadow-md">
+<span class="material-symbols-outlined text-[30px]">local_florist</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="font-title-card text-title-card text-on-surface">Artista o Colectivo Escénico</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary text-on-primary font-label-eyebrow text-label-eyebrow">Activo</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">
+                Para jaraneros, huapangueros, compañías teatrales, músicos, danzantes y creadores itinerantes sin foro fijo.
+              </p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<!-- Role 2: Unselected -->
+<div class="relative p-space-lg rounded-2xl bg-surface hover:bg-surface-container-low shadow-sm cursor-pointer transition-all hover:scale-[1.01] flex items-start justify-between gap-space-md" id="role-venue">
+<div class="flex items-start gap-space-md">
+<div class="w-14 h-14 rounded-2xl bg-surface-container text-text-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[30px]">storefront</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="font-title-card text-title-card text-on-surface">Foro, Teatro o Espacio Cultural</h3>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-surface-container text-text-secondary font-label-eyebrow text-label-eyebrow">Espacio Físico</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">
+                Para centros comunitarios, pulquerías tradicionales, foros independientes, galerías y cafés con tarima.
+              </p>
+</div>
+</div>
+<div class="w-6 h-6 rounded-full bg-surface-container text-text-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Two-Column Workspace Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- LEFT COLUMN: Multi-section Progressive Form (7 cols) -->
+<form class="lg:col-span-7 flex flex-col gap-space-xl" onsubmit="event.preventDefault();">
+<!-- SECTION A: Contact & Entity Data -->
+<div class="bg-surface rounded-2xl p-space-lg md:p-space-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center gap-space-sm pb-space-xs">
+<div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-headline-sm text-title-card">1</div>
+<div>
+<h2 class="font-title-card text-title-card text-on-surface">Datos Generales y de Contacto</h2>
+<p class="font-body-sm text-body-sm text-text-secondary">Información visible para la coordinación de eventos y contacto comunitario.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="md:col-span-2 flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="project-name">Nombre del proyecto, agrupación o artista *</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">theater_comedy</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" id="project-name" placeholder="Ej. Son de Maíz, Raíces del Viento" type="text" value="Luna Mestiza &amp; Ensamble"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="rep-name">Nombre de enlace / representante *</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">person_outline</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" id="rep-name" placeholder="Nombre completo" type="text" value="Xóchitl Morales"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="email">Correo electrónico profesional *</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">mail</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" id="email" placeholder="ejemplo@dominio.mx" type="email" value="contacto@lunamestiza.art"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="phone">Teléfono / WhatsApp de gestión</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">phone_iphone</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" id="phone" placeholder="+52 55..." type="tel" value="+52 55 4912 8831"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="social-ig">Instagram (@cuenta)</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">alternate_email</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" id="social-ig" placeholder="@tu_cuenta" type="text" value="@lunamestiza_cdmx"/>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION B: Territorial Location in CDMX -->
+<div class="bg-surface rounded-2xl p-space-lg md:p-space-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center gap-space-sm pb-space-xs">
+<div class="w-9 h-9 rounded-xl bg-discipline-fandango/15 text-discipline-fandango flex items-center justify-center font-headline-sm text-title-card">2</div>
+<div>
+<h2 class="font-title-card text-title-card text-on-surface">Territorio y Sede en Ciudad de México</h2>
+<p class="font-body-sm text-body-sm text-text-secondary">Permite a los asistentes ubicarte por cercanía y barrio cultural.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="alcaldia">Alcaldía principal de actividad *</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">location_city</span>
+<select class="w-full h-12 pl-11 pr-8 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary appearance-none shadow-inner" id="alcaldia">
+<option selected="" value="cuauhtemoc">Cuauhtémoc</option>
+<option value="coyoacan">Coyoacán</option>
+<option value="benito-juarez">Benito Juárez</option>
+<option value="tlalpan">Tlalpan</option>
+<option value="xochimilco">Xochimilco</option>
+<option value="miguel-hidalgo">Miguel Hidalgo</option>
+<option value="iztapalapa">Iztapalapa</option>
+<option value="gustavo-a-madero">Gustavo A. Madero</option>
+</select>
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface" for="barrio">Barrio, Colonia o Pueblo Originario</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-text-secondary text-[20px]">pin_drop</span>
+<input class="w-full h-12 pl-11 pr-4 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" id="barrio" placeholder="Ej. Santa María la Ribera, San Ángel" type="text" value="Roma Norte"/>
+</div>
+</div>
+<!-- Radio Physical Stage Presence -->
+<div class="md:col-span-2 p-space-md rounded-xl bg-cultural-surface flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-discipline-fandango text-[22px]">domain</span>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">¿Cuentas con foro o espacio físico abierto a público?</h4>
+<p class="font-body-sm text-body-sm text-text-secondary">Si activas esto, tu espacio aparecerá con pin permanente en el mapa vivo.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs bg-surface p-1 rounded-xl shadow-xs">
+<button class="px-space-sm py-1 rounded-lg text-body-sm font-label-md bg-discipline-huapango text-on-primary" type="button">No, itinerante</button>
+<button class="px-space-sm py-1 rounded-lg text-body-sm font-label-md text-text-secondary hover:text-on-surface" type="button">Sí, espacio propio</button>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION C: Disciplines & Cultural Expressions -->
+<div class="bg-surface rounded-2xl p-space-lg md:p-space-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center gap-space-sm pb-space-xs">
+<div class="w-9 h-9 rounded-xl bg-discipline-danza/15 text-discipline-danza flex items-center justify-center font-headline-sm text-title-card">3</div>
+<div>
+<h2 class="font-title-card text-title-card text-on-surface">Disciplinas y Expresiones Culturales</h2>
+<p class="font-body-sm text-body-sm text-text-secondary">Selecciona las etiquetas que mejor representen tu propuesta escénica y saberes.</p>
+</div>
+</div>
+<!-- Interactive Discipline Selector Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+<!-- Chip 1: Selected (Huapango - Turquesa) -->
+<div class="p-space-md rounded-xl bg-discipline-huapango/10 flex items-center justify-between cursor-pointer transition-all hover:scale-[1.01]">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-discipline-huapango text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">music_note</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-discipline-huapango">Huapango &amp; Son Tradicional</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Sones jarochos, huastecos y tarima</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-discipline-huapango text-[22px]">check_circle</span>
+</div>
+<!-- Chip 2: Selected (Danza - Jacaranda) -->
+<div class="p-space-md rounded-xl bg-discipline-danza/10 flex items-center justify-between cursor-pointer transition-all hover:scale-[1.01]">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-discipline-danza text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">accessibility_new</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-discipline-danza">Danza Folclórica &amp; Escénica</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Zapateado, contemporáneo y raíz</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-discipline-danza text-[22px]">check_circle</span>
+</div>
+<!-- Chip 3: Unselected (Música - Talavera) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container flex items-center justify-between cursor-pointer transition-all">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface text-discipline-musica flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[18px]">graphic_eq</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Música en Vivo &amp; Fusiones</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Bandas, cuerdas y electro-folk</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[22px]">radio_button_unchecked</span>
+</div>
+<!-- Chip 4: Unselected (Teatro - Grana) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container flex items-center justify-between cursor-pointer transition-all">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface text-discipline-teatro flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[18px]">masks</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Teatro &amp; Narración Oral</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Callejero, títeres y declamación</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[22px]">radio_button_unchecked</span>
+</div>
+<!-- Chip 5: Unselected (Talleres - Rosa Mexicano) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container flex items-center justify-between cursor-pointer transition-all">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface text-discipline-talleres flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[18px]">school</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Talleres &amp; Saberes Populares</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Laudería, bordado y zapateo</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[22px]">radio_button_unchecked</span>
+</div>
+<!-- Chip 6: Unselected (Cultura Urbana - Cempasúchil) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container flex items-center justify-between cursor-pointer transition-all">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-surface text-dark-orange flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[18px]">brush</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Cultura Urbana &amp; Muralismo</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Gráfica, grabado e intervenciones</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[22px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<!-- SECTION D: Biography, Statement & Portfolio -->
+<div class="bg-surface rounded-2xl p-space-lg md:p-space-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center gap-space-sm pb-space-xs">
+<div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-headline-sm text-title-card">4</div>
+<div>
+<h2 class="font-title-card text-title-card text-on-surface">Semblanza y Material Visual</h2>
+<p class="font-body-sm text-body-sm text-text-secondary">Presenta la esencia de tu propuesta para el público que explora la cartelera.</p>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface" for="bio">Semblanza artística corta (Biografía para tarjeta) *</label>
+<span class="font-body-sm text-[12px] text-text-secondary" id="bio-counter">180 / 300 caracteres</span>
+</div>
+<textarea class="w-full p-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner resize-none" id="bio" rows="3">Ensamble tradicional contemporáneo que entrelaza la potencia del son huasteco, zapateado jarocho y letras poéticas urbanas en las plazas públicas de la capital.</textarea>
+</div>
+<!-- Aesthetics Dropzone -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface">Foto de perfil o portada y Dossier / Presskit</label>
+<div class="p-space-xl rounded-2xl bg-surface-container-low/60 hover:bg-surface-container flex flex-col items-center justify-center text-center cursor-pointer transition-all group">
+<div class="w-14 h-14 rounded-full bg-surface text-primary group-hover:scale-110 transition-transform flex items-center justify-center shadow-sm mb-space-sm">
+<span class="material-symbols-outlined text-[28px]">cloud_upload</span>
+</div>
+<h4 class="font-title-card text-body-lg text-on-surface mb-1">Arrastra aquí tus archivos de imagen o dossier</h4>
+<p class="font-body-sm text-body-sm text-text-secondary max-w-sm mb-space-sm">
+                Formatos JPG, PNG o PDF con un peso máximo de 15MB. Te recomendamos una imagen horizontal de 1200x800px.
+              </p>
+<button class="px-space-md py-2 rounded-xl bg-surface text-primary shadow-sm font-label-md text-body-sm hover:bg-primary hover:text-on-primary transition-colors" type="button">
+                Explorar archivos locales
+              </button>
+</div>
+</div>
+</div>
+<!-- SECTION E: Community Consent & Terms -->
+<div class="bg-surface rounded-2xl p-space-lg md:p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-start gap-space-sm">
+<input checked="" class="mt-1 h-5 w-5 rounded bg-surface-container-low accent-primary cursor-pointer" id="term-1" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-on-surface cursor-pointer select-none" for="term-1">
+              Acepto los <a class="text-primary hover:underline font-label-md" href="#">términos de participación comunitaria</a> y el <a class="text-primary hover:underline font-label-md" href="#">aviso de privacidad</a> de la red cultural Cuicoyan.
+            </label>
+</div>
+<div class="flex items-start gap-space-sm">
+<input checked="" class="mt-1 h-5 w-5 rounded bg-surface-container-low accent-primary cursor-pointer" id="term-2" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-on-surface cursor-pointer select-none" for="term-2">
+              Deseo recibir convocatorias curadas, invitaciones para foros independientes aliados y fechas de festivales comunitarios de la Ciudad de México.
+            </label>
+</div>
+</div>
+</form>
+<!-- RIGHT COLUMN: Sticky Real-time Cultural Profile Preview (5 cols) -->
+<aside class="lg:col-span-5 sticky top-28 flex flex-col gap-space-md">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">visibility</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase tracking-widest text-text-secondary">Vista Previa Dinámica</span>
+</div>
+<span class="font-label-md text-body-sm text-primary font-semibold">Así te verá el público</span>
+</div>
+<!-- Preview Live Cultural Card -->
+<div class="w-full bg-surface rounded-3xl overflow-hidden shadow-xl transition-all duration-300">
+<!-- Card Visual Hero / Media Banner -->
+<div class="relative h-60 w-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Traditional Mexican musicians performing energetic son jarocho on a wooden tarima stage with warm amber stage lighting, vibrant rebozos, and colorful decorations in a historic Mexico City patio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbVVm9SsjcLo7BURMVn0WQNhPN4T1_XLB0JKEyHeyxKAQXzwNqpattG9w2fuMMPEVU7btHhohUVP9eh5FNrcwg2UHlgu_LwM3SzQSAcg6MqaVU2Q8c9EAeV_wXyUybhKmQY_8c3pU9CWCftE3LAGpfuPZsBrHpI9Pa74WV2BiobKeDRhZpveJxxQBNm5jd5IzKJgUwgoZG1gdbpvpvdBTJGoit_rWc2h9ZKvV5htLrr2ZSW5EaDNeE"/>
+<!-- Gradient Scrim -->
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/20 to-transparent"></div>
+<!-- Category & Badge Overlay -->
+<div class="absolute top-4 left-4 right-4 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface/90 backdrop-blur-md text-primary font-label-md text-[13px] shadow-sm">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+                Proyecto Verificado
+              </span>
+<button aria-label="Guardar en favoritos" class="w-9 h-9 rounded-full bg-surface/90 backdrop-blur-md text-on-surface hover:text-primary flex items-center justify-center shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">favorite_border</span>
+</button>
+</div>
+<!-- Live Title & Category Eyebrow pinned at media bottom -->
+<div class="absolute bottom-4 left-4 right-4 text-surface">
+<span class="font-label-eyebrow text-[11px] text-dark-cyan uppercase tracking-widest block mb-0.5">Música Tradicional &amp; Danza · CDMX</span>
+<h3 class="font-headline-sm text-headline-sm text-surface leading-tight drop-shadow-md">Luna Mestiza &amp; Ensamble</h3>
+</div>
+</div>
+<!-- Card Content Body -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Meta Chips -->
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-discipline-huapango/15 text-discipline-huapango font-label-md text-body-sm inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-discipline-huapango"></span>
+                Huapango &amp; Son
+              </span>
+<span class="px-2.5 py-1 rounded-full bg-discipline-danza/15 text-discipline-danza font-label-md text-body-sm inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-discipline-danza"></span>
+                Danza de Raíz
+              </span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-low text-text-secondary font-label-md text-body-sm inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">pin_drop</span>
+                Roma Norte · Cuauhtémoc
+              </span>
+</div>
+<!-- Dynamic Biography Snippet -->
+<p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+              Ensamble tradicional contemporáneo que entrelaza la potencia del son huasteco, zapateado jarocho y letras poéticas urbanas en las plazas públicas de la capital.
+            </p>
+<!-- Embedded Live Next Event Agenda Pill -->
+<div class="p-space-md rounded-2xl bg-cultural-surface flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-xl bg-surface flex flex-col items-center justify-center flex-shrink-0 text-center shadow-xs">
+<span class="font-label-eyebrow text-[10px] text-primary uppercase font-bold">OCT</span>
+<span class="font-headline-sm text-title-card text-on-surface leading-none">24</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-eyebrow text-[10px] text-text-secondary uppercase">Próxima Fecha Sincronizada</span>
+<h5 class="font-title-card text-body-md text-on-surface truncate">Sones del barrio · Casa del Lago</h5>
+<span class="font-body-sm text-[12px] text-text-secondary truncate">Bosque de Chapultepec · 17:00 hrs</span>
+</div>
+</div>
+<span class="px-2 py-1 rounded-lg bg-surface font-label-md text-[12px] text-discipline-huapango flex-shrink-0 shadow-xs">Entrada libre</span>
+</div>
+<!-- Social and Metric Bar -->
+<div class="pt-space-xs flex items-center justify-between text-text-secondary font-body-sm text-[13px]">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary">hub</span>
+<span>Red Cuicoyan CDMX</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-status-jade">check_circle</span>
+<span class="text-status-jade font-semibold">Perfil Listo para Registro</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Curatorial Review Callout Card -->
+<div class="p-space-md rounded-2xl bg-surface-alt flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">diversity_3</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-label-lg text-label-lg text-on-surface">Curaduría colaborativa y abierta</h4>
+<p class="font-body-sm text-body-sm text-text-secondary">
+              Tu solicitud será revisada por el consejo comunitario de creadores en menos de <strong class="text-on-surface">48 horas hábiles</strong> para asegurar espacios seguros y trato digno para todos los foros.
+            </p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Bottom Fixed/Sticky Action Ribbon -->
+<section class="w-full sticky bottom-0 z-40 bg-surface/95 backdrop-blur-lg shadow-[0_-4px_24px_rgba(0,0,0,0.06)] py-space-md">
+<div class="max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<button class="inline-flex items-center gap-2 px-space-md h-12 rounded-xl bg-surface hover:bg-surface-container text-on-surface font-label-md text-label-md transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span>Paso anterior: Tipo de Proyecto</span>
+</button>
+<span class="hidden md:inline font-body-sm text-body-sm text-text-secondary">Paso 3 de 4 · Completado al 75%</span>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<div class="hidden lg:flex flex-col text-right">
+<span class="font-label-md text-body-sm text-on-surface font-semibold">Envío de credenciales oficiales</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Sin costo para proyectos independientes</span>
+</div>
+<!-- Primary Submit Button with Brand Gradient -->
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-space-xl h-12 rounded-xl bg-gradient-to-r from-brand-gradient-start via-brand-gradient-mid to-brand-gradient-end text-on-primary font-label-lg text-label-lg shadow-[0_4px_20px_rgba(242,31,109,0.35)] hover:scale-[1.02] active:scale-[0.98] transition-all" type="button">
+<span>Enviar solicitud de incorporación</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Interactive JavaScript for Live Data Sync -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Role Switcher Interaction
+      const roleArtist = document.getElementById('role-artist');
+      const roleVenue = document.getElementById('role-venue');
+
+      if (roleArtist && roleVenue) {
+        roleArtist.addEventListener('click', () => {
+          roleArtist.className = 'relative p-space-lg rounded-2xl bg-surface-alt shadow-sm cursor-pointer transition-all hover:scale-[1.01] flex items-start justify-between gap-space-md';
+          roleVenue.className = 'relative p-space-lg rounded-2xl bg-surface hover:bg-surface-container-low shadow-sm cursor-pointer transition-all hover:scale-[1.01] flex items-start justify-between gap-space-md';
+        });
+
+        roleVenue.addEventListener('click', () => {
+          roleVenue.className = 'relative p-space-lg rounded-2xl bg-surface-alt shadow-sm cursor-pointer transition-all hover:scale-[1.01] flex items-start justify-between gap-space-md';
+          roleArtist.className = 'relative p-space-lg rounded-2xl bg-surface hover:bg-surface-container-low shadow-sm cursor-pointer transition-all hover:scale-[1.01] flex items-start justify-between gap-space-md';
+        });
+      }
+
+      // Live Bio Character Counter
+      const bioInput = document.getElementById('bio');
+      const bioCounter = document.getElementById('bio-counter');
+      if (bioInput && bioCounter) {
+        bioInput.addEventListener('input', (e) => {
+          const length = e.target.value.length;
+          bioCounter.textContent = `${length} / 300 caracteres`;
+          if (length > 300) {
+            bioCounter.classList.add('text-error');
+          } else {
+            bioCounter.classList.remove('text-error');
+          }
+        });
+      }
+    });
+  </script>
+</div></main><footer class="w-full bg-cultural-surface dark:bg-dark-surface-alt transition-colors duration-200 pt-space-3xl pb-space-2xl"><div class="max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl pb-space-2xl"><div class="lg:col-span-2 flex flex-col items-start"><div class="flex items-center gap-space-xs mb-space-sm"><img alt="Logo.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><span class="font-headline-sm text-title-card tracking-tight text-primary">Cuicoyan</span></div><p class="font-body-md text-body-md text-text-secondary max-w-sm mb-space-lg">Donde la ciudad encuentra su escenario. Plataforma comunitaria para la difusión, resonancia y tejido del arte vivo en la Ciudad de México.</p><div class="flex items-center gap-space-xs"><a aria-label="Canal de audio e identidad sonora" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">podcasts</span></a><a aria-label="Agenda y mapa vivo" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">map</span></a><a aria-label="Comunidad y red territorial" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">hub</span></a><a aria-label="Boletín de novedades culturales" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">mail</span></a></div></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Explora</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="eventos" href="#">Eventos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="artistas" href="#">Artistas</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros" href="#">Foros</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="mapa-cultural" href="#">Mapa cultural</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="explorar" href="#">Por categoría</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Participa</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="para-creadores" href="#para-creadores">Para artistas y colectivos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros-y-espacios" href="#">Para foros y espacios</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="convocatorias" href="#">Convocatorias</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="unete" href="#">Registro de proyectos</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Información</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="manifiesto" href="#">Manifiesto</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="accesibilidad" href="#">Accesibilidad</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="terminos" href="#">Términos de servicio</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="privacidad" href="#">Aviso de privacidad</a></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-text-secondary"><p>© 2025 Cuicoyan. Plataforma de cultura viva de la Ciudad de México.</p><p class="text-center md:text-right font-label-md text-label-md text-on-surface-variant">Cuicoyan es una plataforma desarrollada sobre la infraestructura digital de Ollin.</p></div></div></footer></body></html>

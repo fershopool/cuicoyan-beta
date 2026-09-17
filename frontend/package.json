@@ -1,0 +1,13 @@
+{
+  "name": "cuicoyan-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node ../scripts/dev-server.mjs frontend",
+    "build": "node ../scripts/prepare-dist.mjs",
+    "preview": "node ../scripts/dev-server.mjs dist",
+    "check:links": "node ../scripts/check-links.mjs",
+    "check:content": "node ../scripts/check-forbidden-content.mjs"
+  }
+}

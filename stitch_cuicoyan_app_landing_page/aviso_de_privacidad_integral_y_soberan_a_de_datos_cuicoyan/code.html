@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-fixed-dim": "#63d7e1",
+          "dark-blue": "#24C8EF",
+          "surface": "#FFFFFF",
+          "on-secondary-container": "#006e75",
+          "error": "#ba1a1a",
+          "text-secondary": "#5F6273",
+          "brand-gradient-end": "#00C7D4",
+          "inverse-primary": "#ffb2be",
+          "discipline-huapango": "#009BA5",
+          "primary-container": "#e40e5f",
+          "on-tertiary": "#ffffff",
+          "on-secondary-fixed-variant": "#004f54",
+          "on-surface": "#161a33",
+          "on-tertiary-container": "#fffbff",
+          "on-error": "#ffffff",
+          "primary": "#b8004a",
+          "inverse-on-surface": "#f0efff",
+          "on-primary-container": "#fffbff",
+          "on-background": "#161a33",
+          "on-primary-fixed": "#400014",
+          "on-tertiary-fixed-variant": "#753400",
+          "cultural-surface": "#FFF7EE",
+          "dark-border": "#292540",
+          "error-container": "#ffdad6",
+          "dark-red": "#FF506F",
+          "surface-container": "#edecff",
+          "dark-text": "#F9F7FC",
+          "surface-container-highest": "#dee0ff",
+          "primary-fixed-dim": "#ffb2be",
+          "surface-container-low": "#f4f2ff",
+          "dark-background": "#080817",
+          "status-jade": "#008F70",
+          "outline-variant": "#e4bdc2",
+          "on-primary": "#ffffff",
+          "dark-orange": "#FF9D2E",
+          "surface-container-high": "#e6e6ff",
+          "inverse-surface": "#2b2f49",
+          "on-error-container": "#93000a",
+          "background": "#fbf8ff",
+          "secondary-fixed": "#82f3fe",
+          "discipline-teatro": "#D62650",
+          "dark-primary": "#FF3D8D",
+          "dark-surface": "#101126",
+          "secondary": "#006970",
+          "dark-text-secondary": "#B6B2C2",
+          "brand-gradient-mid": "#8A3FFC",
+          "surface-tint": "#bc004c",
+          "tertiary-fixed": "#ffdbc8",
+          "surface-container-lowest": "#ffffff",
+          "dark-surface-raised": "#1D1735",
+          "primary-fixed": "#ffd9de",
+          "on-tertiary-fixed": "#321200",
+          "discipline-musica": "#008EB5",
+          "tertiary-fixed-dim": "#ffb68b",
+          "discipline-talleres": "#E91662",
+          "on-secondary": "#ffffff",
+          "outline": "#906f73",
+          "surface-variant": "#dee0ff",
+          "dark-cyan": "#17E0E4",
+          "on-primary-fixed-variant": "#900038",
+          "discipline-fandango": "#E96F00",
+          "surface-alt": "#FFF3F6",
+          "dark-purple": "#B45CFF",
+          "dark-green": "#20D5A7",
+          "surface-bright": "#fbf8ff",
+          "tertiary-container": "#bb5800",
+          "surface-dim": "#d5d8fa",
+          "dark-surface-alt": "#16132B",
+          "on-surface-variant": "#5c3f44",
+          "border-hairline": "#ECE4E7",
+          "brand-gradient-start": "#F21F6D",
+          "secondary-container": "#7ff1fb",
+          "on-secondary-fixed": "#002022",
+          "discipline-danza": "#7936D2",
+          "tertiary": "#954500"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-sm": "0.75rem",
+          "gutter-desktop": "5rem",
+          "space-2xs": "0.25rem",
+          "space-3xl": "4.5rem",
+          "space-lg": "1.5rem",
+          "space-2xl": "3rem",
+          "gutter-tablet": "2.5rem",
+          "space-4xl": "7rem",
+          "space-xl": "2rem",
+          "margin-desktop": "5rem",
+          "space-md": "1rem",
+          "margin-tablet": "2.5rem",
+          "gutter": "1.25rem",
+          "space-xs": "0.5rem",
+          "margin": "1.25rem"
+        },
+        "fontFamily": {
+          "display-hero": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "display-hero-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-md": [
+            "Manrope"
+          ],
+          "headline-lg-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-eyebrow": [
+            "Manrope"
+          ],
+          "headline-lg": [
+            "Bricolage Grotesque"
+          ],
+          "body-lg": [
+            "Manrope"
+          ],
+          "body-md": [
+            "Manrope"
+          ],
+          "body-sm": [
+            "Manrope"
+          ],
+          "headline-md-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "headline-md": [
+            "Bricolage Grotesque"
+          ],
+          "title-card": [
+            "Bricolage Grotesque"
+          ],
+          "label-lg": [
+            "Manrope"
+          ]
+        },
+        "fontSize": {
+          "display-hero": [
+            "72px",
+            {
+              "lineHeight": "76px",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "800"
+            }
+          ],
+          "headline-sm": [
+            "28px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-sm-mobile": [
+            "24px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "0em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-hero-mobile": [
+            "42px",
+            {
+              "lineHeight": "46px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "800"
+            }
+          ],
+          "label-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "36px",
+            {
+              "lineHeight": "42px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-eyebrow": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.08em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-lg": [
+            "56px",
+            {
+              "lineHeight": "62px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "20px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "16px",
+            {
+              "lineHeight": "26px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "letterSpacing": "0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md-mobile": [
+            "30px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "44px",
+            {
+              "lineHeight": "50px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "title-card": [
+            "22px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-lg": [
+            "16px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface antialiased transition-colors duration-200"><a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-space-md focus:py-space-xs focus:bg-primary focus:text-on-primary focus:rounded-xl focus:shadow-lg focus:outline-none font-label-md text-label-md" href="#main-content">Saltar al contenido</a><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 dark:bg-dark-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-colors duration-200"><div class="h-20 max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-xl"><a class="flex items-center gap-space-xs group focus:outline-none" data-path="inicio" href="#"><img alt="Logo.png" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><div class="flex flex-col"><span class="font-headline-sm text-title-card tracking-tight text-primary leading-none">Cuicoyan</span><span class="font-label-eyebrow text-[10px] tracking-widest uppercase text-text-secondary leading-tight">Cultura Viva CDMX</span></div></a><nav class="hidden xl:flex items-center gap-space-md" data-active-classes="text-primary font-bold"><a aria-current="page" class="transition-colors py-space-2xs text-primary font-bold" data-path="inicio" href="#">Inicio</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="explorar" href="#">Explorar</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="eventos" href="#">Eventos</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="artistas" href="#">Artistas</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="foros" href="#">Foros</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="mapa-cultural" href="#">Mapa</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="para-creadores" href="#para-creadores">Para creadores</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a></nav></div><div class="flex items-center gap-space-xs sm:gap-space-sm"><div class="relative hidden md:block w-44 lg:w-56"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px] pointer-events-none">search</span><input aria-label="Buscar contenido cultural" class="w-full h-10 pl-9 pr-3 rounded-xl bg-surface-container-lowest text-on-surface placeholder:text-text-secondary font-body-sm text-body-sm shadow-[0_1px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar talleres, sones, foros..." type="search"/></div><button aria-label="Alternar modo visual claro u oscuro" class="h-10 w-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors focus:outline-none" onclick="document.documentElement.classList.toggle('dark')" type="button"><span class="material-symbols-outlined text-[20px] dark:hidden">dark_mode</span><span class="material-symbols-outlined text-[20px] hidden dark:inline-block">light_mode</span></button><a class="inline-flex items-center justify-center px-space-md h-10 rounded-xl bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-all shadow-[0_4px_16px_rgba(184,0,74,0.18)] hover:scale-[1.02] active:scale-[0.98]" data-path="unete" href="#">Únete a Cuicoyan</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background transition-colors duration-200" id="main-content"><div class="flex flex-col w-full">
+<!-- ENCABEZADO EDITORIAL & SOBERANÍA DIGITAL -->
+<section class="relative w-full overflow-hidden pb-space-2xl pt-space-xl">
+<!-- Fondos decorativos lumínicos orgánicos (sin desbordamiento) -->
+<div class="pointer-events-none absolute -top-32 -left-20 h-96 w-96 rounded-full bg-primary/5 blur-3xl"></div>
+<div class="pointer-events-none absolute top-1/3 -right-24 h-96 w-96 rounded-full bg-brand-gradient-end/10 blur-3xl"></div>
+<div class="mx-auto max-w-[1280px] px-margin md:px-margin-tablet lg:px-margin-desktop">
+<!-- Migajas de Pan / Breadcrumbs -->
+<nav aria-label="Ruta de navegación" class="mb-space-md flex flex-wrap items-center gap-space-xs font-label-md text-label-md text-text-secondary">
+<a class="transition-colors hover:text-primary" data-path="inicio" href="#">Inicio</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-text-secondary">Información Legal</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-bold text-on-surface">Aviso de Privacidad Integral</span>
+</nav>
+<!-- Badge de Cumplimiento e Identidad Cívica -->
+<div class="mb-space-md inline-flex items-center gap-space-xs rounded-full bg-surface-alt px-space-md py-space-2xs text-primary shadow-sm">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase tracking-wider">
+          Transparencia Activa · LFPDPPP México · Soberanía de Datos Ollin
+        </span>
+</div>
+<!-- Título de Página -->
+<h1 class="mb-space-md font-headline-lg text-headline-lg text-on-surface">
+        Aviso de Privacidad Integral y Compromiso de Soberanía de Datos
+      </h1>
+<!-- Resumen y Filosofía Comunitaria -->
+<p class="max-w-3xl font-body-lg text-body-lg text-text-secondary">
+        Tu navegación cultural y tus datos comunitarios jamás serán perfilados, comercializados ni subastados a redes publicitarias de terceros. Conoce con total claridad qué información tratamos, con qué finalidades estrictamente cívicas y el procedimiento para ejercer tus derechos ARCO.
+      </p>
+<!-- Metadatos de Vigencia y Versión -->
+<div class="mt-space-lg flex flex-wrap items-center gap-x-space-lg gap-y-space-xs rounded-xl bg-surface-container-lowest p-space-sm font-label-md text-label-md text-text-secondary shadow-sm">
+<div class="flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[18px] text-primary">calendar_today</span>
+<span>Última actualización: <strong>15 de Octubre de 2025</strong></span>
+</div>
+<div class="flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[18px] text-discipline-huapango">history</span>
+<span>Versión reglamentaria: <strong>2.1 (Vigente)</strong></span>
+</div>
+<div class="flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[18px] text-discipline-danza">gavel</span>
+<span>Responsable: <strong>Cuicoyan / Infraestructura Ollin A.C.</strong></span>
+</div>
+</div>
+<!-- Índice interactivo de anclaje rápido -->
+<div class="mt-space-xl overflow-x-auto pb-space-xs">
+<div class="flex min-w-max items-center gap-space-xs">
+<span class="mr-space-2xs font-label-eyebrow text-label-eyebrow uppercase text-text-secondary">Índice:</span>
+<a class="rounded-full bg-surface-container-low px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-alt hover:text-primary" href="#seccion-responsable">1. Responsable</a>
+<a class="rounded-full bg-surface-container-low px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-alt hover:text-primary" href="#seccion-datos">2. Datos que recabamos</a>
+<a class="rounded-full bg-surface-container-low px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-alt hover:text-primary" href="#seccion-finalidades">3. Finalidades legítimas</a>
+<a class="rounded-full bg-surface-container-low px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-alt hover:text-primary" href="#seccion-no-venta">4. Cero venta de datos</a>
+<a class="rounded-full bg-surface-container-low px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-alt hover:text-primary" href="#seccion-arco">5. Derechos ARCO</a>
+<a class="rounded-full bg-surface-container-low px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant transition-all hover:bg-surface-alt hover:text-primary" href="#seccion-cookies">6. Cookies y memoria local</a>
+<a class="rounded-full bg-primary/10 px-space-md py-space-xs font-label-md text-label-md text-primary transition-all hover:bg-primary hover:text-on-primary" href="#seccion-buzon">7. Buzón del Oficial</a>
+</div>
+</div>
+</div>
+</section>
+<!-- TARJETA EDITORIAL: GARANTÍA FUNDAMENTAL CUICOYAN -->
+<section class="w-full bg-cultural-surface py-space-2xl">
+<div class="mx-auto max-w-[1280px] px-margin md:px-margin-tablet lg:px-margin-desktop">
+<div class="relative overflow-hidden rounded-3xl bg-surface-container-lowest p-space-xl md:p-space-2xl shadow-xl">
+<!-- Detalle artístico decorativo con svg representativo del flujo cultural -->
+<div class="pointer-events-none absolute -right-8 -bottom-8 opacity-10">
+<svg fill="none" height="280" viewbox="0 0 200 200" width="280" xmlns="http://www.w3.org/2000/svg">
+<path class="text-primary" d="M100 20C55.8 20 20 55.8 20 100C20 144.2 55.8 180 100 180C144.2 180 180 144.2 180 100C180 55.8 144.2 20 100 20ZM100 140C77.9 140 60 122.1 60 100C60 77.9 77.9 60 100 60C122.1 60 140 77.9 140 100C140 122.1 122.1 140 100 140Z" fill="currentColor"></path>
+<path class="text-discipline-fandango" d="M100 80C88.95 80 80 88.95 80 100C80 111.05 88.95 120 100 120C111.05 120 120 111.05 120 100C120 88.95 111.05 80 100 80Z" fill="currentColor"></path>
+</svg>
+</div>
+<div class="relative z-10">
+<div class="mb-space-sm flex items-center gap-space-xs text-discipline-fandango">
+<span class="material-symbols-outlined text-[24px]">local_fire_department</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase tracking-widest">Compromiso Ético y Constitucional</span>
+</div>
+<h2 class="mb-space-sm font-headline-md text-headline-md text-on-surface">
+            Garantía Fundamental Cuicoyan
+          </h2>
+<p class="max-w-4xl font-body-lg text-body-lg text-text-secondary">
+            En Cuicoyan, la cultura viva de la Ciudad de México es concebida como un bien común inalienable. No monetizamos tu atención, tus traslados vecinales ni tus preferencias artísticas. Consultar la cartelera, localizar un fandango comunitario o explorar talleres nunca requerirá un registro forzoso ni la entrega de telemetría invasiva.
+          </p>
+<!-- Tríptico de Sellos de Seguridad Ética -->
+<div class="mt-space-xl grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<div class="flex flex-col rounded-2xl bg-surface-container-low p-space-lg transition-transform hover:-translate-y-1">
+<div class="mb-space-sm inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-on-primary">
+<span class="material-symbols-outlined text-[26px]">block</span>
+</div>
+<h3 class="mb-space-xs font-title-card text-title-card text-on-surface">Cero Rastreadores Comerciales</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">
+                Sin píxeles de Meta, tags de Google Ads, identificadores de publicidad programática ni intermediarios de perfiles de audiencia.
+              </p>
+</div>
+<div class="flex flex-col rounded-2xl bg-surface-container-low p-space-lg transition-transform hover:-translate-y-1">
+<div class="mb-space-sm inline-flex h-12 w-12 items-center justify-center rounded-xl bg-discipline-huapango text-on-primary">
+<span class="material-symbols-outlined text-[26px]">pin_drop</span>
+</div>
+<h3 class="mb-space-xs font-title-card text-title-card text-on-surface">Geolocalización en Dispositivo</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">
+                Tu ubicación aproximada para calcular distancias a foros se computa estrictamente en la memoria del navegador. No se almacena en base de datos.
+              </p>
+</div>
+<div class="flex flex-col rounded-2xl bg-surface-container-low p-space-lg transition-transform hover:-translate-y-1">
+<div class="mb-space-sm inline-flex h-12 w-12 items-center justify-center rounded-xl bg-discipline-danza text-on-primary">
+<span class="material-symbols-outlined text-[26px]">terminal</span>
+</div>
+<h3 class="mb-space-xs font-title-card text-title-card text-on-surface">Infraestructura Libre Ollin</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">
+                Operado sobre el stack cívico transparente y verificable de la Red Ollin de Tecnologías Comunitarias de la Ciudad de México.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CONTENIDO EDITORIAL DE LAS SECCIONES -->
+<section class="w-full py-space-3xl">
+<div class="mx-auto max-w-[1280px] px-margin md:px-margin-tablet lg:px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-2xl">
+<!-- Columna de Contenido Principal -->
+<div class="lg:col-span-8 flex flex-col gap-space-2xl">
+<!-- SECCIÓN 1: IDENTIDAD Y DOMICILIO -->
+<article class="scroll-mt-28 rounded-3xl bg-surface-container-lowest p-space-xl shadow-md" id="seccion-responsable">
+<div class="mb-space-sm flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[22px]">corporate_fare</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase">Capítulo I</span>
+</div>
+<h2 class="mb-space-md font-headline-sm text-headline-sm text-on-surface">
+              1. Identidad y Domicilio del Responsable
+            </h2>
+<div class="flex flex-col gap-space-md font-body-md text-body-md text-text-secondary">
+<p>
+<strong>Cuicoyan: Cultura Viva CDMX</strong>, en corresponsabilidad técnica y jurídica con la iniciativa <strong>Ollin Tecnología Cívica A.C.</strong>, con domicilio legal para oír y recibir notificaciones en:
+              </p>
+<div class="rounded-2xl bg-surface-container-low p-space-md font-body-sm text-body-sm text-on-surface">
+<p class="font-bold">Domicilio de Enlace de Privacidad y Derechos ARCO:</p>
+<p>Calle Regina 14, 2do Piso, Centro Histórico de la Ciudad de México, Alcaldía Cuauhtémoc, C.P. 06000, Ciudad de México, México.</p>
+<p class="mt-space-2xs text-primary">Canal formal: privacidad@cuicoyan.cdmx</p>
+</div>
+<p>
+                Nos declaramos plenamente sujetos a las disposiciones de la <em>Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)</em>, su Reglamento, y los Lineamientos del Aviso de Privacidad emitidos por el INAI.
+              </p>
+</div>
+</article>
+<!-- SECCIÓN 2: DATOS RECABADOS POR ROL -->
+<article class="scroll-mt-28 rounded-3xl bg-surface-container-lowest p-space-xl shadow-md" id="seccion-datos">
+<div class="mb-space-sm flex items-center gap-space-xs text-discipline-huapango">
+<span class="material-symbols-outlined text-[22px]">badge</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase">Capítulo II</span>
+</div>
+<h2 class="mb-space-md font-headline-sm text-headline-sm text-on-surface">
+              2. Datos Personales que Tratamos por Perfil Comunitario
+            </h2>
+<p class="mb-space-lg font-body-md text-body-md text-text-secondary">
+              Aplicamos el principio estricto de <strong>minimización de datos</strong>: solo solicitamos la información estrictamente indispensable según tu grado de participación en la red.
+            </p>
+<div class="space-y-space-md">
+<!-- Rol 1: Público general -->
+<div class="rounded-2xl bg-surface-container-low p-space-lg">
+<div class="mb-space-xs flex items-center justify-between">
+<span class="inline-flex items-center gap-space-2xs font-title-card text-title-card text-on-surface">
+<span class="material-symbols-outlined text-primary">groups</span>
+                    Visitantes, Espectadores y Asistentes
+                  </span>
+<span class="rounded-full bg-status-jade/10 px-space-sm py-1 font-label-eyebrow text-[11px] text-status-jade">Recolección Mínima</span>
+</div>
+<ul class="mt-space-sm list-disc space-y-space-xs pl-5 font-body-sm text-body-sm text-text-secondary">
+<li><strong>Correo electrónico:</strong> Únicamente en caso de suscripción opt-in a la agenda cultural semanal o boletín barrial de novedades.</li>
+<li><strong>Preferencias culturales locales:</strong> Guardadas en el almacenamiento de tu navegador (Local Storage) sin asociarse a nombre, cédula o cuenta.</li>
+<li><strong>Ubicación relativa:</strong> Solo si el usuario pulsa deliberadamente "Cerca de mí" para ordenar foros en pantalla; se procesa de forma efímera en memoria.</li>
+</ul>
+</div>
+<!-- Rol 2: Artistas y Creadores -->
+<div class="rounded-2xl bg-surface-container-low p-space-lg">
+<div class="mb-space-xs flex items-center justify-between">
+<span class="inline-flex items-center gap-space-2xs font-title-card text-title-card text-on-surface">
+<span class="material-symbols-outlined text-discipline-fandango">palette</span>
+                    Artistas, Músicos, Talleristas y Colectivos
+                  </span>
+<span class="rounded-full bg-primary/10 px-space-sm py-1 font-label-eyebrow text-[11px] text-primary">Ficha Pública</span>
+</div>
+<ul class="mt-space-sm list-disc space-y-space-xs pl-5 font-body-sm text-body-sm text-text-secondary">
+<li><strong>Datos de difusión pública:</strong> Nombre artístico/colectivo, semblanza, disciplina, enlaces a portafolios abiertos (Bandcamp, YouTube, sitio personal).</li>
+<li><strong>Datos de enlace administrativo (Privados):</strong> Nombre del representante legal o titular de contacto, teléfono celular / WhatsApp de coordinación logística y correo institucional. Estos datos <em>nunca</em> se muestran públicamente sin autorización expresa.</li>
+</ul>
+</div>
+<!-- Rol 3: Foros y Espacios -->
+<div class="rounded-2xl bg-surface-container-low p-space-lg">
+<div class="mb-space-xs flex items-center justify-between">
+<span class="inline-flex items-center gap-space-2xs font-title-card text-title-card text-on-surface">
+<span class="material-symbols-outlined text-discipline-danza">theater_comedy</span>
+                    Foros Culturales, Casas Vecinales y Tarimas
+                  </span>
+<span class="rounded-full bg-secondary/15 px-space-sm py-1 font-label-eyebrow text-[11px] text-secondary">Identidad Territorial</span>
+</div>
+<ul class="mt-space-sm list-disc space-y-space-xs pl-5 font-body-sm text-body-sm text-text-secondary">
+<li><strong>Datos del recinto:</strong> Nombre del espacio, calle, número, colonia, alcaldía, especificaciones de tarima, capacidad de aforo y amenidades de accesibilidad.</li>
+<li><strong>Datos del gestor:</strong> Correo de coordinación de cartelera y teléfono de taquilla vecinal.</li>
+</ul>
+</div>
+</div>
+</article>
+<!-- SECCIÓN 3: FINALIDADES Y TRATAMIENTO -->
+<article class="scroll-mt-28 rounded-3xl bg-surface-container-lowest p-space-xl shadow-md" id="seccion-finalidades">
+<div class="mb-space-sm flex items-center gap-space-xs text-discipline-danza">
+<span class="material-symbols-outlined text-[22px]">assignment</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase">Capítulo III</span>
+</div>
+<h2 class="mb-space-md font-headline-sm text-headline-sm text-on-surface">
+              3. Finalidades Primarias y Secundarias
+            </h2>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="bg-surface-container-low text-on-surface font-label-md">
+<th class="p-space-md rounded-l-xl">Clasificación</th>
+<th class="p-space-md">Finalidad Concreta</th>
+<th class="p-space-md rounded-r-xl">Carácter Obligatorio</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-hairline">
+<tr>
+<td class="p-space-md font-bold text-primary">Primaria</td>
+<td class="p-space-md text-text-secondary">Difusión libre en la cartelera de eventos, talleres de zapateado, fandangos y sones en CDMX.</td>
+<td class="p-space-md font-label-md text-status-jade">Necesario para publicación</td>
+</tr>
+<tr>
+<td class="p-space-md font-bold text-primary">Primaria</td>
+<td class="p-space-md text-text-secondary">Georreferenciación de foros vecinales y vinculación comunitaria entre gestores y público.</td>
+<td class="p-space-md font-label-md text-status-jade">Necesario para publicación</td>
+</tr>
+<tr>
+<td class="p-space-md font-bold text-secondary">Secundaria</td>
+<td class="p-space-md text-text-secondary">Envío del compendio quincenal por correo electrónico (con opción inmediata de desuscripción de 1 clic).</td>
+<td class="p-space-md font-label-md text-text-secondary">Totalmente Voluntario</td>
+</tr>
+<tr class="bg-error-container/20">
+<td class="p-space-md font-bold text-error">Inaplicable</td>
+<td class="p-space-md text-error font-medium">Modelos algorítmicos predictivos, subastas de datos con fines publicitarios o reventa de bases a terceros.</td>
+<td class="p-space-md font-bold text-error">Prohibido en Estatuto Ollin</td>
+</tr>
+</tbody>
+</table>
+</div>
+</article>
+<!-- SECCIÓN 4: CERO VENTA DE DATOS -->
+<article class="scroll-mt-28 rounded-3xl bg-surface-alt p-space-xl shadow-md" id="seccion-no-venta">
+<div class="mb-space-sm flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[22px]">security</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase">Capítulo IV</span>
+</div>
+<h2 class="mb-space-md font-headline-sm text-headline-sm text-on-surface">
+              4. Cláusula de Soberanía y Cero Comercialización
+            </h2>
+<div class="flex flex-col gap-space-md font-body-md text-body-md text-text-secondary">
+<p>
+<strong>Cuicoyan no vende, no arrienda ni transfiere bajo ninguna modalidad comercial las bases de datos ni el tráfico de sus personas usuarias.</strong>
+</p>
+<p>
+                A diferencia de los modelos extractivos dominantes, nuestra plataforma se financia a través de cooperativas cívicas, convocatorias abiertas y el trabajo colectivo de promotores de la Ciudad de México. Tu consumo cultural no es ni será el producto.
+              </p>
+<div class="flex items-center gap-space-sm rounded-xl bg-surface-container-lowest p-space-md font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-[28px] text-primary">verified</span>
+<span>Los únicos intercambios posibles son las transferencias expresamente contempladas en el artículo 37 de la LFPDPPP (cumplimiento a mandatos judiciales o convenios de cooperación cívica pública sin fines lucrativos).</span>
+</div>
+</div>
+</article>
+<!-- SECCIÓN 5: DERECHOS ARCO -->
+<article class="scroll-mt-28 rounded-3xl bg-surface-container-lowest p-space-xl shadow-md" id="seccion-arco">
+<div class="mb-space-sm flex items-center gap-space-xs text-status-jade">
+<span class="material-symbols-outlined text-[22px]">front_hand</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase">Capítulo V</span>
+</div>
+<h2 class="mb-space-md font-headline-sm text-headline-sm text-on-surface">
+              5. Ejercicio de tus Derechos ARCO
+            </h2>
+<p class="mb-space-lg font-body-md text-body-md text-text-secondary">
+              Tienes derecho pleno e incondicional a conocer qué datos tenemos (<strong>Acceso</strong>), solicitar la corrección de datos inexactos (<strong>Rectificación</strong>), pedir que se eliminen de nuestros registros (<strong>Cancelación</strong>) o negarte al tratamiento para fines específicos (<strong>Oposición</strong>).
+            </p>
+<!-- Pasos ARCO -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="flex flex-col rounded-2xl bg-surface-container-low p-space-md">
+<span class="mb-space-2xs font-headline-sm text-primary">01</span>
+<h4 class="font-title-card text-on-surface mb-space-2xs">Presentación</h4>
+<p class="font-body-sm text-text-secondary">Envía tu petición por este portal o al correo privacidad@cuicoyan.cdmx adjuntando copia simple para acreditar titularidad.</p>
+</div>
+<div class="flex flex-col rounded-2xl bg-surface-container-low p-space-md">
+<span class="mb-space-2xs font-headline-sm text-discipline-huapango">02</span>
+<h4 class="font-title-card text-on-surface mb-space-2xs">Revisión</h4>
+<p class="font-body-sm text-text-secondary">Nuestro Oficial de Privacidad verificará la solicitud en un plazo máximo garantizado de <strong>5 días hábiles</strong>.</p>
+</div>
+<div class="flex flex-col rounded-2xl bg-surface-container-low p-space-md">
+<span class="mb-space-2xs font-headline-sm text-status-jade">03</span>
+<h4 class="font-title-card text-on-surface mb-space-2xs">Resolución</h4>
+<p class="font-body-sm text-text-secondary">Determinación emitida en menos de <strong>20 días naturales</strong> (conforme al marco legal federal).</p>
+</div>
+</div>
+<!-- Botón de descarga de formulario oficial -->
+<div class="mt-space-xl flex flex-wrap items-center justify-between gap-space-md rounded-2xl bg-surface-container-high p-space-md">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[32px] text-primary">picture_as_pdf</span>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface font-bold">Formato Oficial de Derechos ARCO (PDF)</p>
+<p class="font-body-sm text-body-sm text-text-secondary">Plantilla estandarizada lista para llenar, firmar y enviar.</p>
+</div>
+</div>
+<a class="inline-flex items-center justify-center gap-space-2xs rounded-xl bg-primary px-space-md py-space-xs font-label-md text-label-md text-on-primary transition-all hover:bg-primary-container shadow-md" href="#">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                Descargar Formulario PDF
+              </a>
+</div>
+</article>
+<!-- SECCIÓN 6: COOKIES Y ALMACENAMIENTO LOCAL -->
+<article class="scroll-mt-28 rounded-3xl bg-surface-container-lowest p-space-xl shadow-md" id="seccion-cookies">
+<div class="mb-space-sm flex items-center gap-space-xs text-discipline-fandango">
+<span class="material-symbols-outlined text-[22px]">cookie</span>
+<span class="font-label-eyebrow text-label-eyebrow uppercase">Capítulo VI</span>
+</div>
+<h2 class="mb-space-md font-headline-sm text-headline-sm text-on-surface">
+              6. Cookies, Telemetría y Almacenamiento Local
+            </h2>
+<div class="flex flex-col gap-space-md font-body-md text-body-md text-text-secondary">
+<p>
+                Cuicoyan emplea únicamente <strong>tecnologías técnicas esenciales</strong> para recordar si tienes activado el modo visual claro/oscuro y para salvaguardar tu lista de foros favoritos directamente en tu dispositivo (mediante <code>localStorage</code>).
+              </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-space-xs">
+<div class="rounded-xl bg-surface-container-low p-space-md">
+<div class="flex items-center gap-space-2xs text-status-jade mb-space-2xs font-bold">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    Lo que permitimos
+                  </div>
+<p class="font-body-sm text-text-secondary">Preferencia de tema (claro/oscuro), caché local de eventos para navegación offline, filtros temporales.</p>
+</div>
+<div class="rounded-xl bg-surface-container-low p-space-md">
+<div class="flex items-center gap-space-2xs text-error mb-space-2xs font-bold">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+                    Lo que bloqueamos
+                  </div>
+<p class="font-body-sm text-text-secondary">Cookies de rastreo cruzado entre sitios (Third-Party Cookies), fingerprinting del navegador, beacons publicitarios.</p>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Columna Lateral: Tarjeta Resumen y Oficial de Privacidad -->
+<aside class="lg:col-span-4 flex flex-col gap-space-xl">
+<!-- Tarjeta del Oficial de Protección de Datos -->
+<div class="sticky top-28 rounded-3xl bg-surface-container-lowest p-space-xl shadow-lg">
+<div class="mb-space-md flex items-center gap-space-sm">
+<div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[28px]">admin_panel_settings</span>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface">Oficina de Privacidad</h3>
+<p class="font-label-eyebrow text-label-eyebrow text-text-secondary">Comité Cívico Ollin</p>
+</div>
+</div>
+<p class="mb-space-md font-body-sm text-body-sm text-text-secondary">
+              Atención directa e individualizada a la comunidad artística, foros culturales y asistentes vecinales de la capital.
+            </p>
+<div class="space-y-space-sm font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs text-text-secondary">
+<span class="material-symbols-outlined text-primary text-[18px]">mail</span>
+<span>privacidad@cuicoyan.cdmx</span>
+</div>
+<div class="flex items-center gap-space-xs text-text-secondary">
+<span class="material-symbols-outlined text-status-jade text-[18px]">timer</span>
+<span>Respuesta garantizada: <strong>&lt; 48 hrs hábiles</strong></span>
+</div>
+<div class="flex items-center gap-space-xs text-text-secondary">
+<span class="material-symbols-outlined text-discipline-huapango text-[18px]">schedule</span>
+<span>Lunes a Viernes: 10:00 a 18:00 hrs CDMX</span>
+</div>
+</div>
+<div class="mt-space-lg pt-space-md border-t border-border-hairline">
+<a class="w-full inline-flex items-center justify-center gap-space-xs rounded-xl bg-primary text-on-primary py-space-sm font-label-md text-label-md transition-all hover:bg-primary-container shadow-md hover:scale-[1.02] active:scale-[0.98]" href="#seccion-buzon">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                Abrir Formulario de Solicitud
+              </a>
+</div>
+<!-- Recordatorio INAI -->
+<div class="mt-space-lg rounded-2xl bg-surface-container-low p-space-md text-[13px] text-text-secondary">
+<p class="leading-relaxed">
+                Si consideras que tu derecho a la protección de datos personales ha sido lesionado, tienes el derecho de acudir ante el <strong>INAI (Instituto Nacional de Transparencia)</strong> en su portal oficial www.inai.org.mx.
+              </p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</section>
+<!-- MÓDULO INTERACTIVO: BUZÓN DIRECTO DE DERECHOS ARCO & CONSULTAS -->
+<section class="w-full bg-surface-container-low py-space-3xl scroll-mt-20" id="seccion-buzon">
+<div class="mx-auto max-w-[800px] px-margin md:px-margin-tablet">
+<div class="rounded-3xl bg-surface-container-lowest p-space-xl md:p-space-2xl shadow-xl">
+<div class="mb-space-lg text-center">
+<div class="mx-auto mb-space-xs inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-on-primary shadow-md">
+<span class="material-symbols-outlined text-[30px]">mark_email_unread</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">
+            Buzón y Consulta del Oficial de Protección de Datos
+          </h2>
+<p class="mx-auto mt-space-xs max-w-lg font-body-md text-body-md text-text-secondary">
+            Ejerce tus derechos ARCO o solicita la remoción inmediata de datos de eventos, colectivos o suscripciones con respuesta en menos de 48 horas.
+          </p>
+</div>
+<form class="space-y-space-md" id="form-privacidad" onsubmit="event.preventDefault(); document.getElementById('estado-envio').classList.remove('hidden'); this.reset();">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div>
+<label class="mb-space-2xs block font-label-md text-label-md text-on-surface" for="nombre-solicitante">
+                Nombre Completo o Razón Artística <span class="text-primary">*</span>
+</label>
+<input class="w-full h-12 rounded-xl bg-surface-container-lowest px-space-md font-body-sm text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" id="nombre-solicitante" placeholder="Ej. Mariana Solís / Colectivo Son y Flor" required="" type="text"/>
+</div>
+<div>
+<label class="mb-space-2xs block font-label-md text-label-md text-on-surface" for="correo-solicitante">
+                Correo Electrónico de Contacto <span class="text-primary">*</span>
+</label>
+<input class="w-full h-12 rounded-xl bg-surface-container-lowest px-space-md font-body-sm text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" id="correo-solicitante" placeholder="ejemplo@comunidad.org.mx" required="" type="email"/>
+</div>
+</div>
+<div>
+<label class="mb-space-2xs block font-label-md text-label-md text-on-surface" for="tipo-solicitud">
+              Naturaleza de tu Solicitud <span class="text-primary">*</span>
+</label>
+<select class="w-full h-12 rounded-xl bg-surface-container-lowest px-space-md font-body-sm text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" id="tipo-solicitud" required="">
+<option value="">Selecciona el tipo de derecho a ejercer...</option>
+<option value="acceso">Acceso (Conocer qué datos personales mios posee Cuicoyan)</option>
+<option value="rectificacion">Rectificación (Modificar datos de mi colectivo o foro)</option>
+<option value="cancelacion">Cancelación (Eliminar mi ficha, reseñas o suscripción)</option>
+<option value="oposicion">Oposición (Limitar el uso de mis datos para avisos)</option>
+<option value="consulta">Consulta de Soberanía Digital y Código Cívico</option>
+</select>
+</div>
+<div>
+<label class="mb-space-2xs block font-label-md text-label-md text-on-surface" for="mensaje-solicitud">
+              Descripción detallada de tu petición <span class="text-primary">*</span>
+</label>
+<textarea class="w-full rounded-xl bg-surface-container-lowest p-space-md font-body-sm text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" id="mensaje-solicitud" placeholder="Describe brevemente el dato, evento o perfil sobre el que deseas ejercer tu derecho..." required="" rows="4"></textarea>
+</div>
+<div class="flex items-start gap-space-xs">
+<input class="mt-1 h-5 w-5 rounded accent-primary cursor-pointer" id="acepta-veracidad" required="" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-text-secondary cursor-pointer" for="acepta-veracidad">
+              Declaro bajo protesta de decir verdad ser la persona titular o representante legal facultada para formular esta solicitud con base en la LFPDPPP.
+            </label>
+</div>
+<div class="pt-space-xs text-center">
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-space-xs rounded-xl bg-primary px-space-xl py-space-md font-label-lg text-label-lg text-on-primary transition-all hover:bg-primary-container shadow-lg hover:scale-[1.02] active:scale-[0.98]" type="submit">
+<span class="material-symbols-outlined text-[20px]">send_and_archive</span>
+              Enviar Solicitud de Privacidad
+            </button>
+</div>
+<!-- Mensaje de confirmación en JS -->
+<div class="hidden mt-space-md rounded-2xl bg-status-jade/15 p-space-md text-center text-status-jade font-body-sm" id="estado-envio">
+<div class="flex items-center justify-center gap-space-xs font-bold">
+<span class="material-symbols-outlined">check_circle</span>
+              Solicitud recibida satisfactoriamente con folio #CY-2025-ARCO
+            </div>
+<p class="mt-1">Nuestro Oficial de Protección te enviará acuse y respuesta a tu correo en un plazo menor a 48 horas hábiles.</p>
+</div>
+</form>
+</div>
+</div>
+</section>
+<!-- BANNER DE CONFIANZA Y DOCUMENTOS HERMANOS -->
+<section class="w-full bg-surface-bright py-space-3xl">
+<div class="mx-auto max-w-[1280px] px-margin md:px-margin-tablet lg:px-margin-desktop">
+<div class="rounded-3xl bg-cultural-surface p-space-xl md:p-space-2xl text-center">
+<span class="font-label-eyebrow text-label-eyebrow uppercase tracking-widest text-primary">Red de Confianza Ciudadana</span>
+<h2 class="mt-space-2xs font-headline-md text-headline-md text-on-surface">
+          La transparencia radical construye comunidad cultural viva
+        </h2>
+<p class="mx-auto mt-space-xs max-w-2xl font-body-md text-body-md text-text-secondary">
+          Explora los otros instrumentos normativos y éticos desarrollados por la comunidad Cuicoyan y la iniciativa Ollin de tecnología comunitaria.
+        </p>
+<div class="mt-space-xl grid grid-cols-1 md:grid-cols-3 gap-space-md text-left">
+<a class="group rounded-2xl bg-surface-container-lowest p-space-lg transition-all hover:-translate-y-1 shadow-sm hover:shadow-md" data-path="terminos" href="#">
+<div class="mb-space-xs flex items-center justify-between">
+<span class="material-symbols-outlined text-primary text-[24px]">balance</span>
+<span class="material-symbols-outlined text-text-secondary group-hover:text-primary transition-colors text-[20px]">arrow_forward</span>
+</div>
+<h3 class="font-title-card text-title-card text-on-surface group-hover:text-primary transition-colors">Términos Comunitarios</h3>
+<p class="mt-space-2xs font-body-sm text-body-sm text-text-secondary">Condiciones para compartir espacios, foros independientes y talleres sin intermediarios.</p>
+</a>
+<a class="group rounded-2xl bg-surface-container-lowest p-space-lg transition-all hover:-translate-y-1 shadow-sm hover:shadow-md" data-path="manifiesto" href="#">
+<div class="mb-space-xs flex items-center justify-between">
+<span class="material-symbols-outlined text-discipline-huapango text-[24px]">local_library</span>
+<span class="material-symbols-outlined text-text-secondary group-hover:text-discipline-huapango transition-colors text-[20px]">arrow_forward</span>
+</div>
+<h3 class="font-title-card text-title-card text-on-surface group-hover:text-discipline-huapango transition-colors">Manifiesto Ollin Digital</h3>
+<p class="mt-space-2xs font-body-sm text-body-sm text-text-secondary">Principios sobre soberanía tecnológica, datos abiertos y defensa del bien cultural común.</p>
+</a>
+<a class="group rounded-2xl bg-surface-container-lowest p-space-lg transition-all hover:-translate-y-1 shadow-sm hover:shadow-md" data-path="accesibilidad" href="#">
+<div class="mb-space-xs flex items-center justify-between">
+<span class="material-symbols-outlined text-discipline-danza text-[24px]">accessibility_new</span>
+<span class="material-symbols-outlined text-text-secondary group-hover:text-discipline-danza transition-colors text-[20px]">arrow_forward</span>
+</div>
+<h3 class="font-title-card text-title-card text-on-surface group-hover:text-discipline-danza transition-colors">Código de Ética y Foros</h3>
+<p class="mt-space-2xs font-body-sm text-body-sm text-text-secondary">Compromiso vecinal de inclusión, tarimas libres de violencia y equidad barrial.</p>
+</a>
+</div>
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-cultural-surface dark:bg-dark-surface-alt transition-colors duration-200 pt-space-3xl pb-space-2xl"><div class="max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl pb-space-2xl"><div class="lg:col-span-2 flex flex-col items-start"><div class="flex items-center gap-space-xs mb-space-sm"><img alt="Logo.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><span class="font-headline-sm text-title-card tracking-tight text-primary">Cuicoyan</span></div><p class="font-body-md text-body-md text-text-secondary max-w-sm mb-space-lg">Donde la ciudad encuentra su escenario. Plataforma comunitaria para la difusión, resonancia y tejido del arte vivo en la Ciudad de México.</p><div class="flex items-center gap-space-xs"><a aria-label="Canal de audio e identidad sonora" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">podcasts</span></a><a aria-label="Agenda y mapa vivo" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">map</span></a><a aria-label="Comunidad y red territorial" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">hub</span></a><a aria-label="Boletín de novedades culturales" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">mail</span></a></div></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Explora</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="eventos" href="#">Eventos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="artistas" href="#">Artistas</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros" href="#">Foros</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="mapa-cultural" href="#">Mapa cultural</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="explorar" href="#">Por categoría</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Participa</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="para-creadores" href="#para-creadores">Para artistas y colectivos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros-y-espacios" href="#">Para foros y espacios</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="convocatorias" href="#">Convocatorias</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="unete" href="#">Registro de proyectos</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Información</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="manifiesto" href="#">Manifiesto</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="accesibilidad" href="#">Accesibilidad</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="terminos" href="#">Términos de servicio</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="privacidad" href="#">Aviso de privacidad</a></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-text-secondary"><p>© 2025 Cuicoyan. Plataforma de cultura viva de la Ciudad de México.</p><p class="text-center md:text-right font-label-md text-label-md text-on-surface-variant">Cuicoyan es una plataforma desarrollada sobre la infraestructura digital de Ollin.</p></div></div></footer></body></html>

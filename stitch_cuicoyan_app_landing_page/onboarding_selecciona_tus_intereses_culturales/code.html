@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-fixed-dim": "#63d7e1",
+          "dark-blue": "#24C8EF",
+          "surface": "#FFFFFF",
+          "on-secondary-container": "#006e75",
+          "error": "#ba1a1a",
+          "text-secondary": "#5F6273",
+          "brand-gradient-end": "#00C7D4",
+          "inverse-primary": "#ffb2be",
+          "discipline-huapango": "#009BA5",
+          "primary-container": "#e40e5f",
+          "on-tertiary": "#ffffff",
+          "on-secondary-fixed-variant": "#004f54",
+          "on-surface": "#161a33",
+          "on-tertiary-container": "#fffbff",
+          "on-error": "#ffffff",
+          "primary": "#b8004a",
+          "inverse-on-surface": "#f0efff",
+          "on-primary-container": "#fffbff",
+          "on-background": "#161a33",
+          "on-primary-fixed": "#400014",
+          "on-tertiary-fixed-variant": "#753400",
+          "cultural-surface": "#FFF7EE",
+          "dark-border": "#292540",
+          "error-container": "#ffdad6",
+          "dark-red": "#FF506F",
+          "surface-container": "#edecff",
+          "dark-text": "#F9F7FC",
+          "surface-container-highest": "#dee0ff",
+          "primary-fixed-dim": "#ffb2be",
+          "surface-container-low": "#f4f2ff",
+          "dark-background": "#080817",
+          "status-jade": "#008F70",
+          "outline-variant": "#e4bdc2",
+          "on-primary": "#ffffff",
+          "dark-orange": "#FF9D2E",
+          "surface-container-high": "#e6e6ff",
+          "inverse-surface": "#2b2f49",
+          "on-error-container": "#93000a",
+          "background": "#fbf8ff",
+          "secondary-fixed": "#82f3fe",
+          "discipline-teatro": "#D62650",
+          "dark-primary": "#FF3D8D",
+          "dark-surface": "#101126",
+          "secondary": "#006970",
+          "dark-text-secondary": "#B6B2C2",
+          "brand-gradient-mid": "#8A3FFC",
+          "surface-tint": "#bc004c",
+          "tertiary-fixed": "#ffdbc8",
+          "surface-container-lowest": "#ffffff",
+          "dark-surface-raised": "#1D1735",
+          "primary-fixed": "#ffd9de",
+          "on-tertiary-fixed": "#321200",
+          "discipline-musica": "#008EB5",
+          "tertiary-fixed-dim": "#ffb68b",
+          "discipline-talleres": "#E91662",
+          "on-secondary": "#ffffff",
+          "outline": "#906f73",
+          "surface-variant": "#dee0ff",
+          "dark-cyan": "#17E0E4",
+          "on-primary-fixed-variant": "#900038",
+          "discipline-fandango": "#E96F00",
+          "surface-alt": "#FFF3F6",
+          "dark-purple": "#B45CFF",
+          "dark-green": "#20D5A7",
+          "surface-bright": "#fbf8ff",
+          "tertiary-container": "#bb5800",
+          "surface-dim": "#d5d8fa",
+          "dark-surface-alt": "#16132B",
+          "on-surface-variant": "#5c3f44",
+          "border-hairline": "#ECE4E7",
+          "brand-gradient-start": "#F21F6D",
+          "secondary-container": "#7ff1fb",
+          "on-secondary-fixed": "#002022",
+          "discipline-danza": "#7936D2",
+          "tertiary": "#954500"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-sm": "0.75rem",
+          "gutter-desktop": "5rem",
+          "space-2xs": "0.25rem",
+          "space-3xl": "4.5rem",
+          "space-lg": "1.5rem",
+          "space-2xl": "3rem",
+          "gutter-tablet": "2.5rem",
+          "space-4xl": "7rem",
+          "space-xl": "2rem",
+          "margin-desktop": "5rem",
+          "space-md": "1rem",
+          "margin-tablet": "2.5rem",
+          "gutter": "1.25rem",
+          "space-xs": "0.5rem",
+          "margin": "1.25rem"
+        },
+        "fontFamily": {
+          "display-hero": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "display-hero-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-md": [
+            "Manrope"
+          ],
+          "headline-lg-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-eyebrow": [
+            "Manrope"
+          ],
+          "headline-lg": [
+            "Bricolage Grotesque"
+          ],
+          "body-lg": [
+            "Manrope"
+          ],
+          "body-md": [
+            "Manrope"
+          ],
+          "body-sm": [
+            "Manrope"
+          ],
+          "headline-md-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "headline-md": [
+            "Bricolage Grotesque"
+          ],
+          "title-card": [
+            "Bricolage Grotesque"
+          ],
+          "label-lg": [
+            "Manrope"
+          ]
+        },
+        "fontSize": {
+          "display-hero": [
+            "72px",
+            {
+              "lineHeight": "76px",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "800"
+            }
+          ],
+          "headline-sm": [
+            "28px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-sm-mobile": [
+            "24px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "0em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-hero-mobile": [
+            "42px",
+            {
+              "lineHeight": "46px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "800"
+            }
+          ],
+          "label-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "36px",
+            {
+              "lineHeight": "42px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-eyebrow": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.08em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-lg": [
+            "56px",
+            {
+              "lineHeight": "62px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "20px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "16px",
+            {
+              "lineHeight": "26px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "letterSpacing": "0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md-mobile": [
+            "30px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "44px",
+            {
+              "lineHeight": "50px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "title-card": [
+            "22px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-lg": [
+            "16px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface antialiased transition-colors duration-200"><a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-space-md focus:py-space-xs focus:bg-primary focus:text-on-primary focus:rounded-xl focus:shadow-lg focus:outline-none font-label-md text-label-md" href="#main-content">Saltar al contenido</a><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 dark:bg-dark-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-colors duration-200"><div class="h-20 max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-xl"><a class="flex items-center gap-space-xs group focus:outline-none" data-path="inicio" href="#"><img alt="Logo.png" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><div class="flex flex-col"><span class="font-headline-sm text-title-card tracking-tight text-primary leading-none">Cuicoyan</span><span class="font-label-eyebrow text-[10px] tracking-widest uppercase text-text-secondary leading-tight">Cultura Viva CDMX</span></div></a><nav class="hidden xl:flex items-center gap-space-md" data-active-classes="text-primary font-bold"><a aria-current="page" class="transition-colors py-space-2xs text-primary font-bold" data-path="inicio" href="#">Inicio</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="explorar" href="#">Explorar</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="eventos" href="#">Eventos</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="artistas" href="#">Artistas</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="foros" href="#">Foros</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="mapa-cultural" href="#">Mapa</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="para-creadores" href="#para-creadores">Para creadores</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a></nav></div><div class="flex items-center gap-space-xs sm:gap-space-sm"><div class="relative hidden md:block w-44 lg:w-56"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px] pointer-events-none">search</span><input aria-label="Buscar contenido cultural" class="w-full h-10 pl-9 pr-3 rounded-xl bg-surface-container-lowest text-on-surface placeholder:text-text-secondary font-body-sm text-body-sm shadow-[0_1px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar talleres, sones, foros..." type="search"/></div><button aria-label="Alternar modo visual claro u oscuro" class="h-10 w-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors focus:outline-none" onclick="document.documentElement.classList.toggle('dark')" type="button"><span class="material-symbols-outlined text-[20px] dark:hidden">dark_mode</span><span class="material-symbols-outlined text-[20px] hidden dark:inline-block">light_mode</span></button><a class="inline-flex items-center justify-center px-space-md h-10 rounded-xl bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-all shadow-[0_4px_16px_rgba(184,0,74,0.18)] hover:scale-[1.02] active:scale-[0.98]" data-path="unete" href="#">Únete a Cuicoyan</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background transition-colors duration-200" id="main-content"><div class="flex flex-col w-full">
+<!-- Stepper & Progress Sub-bar -->
+<section class="w-full bg-surface-container-low/70 backdrop-blur-md pt-space-md pb-space-lg px-margin md:px-margin-tablet lg:px-margin-desktop">
+<div class="max-w-[1120px] mx-auto flex flex-col gap-space-xs">
+<div class="flex items-center justify-between font-label-md text-label-md text-text-secondary">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary font-headline-sm text-[12px] font-bold">2</span>
+<span class="text-on-surface font-semibold">Paso 2 de 3</span>
+<span class="text-outline-variant">/</span>
+<span class="text-text-secondary">Intereses y Territorio</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-discipline-talleres">auto_awesome</span>
+<span class="text-on-surface font-medium hidden sm:inline">65% completado</span>
+<a class="ml-space-sm text-text-secondary hover:text-primary transition-colors text-body-sm underline-offset-4 hover:underline" href="#">Omitir personalización</a>
+</div>
+</div>
+<!-- Gradient Progress Bar -->
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full rounded-full bg-gradient-to-r from-brand-gradient-start via-brand-gradient-mid to-brand-gradient-end transition-all duration-500 ease-out" style="width: 66%;"></div>
+</div>
+</div>
+</section>
+<!-- Main Editorial Container -->
+<div class="w-full max-w-[1120px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop pt-space-2xl pb-space-4xl flex flex-col gap-space-3xl">
+<!-- Hero Editorial Block -->
+<header class="flex flex-col gap-space-md items-start max-w-[820px]">
+<div class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-alt text-primary font-label-eyebrow text-label-eyebrow tracking-wider uppercase">
+<span class="material-symbols-outlined text-[16px]">celebration</span>
+<span>Bienvenido a Cuicoyan · Personaliza tu cartelera</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight leading-tight">
+        ¿Qué expresiones culturales despiertan tu curiosidad?
+      </h1>
+<p class="font-body-lg text-body-lg text-text-secondary max-w-[740px]">
+        Selecciona al menos 3 disciplinas o ambientes. Usaremos tus elecciones para recomendarte eventos cercanos, talleres comunitarios y foros independientes que vibran a tu ritmo.
+      </p>
+<!-- Dynamic Badge Counter -->
+<div class="mt-space-xs inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-xl bg-surface-container text-on-surface">
+<span class="flex h-2.5 w-2.5 rounded-full bg-status-jade animate-pulse"></span>
+<p class="font-label-md text-label-md" id="counter-summary">
+          Has seleccionado <strong class="text-primary font-bold" id="selected-count">4 disciplinas</strong> (mínimo recomendado: 3)
+        </p>
+</div>
+</header>
+<!-- Fast Search & Action Pills -->
+<div class="w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md p-space-md rounded-2xl bg-surface-container-low shadow-sm">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary text-[22px] pointer-events-none">filter_alt</span>
+<input class="w-full h-12 pl-12 pr-4 rounded-xl bg-surface text-on-surface placeholder:text-text-secondary font-body-md text-body-md shadow-[0_1px_6px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-primary transition-all" id="tag-search" placeholder="Filtra géneros: huapango, grabado, son jarocho, spoken word..." type="search"/>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 overflow-x-auto pb-1 md:pb-0">
+<button class="inline-flex items-center gap-space-xs px-space-md h-12 rounded-xl bg-cultural-surface hover:bg-tertiary-fixed text-tertiary font-label-md text-label-md transition-all active:scale-95 shadow-sm" id="select-traditional-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">temp_preferences_custom</span>
+<span>Elegir todas las tradicionales</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md h-12 rounded-xl bg-surface text-text-secondary hover:text-error hover:bg-error-container/40 font-label-md text-label-md transition-all active:scale-95 shadow-sm" id="clear-all-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>Restablecer</span>
+</button>
+</div>
+</div>
+<!-- Section 1: Disciplinas Principales (Interactive Large Chips Grid) -->
+<section aria-labelledby="section-disciplines" class="flex flex-col gap-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-space-2xs">
+<div>
+<span class="font-label-eyebrow text-label-eyebrow uppercase tracking-widest text-primary">Sección 1</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="section-disciplines">Disciplinas y Lenguajes Vivos</h2>
+</div>
+<p class="font-body-sm text-body-sm text-text-secondary">Haz clic sobre las tarjetas para agregarlas a tu brújula cultural</p>
+</div>
+<!-- Bento-style interactive discipline tiles -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-md" id="disciplines-grid">
+<!-- Tile 1: Huapango (Selected) -->
+<div aria-checked="true" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-md hover:-translate-y-1 hover:shadow-xl relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-discipline-huapango/10 via-surface to-surface" data-discipline="huapango" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-discipline-huapango/20 text-discipline-huapango flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">graphic_eq</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-discipline-huapango/15 text-discipline-huapango font-bold">24 activos</span>
+<div class="w-7 h-7 rounded-lg bg-discipline-huapango text-on-primary flex items-center justify-center transition-transform group-hover:scale-110 check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Huapango &amp; Son Tradicional</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Fandangos, versería campesina, son huasteco y son jarocho comunitarios.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-discipline-huapango font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">groups</span>
+<span>Comunidades del Sotavento &amp; Sierra</span>
+</div>
+</div>
+<!-- Tile 2: Danza Folclórica & Contemporánea (Selected) -->
+<div aria-checked="true" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-md hover:-translate-y-1 hover:shadow-xl relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-discipline-danza/10 via-surface to-surface" data-discipline="danza" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-discipline-danza/20 text-discipline-danza flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">accessibility_new</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-discipline-danza/15 text-discipline-danza font-bold">18 activos</span>
+<div class="w-7 h-7 rounded-lg bg-discipline-danza text-on-primary flex items-center justify-center transition-transform group-hover:scale-110 check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Danza Folclórica &amp; Cuerpo</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Zapateado sobre tarima, danza folclórica regional y movimiento contemporáneo.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-discipline-danza font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">spatial_audio_off</span>
+<span>Espacios públicos y salas vivas</span>
+</div>
+</div>
+<!-- Tile 3: Música en Vivo (Selected) -->
+<div aria-checked="true" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-md hover:-translate-y-1 hover:shadow-xl relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-discipline-musica/10 via-surface to-surface" data-discipline="musica" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-discipline-musica/20 text-discipline-musica flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">music_note</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-discipline-musica/15 text-discipline-musica font-bold">36 activos</span>
+<div class="w-7 h-7 rounded-lg bg-discipline-musica text-on-primary flex items-center justify-center transition-transform group-hover:scale-110 check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Música en Vivo &amp; Cuerdas</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Acústicos íntimos, ensambles de cuerdas, fusiones vernáculas y sonideros.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-discipline-musica font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">volume_up</span>
+<span>Sesiones acústicas y foros club</span>
+</div>
+</div>
+<!-- Tile 4: Cultura Urbana (Selected) -->
+<div aria-checked="true" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-md hover:-translate-y-1 hover:shadow-xl relative flex flex-col justify-between overflow-hidden bg-gradient-to-br from-discipline-fandango/10 via-surface to-surface" data-discipline="urbana" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-discipline-fandango/20 text-discipline-fandango flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">brush</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-discipline-fandango/15 text-discipline-fandango font-bold">15 activos</span>
+<div class="w-7 h-7 rounded-lg bg-discipline-fandango text-on-primary flex items-center justify-center transition-transform group-hover:scale-110 check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Cultura Urbana &amp; Gráfica</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Hip-hop, spoken word de barrio, gráfica callejera, muralismo y fanzines.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-discipline-fandango font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">palette</span>
+<span>Azoteas, colectivos y plazas</span>
+</div>
+</div>
+<!-- Tile 5: Teatro & Narración (Unselected) -->
+<div aria-checked="false" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-sm hover:shadow-md relative flex flex-col justify-between overflow-hidden opacity-90 hover:opacity-100" data-discipline="teatro" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container text-discipline-teatro flex items-center justify-center shrink-0 transition-colors group-hover:bg-discipline-teatro/20">
+<span class="material-symbols-outlined text-[28px]">theater_comedy</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-surface-container text-text-secondary">12 activos</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container text-transparent flex items-center justify-center transition-transform check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Teatro &amp; Narración Oral</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Dramaturgia comunitaria, títeres, cabaret político, clown y mitos chilangos.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-text-secondary font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">record_voice_over</span>
+<span>Foros comunitarios y carpas</span>
+</div>
+</div>
+<!-- Tile 6: Talleres Comunitarios (Unselected) -->
+<div aria-checked="false" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-sm hover:shadow-md relative flex flex-col justify-between overflow-hidden opacity-90 hover:opacity-100" data-discipline="talleres" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container text-discipline-talleres flex items-center justify-center shrink-0 transition-colors group-hover:bg-discipline-talleres/20">
+<span class="material-symbols-outlined text-[28px]">handyman</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-surface-container text-text-secondary">20 activos</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container text-transparent flex items-center justify-center transition-transform check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Talleres Comunitarios &amp; Oficios</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Cartonería monumental, telar de cintura, barro negro, linograbado y laudería.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-text-secondary font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">school</span>
+<span>Casas de cultura y talleres autogestivos</span>
+</div>
+</div>
+<!-- Tile 7: Artes Visuales & Galerías (Unselected) -->
+<div aria-checked="false" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-sm hover:shadow-md relative flex flex-col justify-between overflow-hidden opacity-90 hover:opacity-100" data-discipline="visuales" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0 transition-colors group-hover:bg-secondary/20">
+<span class="material-symbols-outlined text-[28px]">photo_camera</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-surface-container text-text-secondary">14 activos</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container text-transparent flex items-center justify-center transition-transform check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Artes Visuales &amp; Fotografía</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Fotografía documental, instalaciones lumínicas y circuitos de galerías barriales.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-text-secondary font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">museum</span>
+<span>Espacios independientes y pasajes</span>
+</div>
+</div>
+<!-- Tile 8: Poesía & Décimas (Unselected) -->
+<div aria-checked="false" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-sm hover:shadow-md relative flex flex-col justify-between overflow-hidden opacity-90 hover:opacity-100" data-discipline="poesia" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container text-tertiary flex items-center justify-center shrink-0 transition-colors group-hover:bg-tertiary/20">
+<span class="material-symbols-outlined text-[28px]">menu_book</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-surface-container text-text-secondary">8 activos</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container text-transparent flex items-center justify-center transition-transform check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Poesía, Décimas &amp; Versada</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Tardes de micrófono abierto, versada popular jarocha, poesía en lenguas originarias.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-text-secondary font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">local_cafe</span>
+<span>Cafés literarios y huertos urbanos</span>
+</div>
+</div>
+<!-- Tile 9: Artes Circenses (Unselected) -->
+<div aria-checked="false" class="group discipline-card cursor-pointer p-space-lg rounded-2xl bg-surface transition-all duration-200 shadow-sm hover:shadow-md relative flex flex-col justify-between overflow-hidden opacity-90 hover:opacity-100" data-discipline="circo" data-type="discipline" role="checkbox" tabindex="0">
+<div class="flex items-start justify-between gap-space-sm mb-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container text-primary flex items-center justify-center shrink-0 transition-colors group-hover:bg-primary/20">
+<span class="material-symbols-outlined text-[28px]">star</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-label-eyebrow bg-surface-container text-text-secondary">9 activos</span>
+<div class="w-7 h-7 rounded-lg bg-surface-container text-transparent flex items-center justify-center transition-transform check-indicator">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="font-title-card text-title-card text-on-surface mb-1">Artes Circenses &amp; Calle</h3>
+<p class="font-body-sm text-body-sm text-text-secondary">Malabarismo, acrobacia en tela, rueda Cyr y espectáculos itinerantes al aire libre.</p>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center gap-2 text-text-secondary font-label-md text-[13px]">
+<span class="material-symbols-outlined text-[16px]">park</span>
+<span>Parques, kioscos y alamedas</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Split Section: Intenciones (Ambientes) & Territorios -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+<!-- Left Column: Intenciones & Modos de Salida (7 cols) -->
+<section aria-labelledby="section-intentions" class="lg:col-span-7 flex flex-col gap-space-md">
+<div>
+<span class="font-label-eyebrow text-label-eyebrow uppercase tracking-widest text-primary">Sección 2</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="section-intentions">¿Cómo te gusta vivir la cultura?</h2>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">Ambientes, modalidades de entrada y formatos de encuentro que priorizas.</p>
+</div>
+<div class="flex flex-wrap gap-space-xs pt-space-xs" id="intentions-group">
+<!-- Intention 1: Aire libre (Selected) -->
+<button aria-checked="true" class="intention-chip inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-surface-alt text-primary font-label-md text-label-md shadow-sm transition-all hover:scale-105 active:scale-95" role="checkbox" type="button">
+<span class="material-symbols-outlined text-[18px]">nature_people</span>
+<span>Al aire libre / Plazas públicas</span>
+<span class="material-symbols-outlined text-[16px] font-bold ml-1">check</span>
+</button>
+<!-- Intention 2: Entrada libre (Selected) -->
+<button aria-checked="true" class="intention-chip inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-surface-alt text-primary font-label-md text-label-md shadow-sm transition-all hover:scale-105 active:scale-95" role="checkbox" type="button">
+<span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+<span>Entrada libre / Cooperación voluntaria</span>
+<span class="material-symbols-outlined text-[16px] font-bold ml-1">check</span>
+</button>
+<!-- Intention 3: Foros íntimos (Selected) -->
+<button aria-checked="true" class="intention-chip inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-surface-alt text-primary font-label-md text-label-md shadow-sm transition-all hover:scale-105 active:scale-95" role="checkbox" type="button">
+<span class="material-symbols-outlined text-[18px]">cottage</span>
+<span>Foros íntimos e independientes</span>
+<span class="material-symbols-outlined text-[16px] font-bold ml-1">check</span>
+</button>
+<!-- Intention 4: Familiar (Unselected) -->
+<button aria-checked="false" class="intention-chip inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-surface-container-low text-text-secondary hover:text-on-surface font-label-md text-label-md transition-all hover:scale-105 active:scale-95" role="checkbox" type="button">
+<span class="material-symbols-outlined text-[18px]">family_restroom</span>
+<span>Eventos familiares e infantiles</span>
+</button>
+<!-- Intention 5: Talleres prácticos (Unselected) -->
+<button aria-checked="false" class="intention-chip inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-surface-container-low text-text-secondary hover:text-on-surface font-label-md text-label-md transition-all hover:scale-105 active:scale-95" role="checkbox" type="button">
+<span class="material-symbols-outlined text-[18px]">draw</span>
+<span>Talleres con manos a la obra</span>
+</button>
+<!-- Intention 6: Nocturno (Unselected) -->
+<button aria-checked="false" class="intention-chip inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-surface-container-low text-text-secondary hover:text-on-surface font-label-md text-label-md transition-all hover:scale-105 active:scale-95" role="checkbox" type="button">
+<span class="material-symbols-outlined text-[18px]">dark_mode</span>
+<span>De noche / Conciertos acústicos</span>
+</button>
+<!-- Intention 7: Accesibilidad (Unselected) -->
+<button aria-checked="false" class="intention-chip inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-full bg-surface-container-low text-text-secondary hover:text-on-surface font-label-md text-label-md transition-all hover:scale-105 active:scale-95" role="checkbox" type="button">
+<span class="material-symbols-outlined text-[18px]">accessible</span>
+<span>Accesibilidad garantizada (rampas / LSM)</span>
+</button>
+</div>
+</section>
+<!-- Right Column: Alcaldías y Territorio (5 cols) -->
+<section aria-labelledby="section-territory" class="lg:col-span-5 flex flex-col gap-space-md">
+<div>
+<span class="font-label-eyebrow text-label-eyebrow uppercase tracking-widest text-secondary">Sección 3</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="section-territory">Territorios que frecuentas</h2>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">Elige tus alcaldías de mayor movimiento en CDMX.</p>
+</div>
+<div class="flex flex-col gap-space-xs" id="territory-group">
+<!-- Cuauhtémoc (Selected) -->
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface shadow-sm cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-primary">location_on</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Cuauhtémoc</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Roma, Condesa, Centro Histórico, San Rafael</span>
+</div>
+</div>
+<input checked="" class="w-5 h-5 rounded accent-primary cursor-pointer territory-check" type="checkbox"/>
+</label>
+<!-- Coyoacán (Selected) -->
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface shadow-sm cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-primary">location_on</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Coyoacán</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Centro, Del Carmen, Santa Catarina, Los Reyes</span>
+</div>
+</div>
+<input checked="" class="w-5 h-5 rounded accent-primary cursor-pointer territory-check" type="checkbox"/>
+</label>
+<!-- Benito Juárez -->
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface shadow-sm cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-text-secondary">location_on</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Benito Juárez</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Narvarte, Del Valle, Álamos, Portales</span>
+</div>
+</div>
+<input class="w-5 h-5 rounded accent-primary cursor-pointer territory-check" type="checkbox"/>
+</label>
+<!-- Tlalpan & Xochimilco -->
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface shadow-sm cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-text-secondary">location_on</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Tlalpan &amp; Xochimilco</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Cascos antiguos, pueblos y canales</span>
+</div>
+</div>
+<input class="w-5 h-5 rounded accent-primary cursor-pointer territory-check" type="checkbox"/>
+</label>
+<!-- Toda la CDMX -->
+<label class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-secondary">explore</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Toda la Ciudad de México</span>
+<span class="font-body-sm text-[12px] text-text-secondary">Sin filtro geográfico, abierto a todo hallazgo</span>
+</div>
+</div>
+<input class="w-5 h-5 rounded accent-secondary cursor-pointer territory-check" type="checkbox"/>
+</label>
+</div>
+</section>
+</div>
+<!-- Live Preview Match Section (Tactile Feedback for Selection) -->
+<section aria-labelledby="live-preview-title" class="w-full p-space-xl rounded-3xl bg-cultural-surface shadow-md flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-xl overflow-hidden relative">
+<div class="flex flex-col gap-space-xs max-w-md z-10">
+<div class="inline-flex items-center gap-space-xs text-discipline-fandango font-label-eyebrow text-label-eyebrow tracking-wider uppercase">
+<span class="material-symbols-outlined text-[16px]">radar</span>
+<span>Calibración en tiempo real</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface" id="live-preview-title">
+          Tu cartelera ya está respondiendo
+        </h3>
+<p class="font-body-sm text-body-sm text-text-secondary">
+          Basado en tu afinidad con <span class="font-bold text-on-surface">Huapango, Música y Coyoacán</span>, este evento encabezará tus sugerencias semanales.
+        </p>
+</div>
+<!-- Compact Preview Card matching Inspiration -->
+<div class="w-full md:w-[420px] p-space-md rounded-2xl bg-surface shadow-xl flex flex-col gap-space-sm shrink-0 z-10 transition-transform duration-200 hover:-translate-y-1">
+<div class="flex items-center justify-between">
+<div class="inline-flex items-center gap-1.5 px-space-xs py-0.5 rounded-full bg-discipline-huapango/15 text-discipline-huapango font-label-eyebrow text-[11px] font-bold">
+<span class="material-symbols-outlined text-[14px]">stars</span>
+<span>98% Compatible</span>
+</div>
+<span class="font-label-eyebrow text-[12px] text-text-secondary">Sáb 8 De Ago · 6:00 p.m.</span>
+</div>
+<div class="flex gap-space-md items-center">
+<div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-surface-container relative">
+<img class="w-full h-full object-cover" data-alt="Traditional Mexican wooden jarana and huapanguera instruments resting on an artisanal woven textile with warm festive lanterns in Mexico City, rich cinematic lighting, warm amber and magenta hues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAup8keVIppYcBKMVXhYrm0ruJGp94MzdQepWlqxubWMdAdtpVmImKXDwbJA1N6wYyF141kytF6K4Vha5GxSKaxrDCNPFiISU-Y8v0Ez6hBs6E3enyGqqju9TNoGHrI8JbQesyNuRy-2SKIwU2VGY2ATltAxg0Rihbs-0E5_U72OVb589cZUBHZWmHgXoI4lvRevzO2i606x9bFD2SSPihAC393er20bZNYn3cS3XyeYBxAvW9_dydD"/>
+</div>
+<div class="flex flex-col">
+<h4 class="font-title-card text-[18px] text-on-surface leading-snug">Sones del barrio: Canto y memoria</h4>
+<p class="font-body-sm text-body-sm text-text-secondary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px] text-primary">location_on</span>
+<span>Casa del Lago · Bosque de Chapultepec</span>
+</p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-2xs text-[12px] font-label-md text-text-secondary">
+<div class="flex items-center gap-space-2xs">
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-discipline-huapango font-bold">Huapango</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-discipline-musica font-bold">Música</span>
+</div>
+<span class="font-headline-sm text-title-card text-primary font-bold">Entrada libre</span>
+</div>
+</div>
+<!-- Decorative ambient flourish in background -->
+<div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-gradient-to-tr from-brand-gradient-start/10 to-brand-gradient-end/10 blur-2xl pointer-events-none"></div>
+</section>
+</div>
+<!-- Sticky Bottom Save & Navigation Bar -->
+<aside aria-label="Acciones de guardado" class="sticky bottom-4 inset-x-0 w-full z-40 px-margin md:px-margin-tablet lg:px-margin-desktop pointer-events-none pb-4">
+<div class="max-w-[1040px] mx-auto pointer-events-auto bg-surface/95 backdrop-blur-xl p-space-md sm:p-space-lg rounded-2xl sm:rounded-3xl shadow-[0_12px_40px_rgba(22,26,51,0.14)] flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<!-- Left: Active Summary Chips -->
+<div class="flex items-center gap-space-sm w-full sm:w-auto justify-between sm:justify-start">
+<div class="flex items-center -space-x-2">
+<span class="w-8 h-8 rounded-full bg-discipline-huapango text-on-primary flex items-center justify-center font-bold text-xs shadow-sm" title="Huapango">H</span>
+<span class="w-8 h-8 rounded-full bg-discipline-danza text-on-primary flex items-center justify-center font-bold text-xs shadow-sm" title="Danza">D</span>
+<span class="w-8 h-8 rounded-full bg-discipline-musica text-on-primary flex items-center justify-center font-bold text-xs shadow-sm" title="Música">M</span>
+<span class="w-8 h-8 rounded-full bg-discipline-fandango text-on-primary flex items-center justify-center font-bold text-xs shadow-sm" title="Urbana">U</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface leading-tight font-semibold" id="bar-summary-text">4 disciplinas seleccionadas</span>
+<span class="font-body-sm text-[12px] text-text-secondary leading-none">Listo para preparar tu cartelera</span>
+</div>
+</div>
+<!-- Right: Action Buttons -->
+<div class="flex items-center gap-space-sm w-full sm:w-auto justify-end">
+<button class="px-space-md h-12 rounded-xl text-text-secondary hover:text-on-surface hover:bg-surface-container font-label-md text-label-md transition-colors" onclick="window.history.back()" type="button">
+          Volver
+        </button>
+<a class="inline-flex items-center justify-center gap-space-xs px-space-xl h-12 rounded-xl bg-gradient-to-r from-brand-gradient-start via-brand-gradient-mid to-brand-gradient-end text-on-primary font-label-md text-label-md font-semibold transition-all duration-200 shadow-[0_6px_20px_rgba(242,31,109,0.3)] hover:scale-[1.02] active:scale-[0.98]" href="#" id="finish-onboarding-btn">
+<span>Guardar y Explorar Cartelera</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Micro-interactions Script -->
+<script>
+    (function() {
+      const disciplineCards = document.querySelectorAll('.discipline-card');
+      const intentionChips = document.querySelectorAll('.intention-chip');
+      const counterText = document.getElementById('selected-count');
+      const barSummaryText = document.getElementById('bar-summary-text');
+      const tagSearch = document.getElementById('tag-search');
+      const selectTraditionalBtn = document.getElementById('select-traditional-btn');
+      const clearAllBtn = document.getElementById('clear-all-btn');
+
+      function updateCounts() {
+        const activeCards = document.querySelectorAll('.discipline-card[aria-checked="true"]');
+        const count = activeCards.length;
+        if (counterText) {
+          counterText.textContent = `${count} ${count === 1 ? 'disciplina' : 'disciplinas'}`;
+        }
+        if (barSummaryText) {
+          barSummaryText.textContent = `${count} ${count === 1 ? 'disciplina seleccionada' : 'disciplinas seleccionadas'}`;
+        }
+      }
+
+      // Discipline Tile Click Handler
+      disciplineCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const isChecked = card.getAttribute('aria-checked') === 'true';
+          const nextState = !isChecked;
+          card.setAttribute('aria-checked', String(nextState));
+
+          const indicator = card.querySelector('.check-indicator');
+          const checkIcon = indicator ? indicator.querySelector('.material-symbols-outlined') : null;
+
+          if (nextState) {
+            card.classList.add('shadow-md');
+            card.classList.remove('opacity-90');
+            if (indicator) {
+              indicator.classList.remove('bg-surface-container', 'text-transparent');
+              indicator.classList.add('bg-primary', 'text-on-primary');
+            }
+          } else {
+            card.classList.remove('shadow-md');
+            card.classList.add('opacity-90');
+            if (indicator) {
+              indicator.classList.add('bg-surface-container', 'text-transparent');
+              indicator.classList.remove('bg-primary', 'text-on-primary', 'bg-discipline-huapango', 'bg-discipline-danza', 'bg-discipline-musica', 'bg-discipline-fandango');
+            }
+          }
+          updateCounts();
+        });
+
+        // Accessibility Keyboard Space/Enter Support
+        card.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            card.click();
+          }
+        });
+      });
+
+      // Intention Chips Toggle
+      intentionChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const checked = chip.getAttribute('aria-checked') === 'true';
+          const next = !checked;
+          chip.setAttribute('aria-checked', String(next));
+
+          if (next) {
+            chip.classList.remove('bg-surface-container-low', 'text-text-secondary');
+            chip.classList.add('bg-surface-alt', 'text-primary', 'shadow-sm');
+            if (!chip.querySelector('.material-symbols-outlined.font-bold')) {
+              const check = document.createElement('span');
+              check.className = 'material-symbols-outlined text-[16px] font-bold ml-1';
+              check.textContent = 'check';
+              chip.appendChild(check);
+            }
+          } else {
+            chip.classList.add('bg-surface-container-low', 'text-text-secondary');
+            chip.classList.remove('bg-surface-alt', 'text-primary', 'shadow-sm');
+            const check = chip.querySelector('.material-symbols-outlined.font-bold');
+            if (check) check.remove();
+          }
+        });
+      });
+
+      // Tag Search Filter
+      if (tagSearch) {
+        tagSearch.addEventListener('input', (e) => {
+          const term = e.target.value.toLowerCase().trim();
+          disciplineCards.forEach(card => {
+            const text = card.innerText.toLowerCase();
+            if (text.includes(term)) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      }
+
+      // Quick Action: Select Traditional
+      if (selectTraditionalBtn) {
+        selectTraditionalBtn.addEventListener('click', () => {
+          const traditionalKeys = ['huapango', 'danza', 'poesia'];
+          disciplineCards.forEach(card => {
+            const disc = card.getAttribute('data-discipline');
+            if (traditionalKeys.includes(disc)) {
+              if (card.getAttribute('aria-checked') !== 'true') {
+                card.click();
+              }
+            }
+          });
+        });
+      }
+
+      // Quick Action: Clear All
+      if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', () => {
+          disciplineCards.forEach(card => {
+            if (card.getAttribute('aria-checked') === 'true') {
+              card.click();
+            }
+          });
+        });
+      }
+
+      updateCounts();
+    })();
+  </script>
+</div></main><footer class="w-full bg-cultural-surface dark:bg-dark-surface-alt transition-colors duration-200 pt-space-3xl pb-space-2xl"><div class="max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl pb-space-2xl"><div class="lg:col-span-2 flex flex-col items-start"><div class="flex items-center gap-space-xs mb-space-sm"><img alt="Logo.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><span class="font-headline-sm text-title-card tracking-tight text-primary">Cuicoyan</span></div><p class="font-body-md text-body-md text-text-secondary max-w-sm mb-space-lg">Donde la ciudad encuentra su escenario. Plataforma comunitaria para la difusión, resonancia y tejido del arte vivo en la Ciudad de México.</p><div class="flex items-center gap-space-xs"><a aria-label="Canal de audio e identidad sonora" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">podcasts</span></a><a aria-label="Agenda y mapa vivo" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">map</span></a><a aria-label="Comunidad y red territorial" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">hub</span></a><a aria-label="Boletín de novedades culturales" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">mail</span></a></div></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Explora</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="eventos" href="#">Eventos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="artistas" href="#">Artistas</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros" href="#">Foros</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="mapa-cultural" href="#">Mapa cultural</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="explorar" href="#">Por categoría</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Participa</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="para-creadores" href="#para-creadores">Para artistas y colectivos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros-y-espacios" href="#">Para foros y espacios</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="convocatorias" href="#">Convocatorias</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="unete" href="#">Registro de proyectos</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Información</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="manifiesto" href="#">Manifiesto</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="accesibilidad" href="#">Accesibilidad</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="terminos" href="#">Términos de servicio</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="privacidad" href="#">Aviso de privacidad</a></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-text-secondary"><p>© 2025 Cuicoyan. Plataforma de cultura viva de la Ciudad de México.</p><p class="text-center md:text-right font-label-md text-label-md text-on-surface-variant">Cuicoyan es una plataforma desarrollada sobre la infraestructura digital de Ollin.</p></div></div></footer></body></html>

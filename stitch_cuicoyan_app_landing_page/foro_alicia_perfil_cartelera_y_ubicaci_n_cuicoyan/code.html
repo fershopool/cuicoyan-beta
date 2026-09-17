@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-fixed-dim": "#63d7e1",
+          "dark-blue": "#24C8EF",
+          "surface": "#FFFFFF",
+          "on-secondary-container": "#006e75",
+          "error": "#ba1a1a",
+          "text-secondary": "#5F6273",
+          "brand-gradient-end": "#00C7D4",
+          "inverse-primary": "#ffb2be",
+          "discipline-huapango": "#009BA5",
+          "primary-container": "#e40e5f",
+          "on-tertiary": "#ffffff",
+          "on-secondary-fixed-variant": "#004f54",
+          "on-surface": "#161a33",
+          "on-tertiary-container": "#fffbff",
+          "on-error": "#ffffff",
+          "primary": "#b8004a",
+          "inverse-on-surface": "#f0efff",
+          "on-primary-container": "#fffbff",
+          "on-background": "#161a33",
+          "on-primary-fixed": "#400014",
+          "on-tertiary-fixed-variant": "#753400",
+          "cultural-surface": "#FFF7EE",
+          "dark-border": "#292540",
+          "error-container": "#ffdad6",
+          "dark-red": "#FF506F",
+          "surface-container": "#edecff",
+          "dark-text": "#F9F7FC",
+          "surface-container-highest": "#dee0ff",
+          "primary-fixed-dim": "#ffb2be",
+          "surface-container-low": "#f4f2ff",
+          "dark-background": "#080817",
+          "status-jade": "#008F70",
+          "outline-variant": "#e4bdc2",
+          "on-primary": "#ffffff",
+          "dark-orange": "#FF9D2E",
+          "surface-container-high": "#e6e6ff",
+          "inverse-surface": "#2b2f49",
+          "on-error-container": "#93000a",
+          "background": "#fbf8ff",
+          "secondary-fixed": "#82f3fe",
+          "discipline-teatro": "#D62650",
+          "dark-primary": "#FF3D8D",
+          "dark-surface": "#101126",
+          "secondary": "#006970",
+          "dark-text-secondary": "#B6B2C2",
+          "brand-gradient-mid": "#8A3FFC",
+          "surface-tint": "#bc004c",
+          "tertiary-fixed": "#ffdbc8",
+          "surface-container-lowest": "#ffffff",
+          "dark-surface-raised": "#1D1735",
+          "primary-fixed": "#ffd9de",
+          "on-tertiary-fixed": "#321200",
+          "discipline-musica": "#008EB5",
+          "tertiary-fixed-dim": "#ffb68b",
+          "discipline-talleres": "#E91662",
+          "on-secondary": "#ffffff",
+          "outline": "#906f73",
+          "surface-variant": "#dee0ff",
+          "dark-cyan": "#17E0E4",
+          "on-primary-fixed-variant": "#900038",
+          "discipline-fandango": "#E96F00",
+          "surface-alt": "#FFF3F6",
+          "dark-purple": "#B45CFF",
+          "dark-green": "#20D5A7",
+          "surface-bright": "#fbf8ff",
+          "tertiary-container": "#bb5800",
+          "surface-dim": "#d5d8fa",
+          "dark-surface-alt": "#16132B",
+          "on-surface-variant": "#5c3f44",
+          "border-hairline": "#ECE4E7",
+          "brand-gradient-start": "#F21F6D",
+          "secondary-container": "#7ff1fb",
+          "on-secondary-fixed": "#002022",
+          "discipline-danza": "#7936D2",
+          "tertiary": "#954500"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-sm": "0.75rem",
+          "gutter-desktop": "5rem",
+          "space-2xs": "0.25rem",
+          "space-3xl": "4.5rem",
+          "space-lg": "1.5rem",
+          "space-2xl": "3rem",
+          "gutter-tablet": "2.5rem",
+          "space-4xl": "7rem",
+          "space-xl": "2rem",
+          "margin-desktop": "5rem",
+          "space-md": "1rem",
+          "margin-tablet": "2.5rem",
+          "gutter": "1.25rem",
+          "space-xs": "0.5rem",
+          "margin": "1.25rem"
+        },
+        "fontFamily": {
+          "display-hero": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm": [
+            "Bricolage Grotesque"
+          ],
+          "headline-sm-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "display-hero-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-md": [
+            "Manrope"
+          ],
+          "headline-lg-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "label-eyebrow": [
+            "Manrope"
+          ],
+          "headline-lg": [
+            "Bricolage Grotesque"
+          ],
+          "body-lg": [
+            "Manrope"
+          ],
+          "body-md": [
+            "Manrope"
+          ],
+          "body-sm": [
+            "Manrope"
+          ],
+          "headline-md-mobile": [
+            "Bricolage Grotesque"
+          ],
+          "headline-md": [
+            "Bricolage Grotesque"
+          ],
+          "title-card": [
+            "Bricolage Grotesque"
+          ],
+          "label-lg": [
+            "Manrope"
+          ]
+        },
+        "fontSize": {
+          "display-hero": [
+            "72px",
+            {
+              "lineHeight": "76px",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "800"
+            }
+          ],
+          "headline-sm": [
+            "28px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-sm-mobile": [
+            "24px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "0em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-hero-mobile": [
+            "42px",
+            {
+              "lineHeight": "46px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "800"
+            }
+          ],
+          "label-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "36px",
+            {
+              "lineHeight": "42px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-eyebrow": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.08em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-lg": [
+            "56px",
+            {
+              "lineHeight": "62px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-lg": [
+            "20px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-md": [
+            "16px",
+            {
+              "lineHeight": "26px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "letterSpacing": "0.005em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md-mobile": [
+            "30px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-md": [
+            "44px",
+            {
+              "lineHeight": "50px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "title-card": [
+            "22px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "label-lg": [
+            "16px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface antialiased transition-colors duration-200"><a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-space-md focus:py-space-xs focus:bg-primary focus:text-on-primary focus:rounded-xl focus:shadow-lg focus:outline-none font-label-md text-label-md" href="#main-content">Saltar al contenido</a><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 dark:bg-dark-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-colors duration-200"><div class="h-20 max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-xl"><a class="flex items-center gap-space-xs group focus:outline-none" data-path="inicio" href="#"><img alt="Logo.png" class="h-8 w-auto object-contain transition-transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><div class="flex flex-col"><span class="font-headline-sm text-title-card tracking-tight text-primary leading-none">Cuicoyan</span><span class="font-label-eyebrow text-[10px] tracking-widest uppercase text-text-secondary leading-tight">Cultura Viva CDMX</span></div></a><nav class="hidden xl:flex items-center gap-space-md" data-active-classes="text-primary font-bold"><a aria-current="page" class="transition-colors py-space-2xs text-primary font-bold" data-path="inicio" href="#">Inicio</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="explorar" href="#">Explorar</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="eventos" href="#">Eventos</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="artistas" href="#">Artistas</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="foros" href="#">Foros</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="mapa-cultural" href="#">Mapa</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="para-creadores" href="#para-creadores">Para creadores</a><a class="font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors py-space-2xs" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a></nav></div><div class="flex items-center gap-space-xs sm:gap-space-sm"><div class="relative hidden md:block w-44 lg:w-56"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-[20px] pointer-events-none">search</span><input aria-label="Buscar contenido cultural" class="w-full h-10 pl-9 pr-3 rounded-xl bg-surface-container-lowest text-on-surface placeholder:text-text-secondary font-body-sm text-body-sm shadow-[0_1px_4px_rgba(0,0,0,0.03)] focus:outline-none focus:ring-2 focus:ring-primary transition-all" placeholder="Buscar talleres, sones, foros..." type="search"/></div><button aria-label="Alternar modo visual claro u oscuro" class="h-10 w-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors focus:outline-none" onclick="document.documentElement.classList.toggle('dark')" type="button"><span class="material-symbols-outlined text-[20px] dark:hidden">dark_mode</span><span class="material-symbols-outlined text-[20px] hidden dark:inline-block">light_mode</span></button><a class="inline-flex items-center justify-center px-space-md h-10 rounded-xl bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-all shadow-[0_4px_16px_rgba(184,0,74,0.18)] hover:scale-[1.02] active:scale-[0.98]" data-path="unete" href="#">Únete a Cuicoyan</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background transition-colors duration-200" id="main-content"><div class="flex flex-col w-full">
+<!-- Subtle decorative cultural background motif -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-32 right-[-10%] w-[550px] h-[550px] rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
+<div class="absolute top-[40%] -left-36 w-[480px] h-[480px] rounded-full bg-discipline-fandango/5 blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-40 right-[-5%] w-[420px] h-[420px] rounded-full bg-discipline-huapango/5 blur-3xl pointer-events-none"></div>
+<!-- MAIN WRAPPER CONTAINER -->
+<div class="max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop py-space-md">
+<!-- BREADCRUMB & LIVE STATUS -->
+<section class="flex flex-wrap items-center justify-between gap-space-sm mb-space-lg">
+<nav aria-label="Ruta de navegación" class="flex items-center gap-space-xs flex-wrap font-label-md text-label-md text-text-secondary">
+<a class="hover:text-primary transition-colors inline-flex items-center gap-1" data-path="inicio" href="#">
+<span class="material-symbols-outlined text-[18px]">home</span>
+            Inicio
+          </a>
+<span class="material-symbols-outlined text-[16px] text-text-secondary/60">chevron_right</span>
+<a class="hover:text-primary transition-colors" data-path="foros" href="#">Foros y Espacios</a>
+<span class="material-symbols-outlined text-[16px] text-text-secondary/60">chevron_right</span>
+<span class="font-bold text-on-surface">Foro Alicia</span>
+</nav>
+<!-- Live Status Pill & Badges -->
+<div class="flex items-center gap-space-xs flex-wrap">
+<div class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-status-jade/10 text-status-jade font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-status-jade animate-pulse"></span>
+            Abierto hoy · Cierra 23:30 hrs
+          </div>
+<div class="inline-flex items-center gap-1 px-space-sm py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+            Recinto Autogestivo Verificado
+          </div>
+</div>
+</section>
+<!-- HERO EDITORIAL DEL FORO -->
+<section class="relative rounded-[28px] overflow-hidden bg-on-surface text-surface-container-lowest shadow-xl mb-space-2xl">
+<!-- Hero Background Media with Warm Editorial Scrim -->
+<div class="relative w-full min-h-[460px] lg:min-h-[520px] bg-cover bg-center flex flex-col justify-end p-space-md sm:p-space-xl lg:p-space-2xl" data-alt="An atmospheric twilight photograph of Foro Alicia cultural venue in Mexico City. The stage is bathed in warm magenta, amber, and indigo theatrical lighting, featuring independent musicians playing jaranas and guitars on a rustic cedar wood platform. An engaged, vibrant multi-generational audience gathers close in the intimate historic venue with raw brick walls adorned with contemporary Mexican screenprints, posters, and soft neon accents under an exposed beamed ceiling." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxBCzYVAaK2X41whAYTc5r72dXpeNHdQAelCQrx4UzsL9UMBOpkVIhKjt0ss4GqHVeKKj5VyCeCjusuNynjGv74ugDHeSSuL-eyLa0fJLK2fcNHMLqrJQDXEKpe2DTSjK9Aow4O6ojTaALoQGaR9FMoX0yxdZSTh3zXxVOE7UZxHsCiXkknsm5ZaHAMaxrOP5QUlDFUDAGeBI-ZAggvWIzVFjxbAk6YJfcpNF09y4zhASj56790T2V')">
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface via-on-surface/60 to-transparent"></div>
+<div class="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 flex items-center gap-space-xs">
+<button aria-label="Guardar en favoritos" class="w-11 h-11 rounded-full bg-surface/80 backdrop-blur-md text-primary flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all" id="likeBtn" onclick="toggleLike()">
+<span class="material-symbols-outlined text-[22px]" id="heartIcon">favorite_border</span>
+</button>
+<button aria-label="Compartir ficha del foro" class="w-11 h-11 rounded-full bg-surface/80 backdrop-blur-md text-on-surface flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all" onclick="shareVenue()">
+<span class="material-symbols-outlined text-[22px]">share</span>
+</button>
+</div>
+<!-- Hero Content Layer -->
+<div class="relative z-10 max-w-3xl">
+<div class="inline-flex items-center gap-2 px-space-sm py-1 rounded-full bg-primary text-on-primary font-label-eyebrow text-label-eyebrow uppercase tracking-wider mb-space-sm shadow-sm">
+<span class="material-symbols-outlined text-[14px]">theater_comedy</span>
+              FORO CULTURAL INDEPENDIENTE · ROMA NORTE
+            </div>
+<h1 class="font-display-hero text-headline-lg lg:text-display-hero text-surface-container-lowest leading-none tracking-tight mb-space-xs">
+              Foro Alicia
+            </h1>
+<p class="font-body-lg text-body-lg text-surface-dim/90 max-w-2xl mb-space-lg">
+              Escenario independiente para música en vivo, comunidad, poesía en voz alta y resistencia cultural urbana en el corazón de la Roma Norte.
+            </p>
+<!-- Quick Action Toolbar -->
+<div class="flex flex-wrap items-center gap-space-sm pt-space-xs">
+<a class="inline-flex items-center gap-2 px-space-lg h-12 rounded-xl bg-primary text-on-primary font-label-md text-label-md shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform" href="#cartelera">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+                Ver cartelera en vivo
+              </a>
+<a class="inline-flex items-center gap-2 px-space-lg h-12 rounded-xl bg-surface/90 text-on-surface font-label-md text-label-md backdrop-blur hover:bg-surface shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all" href="#ubicacion">
+<span class="material-symbols-outlined text-[20px]">near_me</span>
+                Cómo llegar
+              </a>
+<a class="inline-flex items-center gap-2 px-space-md h-12 rounded-xl bg-surface/20 text-surface-container-lowest font-label-md text-label-md backdrop-blur-md hover:bg-surface/30 transition-colors" href="#contacto-taquilla">
+<span class="material-symbols-outlined text-[18px]">call</span>
+                Taquilla · +52 55 5555 0101
+              </a>
+</div>
+</div>
+</div>
+<!-- Metric Ribbon below Hero -->
+<div class="w-full bg-surface-container-lowest/10 backdrop-blur-md px-space-md sm:px-space-xl py-space-sm flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-lg flex-wrap">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">groups</span>
+<span class="font-label-md text-label-md text-surface-container-lowest">Aforo 180 personas</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-discipline-huapango text-[20px]">accessible</span>
+<span class="font-label-md text-label-md text-surface-container-lowest">Accesible en PB</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-[20px]">coffee</span>
+<span class="font-label-md text-label-md text-surface-container-lowest">Cafetería comunitaria</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">volume_up</span>
+<span class="font-label-md text-label-md text-surface-container-lowest">Sistema acústico PA pro</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-surface-dim font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-tertiary-fixed">star</span>
+<span class="font-bold text-surface-container-lowest">4.9</span>
+<span>(340+ resonancias comunitarias)</span>
+</div>
+</div>
+</section>
+<!-- TWO-COLUMN EDITORIAL: SOBRE EL ESPACIO & FICHA TÉCNICA -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl mb-space-3xl items-start">
+<!-- Semblanza Narrative Block -->
+<div class="lg:col-span-7 flex flex-col">
+<div class="inline-flex items-center gap-2 font-label-eyebrow text-label-eyebrow text-primary uppercase tracking-widest mb-space-xs">
+<span class="material-symbols-outlined text-[16px]">history_edu</span>
+            Identidad y Memoria Barrial
+          </div>
+<h2 class="font-headline-md text-headline-sm lg:text-headline-md text-on-surface mb-space-md">
+            Treinta años sosteniendo la voz independiente de la ciudad
+          </h2>
+<div class="font-body-md text-body-md text-text-secondary space-y-space-md">
+<p>
+              Nacido como un refugio indómito para la experimentación sonora, el <strong>Foro Alicia</strong> se ha consolidado como el punto neurálgico donde dialogan el son jarocho de fandango, el ska combativo, la poesía de barricada, el jazz urbano y los saberes comunitarios que no caben en las salas comerciales.
+            </p>
+<p>
+              Aquí no hay butacas rígidas ni vallas de exclusión. Su tarima de madera de cedro fue curada para transmitir la vibración acústica de la jarana, la tarima zapateada y el bajo eléctrico con igual dignidad. Cada función se organiza en estrecho acuerdo con artistas independientes, garantizando remuneración justa y precios de boleto siempre al alcance de vecinas, estudiantes y familias.
+            </p>
+</div>
+<!-- Community Values Badges -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm mt-space-lg">
+<div class="p-space-md rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<span class="material-symbols-outlined text-primary text-[24px]">handshake</span>
+<span class="font-title-card text-body-md font-bold text-on-surface">Economía Justa</span>
+<span class="font-body-sm text-body-sm text-text-secondary">85% de taquilla va directo al colectivo ejecutante.</span>
+</div>
+<div class="p-space-md rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<span class="material-symbols-outlined text-discipline-huapango text-[24px]">volume_up</span>
+<span class="font-title-card text-body-md font-bold text-on-surface">Sonoridad Cuidada</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Cabina análoga de mezcla e ingeniería de sala especializada.</span>
+</div>
+<div class="p-space-md rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<span class="material-symbols-outlined text-status-jade text-[24px]">diversity_3</span>
+<span class="font-title-card text-body-md font-bold text-on-surface">Espacio Libre</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Protocolo violeta activo y asambleas abiertas de autogestión.</span>
+</div>
+</div>
+</div>
+<!-- Ficha Técnica Card (Tactile Neo-Mexican Card Layout) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-[24px] p-space-lg sm:p-space-xl shadow-md">
+<div class="flex items-center justify-between pb-space-sm mb-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-discipline-talleres text-[22px]">tune</span>
+<h3 class="font-headline-sm text-title-card text-on-surface">Ficha Técnica y Servicios</h3>
+</div>
+<span class="px-space-xs py-0.5 rounded-md bg-surface-container font-label-eyebrow text-label-eyebrow text-text-secondary uppercase">
+              Actualizado 2025
+            </span>
+</div>
+<ul class="space-y-space-md font-body-sm text-body-sm">
+<li class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">aspect_ratio</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Tarima Escénica</span>
+<span class="text-text-secondary">28 m² (7m frente × 4m fondo) entarimado de cedro optimizado para zapateado y ensambles de hasta 12 músicos.</span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-discipline-huapango flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">graphic_eq</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Audio · PA · Microfonía</span>
+<span class="text-text-secondary">Consola digital 32 canales, 4 monitores de piso, microfonía Shure/AKG para jarana, leona, contrabajo y voz.</span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-status-jade flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">accessible_forward</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Accesibilidad Física</span>
+<span class="text-text-secondary">Rampa de acceso a nivel de calle en Av. Cuauhtémoc. Planta baja 100% transitable sin desniveles ni escalones.</span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-discipline-danza flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">wc</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Servicios Sanitarios</span>
+<span class="text-text-secondary">Sanitarios sin distinción de género, equipados con cabina amplia para movilidad reducida.</span>
+</div>
+</li>
+<li class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-discipline-fandango flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">local_cafe</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Barra Cultural</span>
+<span class="text-text-secondary">Café de olla orgánico de Coatepec, infusiones de flor de jamaica, pulque curado artesanal y mezcal oaxaqueño solidario.</span>
+</div>
+</li>
+</ul>
+<div class="mt-space-lg p-space-sm rounded-xl bg-cultural-surface flex items-center justify-between">
+<span class="font-label-md text-label-md text-tertiary">Descargar rider técnico en PDF</span>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary hover:underline" href="#">
+<span>Descargar</span>
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+</a>
+</div>
+</div>
+</section>
+<!-- CARTELERA EN VIVO / PRÓXIMAS FECHAS -->
+<section class="mb-space-3xl scroll-mt-24" id="cartelera">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-sm mb-space-lg">
+<div>
+<div class="inline-flex items-center gap-1 font-label-eyebrow text-label-eyebrow text-primary uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[16px]">event_available</span>
+              Programación confirmada
+            </div>
+<h2 class="font-headline-md text-headline-sm sm:text-headline-md text-on-surface">
+              Próximas fechas en Alicia
+            </h2>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-text-secondary">3 eventos disponibles este mes</span>
+</div>
+</div>
+<!-- Event Cards Stack -->
+<div class="space-y-space-md">
+<!-- Event 1: Sones del barrio (Featured from reference) -->
+<article class="bg-surface-container-lowest rounded-[24px] p-space-md sm:p-space-lg shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row items-stretch gap-space-md relative overflow-hidden">
+<!-- Left Date Ribbon Accent -->
+<div class="w-full md:w-44 rounded-2xl bg-surface-alt p-space-md flex flex-col justify-center items-center text-center flex-shrink-0">
+<span class="font-label-eyebrow text-label-eyebrow text-primary uppercase tracking-wider">Agosto 2025</span>
+<span class="font-headline-lg text-headline-md text-primary font-bold leading-tight">Sáb 8</span>
+<span class="font-label-md text-label-md text-on-surface-variant">18:00 hrs</span>
+<span class="text-[11px] text-text-secondary mt-1">Puertas 17:30</span>
+</div>
+<!-- Event Center Details -->
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<div class="flex flex-wrap items-center gap-space-xs mb-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-discipline-huapango/10 text-discipline-huapango font-label-md text-body-sm font-semibold">
+                    Son Jarocho
+                  </span>
+<span class="px-space-xs py-0.5 rounded-full bg-discipline-musica/10 text-discipline-musica font-label-md text-body-sm font-semibold">
+                    Música en Vivo
+                  </span>
+<span class="font-body-sm text-body-sm text-status-jade font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">confirmation_number</span>
+                    Boletos disponibles
+                  </span>
+</div>
+<h3 class="font-headline-sm text-title-card text-on-surface font-bold hover:text-primary transition-colors">
+                  Sones del barrio · Colectivo Son de Barro
+                </h3>
+<p class="font-body-md text-body-md text-text-secondary mt-1 max-w-2xl">
+                  Una tarde íntima de canciones, cuerdas y memoria compartida. Convivio fandanguero con tarima abierta al término del concierto para quien lleve jarana o zapato de baile.
+                </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-md text-body-sm text-text-secondary mt-space-sm pt-space-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                  Foro Alicia · Sala Mayor
+                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">timelapse</span>
+                  Duración: 2h 30m
+                </span>
+</div>
+</div>
+<!-- Event Right Price & CTA -->
+<div class="flex md:flex-col items-center md:items-end justify-between md:justify-center gap-space-md md:w-48 pt-space-xs md:pt-0">
+<div class="text-left md:text-right">
+<span class="text-[12px] uppercase text-text-secondary block font-label-eyebrow">Aportación</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">$180 <span class="text-[14px] font-normal text-text-secondary">MXN</span></span>
+</div>
+<button class="inline-flex items-center justify-center px-space-md h-11 rounded-xl bg-primary text-on-primary font-label-md text-label-md shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform" onclick="openTicketModal('Sones del barrio', '$180 MXN', 'Sábado 8 de Agosto · 18:00 hrs')">
+                Apartar boleto
+              </button>
+</div>
+</article>
+<!-- Event 2: La ciudad en azul -->
+<article class="bg-surface-container-lowest rounded-[24px] p-space-md sm:p-space-lg shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row items-stretch gap-space-md relative overflow-hidden">
+<div class="w-full md:w-44 rounded-2xl bg-surface-container-low p-space-md flex flex-col justify-center items-center text-center flex-shrink-0">
+<span class="font-label-eyebrow text-label-eyebrow text-discipline-musica uppercase tracking-wider">Agosto 2025</span>
+<span class="font-headline-lg text-headline-md text-on-surface font-bold leading-tight">Sáb 22</span>
+<span class="font-label-md text-label-md text-on-surface-variant">20:00 hrs</span>
+<span class="text-[11px] text-text-secondary mt-1">Puertas 19:30</span>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<div class="flex flex-wrap items-center gap-space-xs mb-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-discipline-musica/10 text-discipline-musica font-label-md text-body-sm font-semibold">
+                    Jazz Contemporáneo
+                  </span>
+<span class="px-space-xs py-0.5 rounded-full bg-discipline-danza/10 text-discipline-danza font-label-md text-body-sm font-semibold">
+                    Poesía Sonora
+                  </span>
+</div>
+<h3 class="font-headline-sm text-title-card text-on-surface font-bold hover:text-primary transition-colors">
+                  La ciudad en azul · Calle Azul Ensamble
+                </h3>
+<p class="font-body-md text-body-md text-text-secondary mt-1 max-w-2xl">
+                  Composiciones nocturnas inspiradas en los pasos solitarios por el Eje Central y la Alameda. Fusión de clarinete bajo, marimba de madera, batería y spoken word callejero.
+                </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-md text-body-sm text-text-secondary mt-space-sm pt-space-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                  Foro Alicia · Sala Mayor
+                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">timelapse</span>
+                  Duración: 1h 45m
+                </span>
+</div>
+</div>
+<div class="flex md:flex-col items-center md:items-end justify-between md:justify-center gap-space-md md:w-48 pt-space-xs md:pt-0">
+<div class="text-left md:text-right">
+<span class="text-[12px] uppercase text-text-secondary block font-label-eyebrow">Aportación</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">$150 <span class="text-[14px] font-normal text-text-secondary">MXN</span></span>
+</div>
+<button class="inline-flex items-center justify-center px-space-md h-11 rounded-xl bg-on-surface text-surface-container-lowest font-label-md text-label-md hover:bg-primary transition-colors shadow-sm" onclick="openTicketModal('La ciudad en azul', '$150 MXN', 'Sábado 22 de Agosto · 20:00 hrs')">
+                Apartar boleto
+              </button>
+</div>
+</article>
+<!-- Event 3: Encuentro de Jaranas y Décimas Libres -->
+<article class="bg-surface-container-lowest rounded-[24px] p-space-md sm:p-space-lg shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row items-stretch gap-space-md relative overflow-hidden">
+<div class="w-full md:w-44 rounded-2xl bg-cultural-surface p-space-md flex flex-col justify-center items-center text-center flex-shrink-0">
+<span class="font-label-eyebrow text-label-eyebrow text-discipline-fandango uppercase tracking-wider">Agosto 2025</span>
+<span class="font-headline-lg text-headline-md text-discipline-fandango font-bold leading-tight">Dom 30</span>
+<span class="font-label-md text-label-md text-on-surface-variant">17:00 hrs</span>
+<span class="text-[11px] text-text-secondary mt-1">Puertas 16:30</span>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<div class="flex flex-wrap items-center gap-space-xs mb-space-xs">
+<span class="px-space-xs py-0.5 rounded-full bg-discipline-fandango/10 text-discipline-fandango font-label-md text-body-sm font-semibold">
+                    Fandango Libre
+                  </span>
+<span class="px-space-xs py-0.5 rounded-full bg-status-jade/10 text-status-jade font-label-md text-body-sm font-semibold">
+                    Entrada Libre Solidaria
+                  </span>
+</div>
+<h3 class="font-headline-sm text-title-card text-on-surface font-bold hover:text-primary transition-colors">
+                  Encuentro de Jaranas y Décimas Libres
+                </h3>
+<p class="font-body-md text-body-md text-text-secondary mt-1 max-w-2xl">
+                  Asamblea versadora y zapateada abierta entre colectivos de Iztapalapa, Coyoacán y Xochimilco. Registro de poetas improvisadores al llegar. Convivio al sombrero.
+                </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-md text-body-sm text-text-secondary mt-space-sm pt-space-xs">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                  Foro Alicia · Patio Comunitario y Tarima
+                </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">volunteer_activism</span>
+                  Cooperación voluntaria
+                </span>
+</div>
+</div>
+<div class="flex md:flex-col items-center md:items-end justify-between md:justify-center gap-space-md md:w-48 pt-space-xs md:pt-0">
+<div class="text-left md:text-right">
+<span class="text-[12px] uppercase text-text-secondary block font-label-eyebrow">Modalidad</span>
+<span class="font-headline-sm text-headline-sm text-status-jade font-bold">Gratis</span>
+</div>
+<button class="inline-flex items-center justify-center px-space-md h-11 rounded-xl bg-status-jade text-on-primary font-label-md text-label-md hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-sm" onclick="openTicketModal('Encuentro de Jaranas y Décimas Libres', 'Cooperación Voluntaria', 'Domingo 30 de Agosto · 17:00 hrs')">
+                Registrar asistencia
+              </button>
+</div>
+</article>
+</div>
+</section>
+<!-- UBICACIÓN, TRANSPORTE Y ENTORNO BARRIAL -->
+<section class="mb-space-3xl scroll-mt-24" id="ubicacion">
+<div class="bg-surface-container-lowest rounded-[28px] p-space-lg sm:p-space-xl lg:p-space-2xl shadow-md">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- Left Data & Transit Guide -->
+<div class="lg:col-span-6 flex flex-col">
+<div class="inline-flex items-center gap-1.5 font-label-eyebrow text-label-eyebrow text-primary uppercase tracking-wider mb-space-xs">
+<span class="material-symbols-outlined text-[16px]">pin_drop</span>
+                Acceso y Territorio Urbano
+              </div>
+<h2 class="font-headline-md text-headline-sm sm:text-headline-md text-on-surface mb-space-xs">
+                Ubicación y Rutas de Llegada
+              </h2>
+<p class="font-body-md text-body-md text-text-secondary mb-space-lg">
+                Situado sobre el eje peatonal y cultural de la Roma Norte con conexión directa a transportes públicos eléctricos y ciclovías protegidas.
+              </p>
+<!-- Address Box -->
+<div class="p-space-md rounded-2xl bg-surface-container-low mb-space-md flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">location_city</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Dirección Oficial</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Av. Cuauhtémoc 91, Roma Norte</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Alcaldía Cuauhtémoc, C.P. 06700, Ciudad de México</span>
+</div>
+</div>
+<!-- Transit options list -->
+<div class="space-y-space-sm">
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface">
+<span class="w-8 h-8 rounded-lg bg-discipline-teatro/10 text-discipline-teatro font-bold flex items-center justify-center text-[12px]">M1</span>
+<div class="flex-1">
+<span class="font-label-md text-label-md text-on-surface">Metro Cuauhtémoc (Línea 1)</span>
+<p class="font-body-sm text-body-sm text-text-secondary">Caminando 350 metros (4 minutos hacia el sur).</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface">
+<span class="w-8 h-8 rounded-lg bg-discipline-fandango/10 text-discipline-fandango font-bold flex items-center justify-center text-[12px]">MB3</span>
+<div class="flex-1">
+<span class="font-label-md text-label-md text-on-surface">Metrobús Jardín Pushkin (Línea 3)</span>
+<p class="font-body-sm text-body-sm text-text-secondary">Caminando 120 metros cruzando el jardín arbolado.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface">
+<span class="w-8 h-8 rounded-lg bg-status-jade/10 text-status-jade font-bold flex items-center justify-center text-[14px]">
+<span class="material-symbols-outlined text-[18px]">pedal_bike</span>
+</span>
+<div class="flex-1">
+<span class="font-label-md text-label-md text-on-surface">Ciclovía · Estación Ecobici 128</span>
+<p class="font-body-sm text-body-sm text-text-secondary">Estación sobre la banqueta exterior con 24 anclajes.</p>
+</div>
+</div>
+</div>
+<!-- Schedule hours badge -->
+<div class="mt-space-md p-space-sm rounded-xl bg-cultural-surface flex items-center gap-space-sm text-body-sm text-tertiary">
+<span class="material-symbols-outlined text-[22px]">schedule</span>
+<div>
+<strong>Horarios del recinto:</strong> Miércoles a Domingo de 16:00 a 23:30 hrs. Taquilla presencial abre desde las 15:00 hrs en días de función.
+                </div>
+</div>
+</div>
+<!-- Right Interactive Map View & Neighborhood Pins -->
+<div class="lg:col-span-6 flex flex-col gap-space-md">
+<div class="w-full h-80 sm:h-96 rounded-2xl bg-cover bg-center shadow-inner relative overflow-hidden flex flex-col justify-end p-space-md" data-location="Foro Alicia, Avenida Cuauhtémoc 91, Roma Norte, Mexico City" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBI8iq6ZLdM-SgWl2PjqHfp4oKnuc-ENWpzsGySaZoyhvaej6phJD7f5hbsNTF4x12QcfNKTjLQxXwfL0G6eih234DwrFhSYyg-FMlAGF_X2FPKc-9m3osv9RR1BhV14p1f8obfLa3LEemsMtmqE5FRSQSDoO5_TEFJkojEmjsuDa02reYRR8BhLWpSygPTlKzcb-_ESjJoRS5WKdn68U0yhb_q8rnh5R3uxmSSGhIeA4KLhCLdVb2G')">
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-on-surface/20 to-transparent"></div>
+<!-- Center Map Pin Marker -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-xl animate-bounce">
+<span class="material-symbols-outlined text-[24px]">theater_comedy</span>
+</div>
+<span class="px-2 py-0.5 rounded-md bg-on-surface text-surface font-label-md text-[11px] shadow-md mt-1">
+                    Foro Alicia
+                  </span>
+</div>
+<!-- Overlay Bar -->
+<div class="relative z-10 bg-surface/90 backdrop-blur-md p-space-sm rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">explore</span>
+<span class="font-label-md text-label-md text-on-surface">Mapa territorial y entorno</span>
+</div>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary hover:underline" href="https://maps.google.com/?q=Av.+Cuauhtemoc+91,+Roma+Norte,+CDMX" rel="noopener noreferrer" target="_blank">
+<span>Abrir en Google Maps</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Neighborhood Nodes of Interest -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-xs">
+<div class="p-space-xs rounded-xl bg-surface-container-low text-center">
+<span class="block font-label-md text-label-md text-on-surface">Jardín Pushkin</span>
+<span class="text-[12px] text-text-secondary">A 120m · Área verde y tianguis</span>
+</div>
+<div class="p-space-xs rounded-xl bg-surface-container-low text-center">
+<span class="block font-label-md text-label-md text-on-surface">Huerto Roma Verde</span>
+<span class="text-[12px] text-text-secondary">A 400m · Proyectos ecológicos</span>
+</div>
+<div class="p-space-xs rounded-xl bg-surface-container-low text-center">
+<span class="block font-label-md text-label-md text-on-surface">Librerías de Viejo</span>
+<span class="text-[12px] text-text-secondary">A 250m · Corredor Álvaro Obregón</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- BITÁCORA FOTOGRÁFICA Y MEMORIAS DEL FORO -->
+<section class="mb-space-3xl">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-sm mb-space-lg">
+<div>
+<div class="inline-flex items-center gap-1 font-label-eyebrow text-label-eyebrow text-primary uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[16px]">photo_library</span>
+              Memoria Gráfica
+            </div>
+<h2 class="font-headline-md text-headline-sm sm:text-headline-md text-on-surface">
+              Bitácora de noches y convivios
+            </h2>
+</div>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary hover:underline" href="#">
+<span>Ver archivo histórico fotográfico</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- Bento Photo Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Photo 1: Sones del barrio live -->
+<div class="group relative rounded-[20px] overflow-hidden bg-on-surface shadow-sm h-72">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Close-up photograph of hands playing a hand-carved traditional wooden jarana jarocha on the stage of Foro Alicia. Warm stage lights illuminate the wood grain and colorful fabric ribbons tied to the instrument headstock with cheering audience hands blurred in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7mKOfnkfvzNeJcrkthFWQ2NUz5Ml79883bf3pU0Wmb6nPEStFjamvjvOPzEbRF5PR21-c8qEzY9S5wZ2za0XkWzxRAHbeR605-iVqrBj0-zHM9-jlL41fJQCB89TNwoEXUHFAqTlOga8_pEZlqiZ9sDxpqFyLe0C69WLl5mN2tXvy-0rL-6dLDU3lUVETfva0xEz4WlIeJ5AOLKnZcTrwIuaRabgFmyJ4snfnw3JoLMHtqIi9J7vD"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/20 to-transparent flex flex-col justify-end p-space-md text-surface-container-lowest">
+<span class="font-label-eyebrow text-label-eyebrow text-secondary-fixed uppercase">Sones del Barrio</span>
+<p class="font-title-card text-body-md font-bold leading-snug">Zapateado sobre tarima de cedro</p>
+<span class="text-[12px] text-surface-dim mt-0.5">Sábado 8 de Agosto</span>
+</div>
+</div>
+<!-- Photo 2: Asambleas y público -->
+<div class="group relative rounded-[20px] overflow-hidden bg-on-surface shadow-sm h-72">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Wide shot of a lively audience inside Foro Alicia listening to a band with illuminated lanterns and ambient fairy lights hung across exposed brick arches. Smiles, raised hands and diverse youth enjoying live Mexican independent music in Mexico City." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7D9XI-sF2GnKvw-5N4lis3wC0t7ci3oJL9DRyglqZ4tBEAHnHAUCAI-5FY4wilTGuuigfuE7VIjjmoJe9EozovxHFloi8iX2yULideA5yJYB2BF5keVNsZBqi2g48XC7AIhm9bIK-L7vcor4MbPlLeJRoqdXAzCD77PJxGKlpeLQumtnD6HrBZR2cbkykzQi3TzjPx1r1goh_hSRHw-7S4kzQqwy58otH8QXE18J0oDK_00bsuwKL"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/20 to-transparent flex flex-col justify-end p-space-md text-surface-container-lowest">
+<span class="font-label-eyebrow text-label-eyebrow text-tertiary-fixed uppercase">Comunidad</span>
+<p class="font-title-card text-body-md font-bold leading-snug">Así se vivió la última noche viva</p>
+<span class="text-[12px] text-surface-dim mt-0.5">Sala completa con cupo íntegro</span>
+</div>
+</div>
+<!-- Photo 3: Carteles y serigrafía comunitaria -->
+<div class="group relative rounded-[20px] overflow-hidden bg-on-surface shadow-sm h-72">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Editorial close up of a hand-printed serigraph poster on craft paper pinned to the bulletin board at Foro Alicia. Bold modern Mexican typography advertising the independent music and poetry cycle with geometric folk motifs in crimson, marigold, and cyan inks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfbcKh65xzs01CtkW7No3JxwAT2yaEB746s6nmWVmom4s0dIrjN3O0_eYhe5TpMPBqst2OAbSlJLz8mcvq5i2YBGrF2F3mXALTZ2gA1FjEjSPxIf9dEX1sUPsVBG81vdlOZT8Trc2-eFGLRxRepaceKFLcxRD-QsWtXXoawbrLewHPL0E6AAXOm2JPk-assOMZs9S_74EjD3eqlO3ez8d-Wm2CylJh4XE8WoOs_mKfwMWb8CWiEQI2"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/20 to-transparent flex flex-col justify-end p-space-md text-surface-container-lowest">
+<span class="font-label-eyebrow text-label-eyebrow text-discipline-huapango uppercase">Artes Gráficas</span>
+<p class="font-title-card text-body-md font-bold leading-snug">Ciclo de música y resistencia</p>
+<span class="text-[12px] text-surface-dim mt-0.5">Cartelería serigráfica de colección</span>
+</div>
+</div>
+<!-- Photo 4: Fachada e ingreso al atardecer -->
+<div class="group relative rounded-[20px] overflow-hidden bg-on-surface shadow-sm h-72">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Nighttime street view of the iconic entrance to Foro Alicia on Avenida Cuauhtémoc in Roma Norte, Mexico City. Neon signage glowing warm magenta against a dark indigo sky, with patrons waiting outside on the sidewalk under green foliage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCH_aCuH4VZ2Gx0D_bu8lOnQhXq3iiAGDyzLvn2oGVNHhyNHpPrjOPiigAFLDpVQ4DdIsoxv3efrvXUlkk2oiZeb9NYXzi23SLCuxxQFJS_SLtSoCn-GAxTcr1heN6uoIalU--0D6q8RTQ_nH05_qAGBH-SLeQmGiVpQPwn-M91bDq153-qoNNPntYytbv_PFeYENVfzoX16IRmfmjZTropNydzmH1xVFYiT8jl9uM60fVCVFQCPUYe"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/20 to-transparent flex flex-col justify-end p-space-md text-surface-container-lowest">
+<span class="font-label-eyebrow text-label-eyebrow text-primary-fixed uppercase">El Hogar Barrial</span>
+<p class="font-title-card text-body-md font-bold leading-snug">Gracias por hacer de Alicia un hogar</p>
+<span class="text-[12px] text-surface-dim mt-0.5">Entrada por Av. Cuauhtémoc</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FRANJA DE VINCULACIÓN PARA CREADORES & ARTISTAS -->
+<section class="rounded-[28px] bg-gradient-to-r from-primary via-primary-container to-discipline-fandango p-space-lg sm:p-space-2xl text-on-primary shadow-xl mb-space-xl relative overflow-hidden">
+<div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-xl">
+<div class="max-w-2xl">
+<div class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-surface-container-lowest/20 backdrop-blur-sm text-surface font-label-eyebrow text-label-eyebrow uppercase tracking-wider mb-space-sm">
+<span class="material-symbols-outlined text-[16px]">campaign</span>
+              Convocatoria Abierta Permanente
+            </div>
+<h2 class="font-headline-lg text-headline-sm sm:text-headline-md lg:text-headline-lg font-bold leading-tight mb-space-xs text-on-primary">
+              ¿Tienes una propuesta escénica para la tarima del Alicia?
+            </h2>
+<p class="font-body-lg text-body-md sm:text-body-lg text-surface-dim/95 max-w-xl">
+              Postula tu ensamble, obra corta, libro o taller sin intermediarios comerciales. Revisamos propuestas semanalmente con acuerdos solidarios 85/15.
+            </p>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm w-full lg:w-auto">
+<a class="inline-flex items-center justify-center gap-2 px-space-xl h-14 rounded-2xl bg-surface-container-lowest text-primary font-label-lg text-label-lg font-bold shadow-lg hover:bg-surface hover:scale-[1.02] active:scale-[0.98] transition-all" href="#postular-proyecto">
+<span class="material-symbols-outlined text-[22px]">send</span>
+              Postular mi proyecto
+            </a>
+<a class="inline-flex items-center justify-center gap-2 px-space-lg h-14 rounded-2xl bg-on-surface/20 backdrop-blur-md text-surface-container-lowest font-label-md text-label-md hover:bg-on-surface/30 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+              Bases y condiciones
+            </a>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- POPUP RESERVATION MODAL (Hidden by default, triggered via Apartar Boleto) -->
+<div aria-hidden="true" class="fixed inset-0 z-50 bg-on-surface/60 backdrop-blur-sm hidden items-center justify-center p-space-md" id="ticketModal">
+<div class="bg-surface rounded-[24px] max-w-lg w-full p-space-lg sm:p-space-xl shadow-2xl relative">
+<button aria-label="Cerrar ventana de reserva" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-text-secondary hover:text-on-surface" onclick="closeTicketModal()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<div class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-primary/10 text-primary font-label-eyebrow text-label-eyebrow uppercase mb-space-xs">
+<span class="material-symbols-outlined text-[14px]">confirmation_number</span>
+        Reserva Comunitaria sin Comisiones
+      </div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-1" id="modalEventTitle">
+        Sones del barrio
+      </h3>
+<p class="font-body-sm text-body-sm text-text-secondary mb-space-md" id="modalEventDate">
+        Sábado 8 de Agosto · 18:00 hrs
+      </p>
+<div class="p-space-md rounded-2xl bg-surface-container-low mb-space-md space-y-2">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-text-secondary">Precio por acceso:</span>
+<span class="font-bold text-on-surface" id="modalEventPrice">$180 MXN</span>
+</div>
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-text-secondary">Comisión por servicio:</span>
+<span class="font-bold text-status-jade">$0.00 MXN (100% autogestivo)</span>
+</div>
+<div class="pt-2 flex items-center justify-between font-label-md text-label-md text-on-surface">
+<span>Total a pagar en taquilla / digital:</span>
+<span class="font-headline-sm text-title-card text-primary font-bold" id="modalEventTotal">$180 MXN</span>
+</div>
+</div>
+<form class="space-y-space-sm" onsubmit="handleTicketSubmit(event)">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Tu nombre completo</label>
+<input class="w-full h-11 px-space-sm rounded-xl bg-surface-container-lowest text-on-surface font-body-sm text-body-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Ej. Citlali Morales" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Correo electrónico para confirmación</label>
+<input class="w-full h-11 px-space-sm rounded-xl bg-surface-container-lowest text-on-surface font-body-sm text-body-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" placeholder="citlali@ejemplo.org" required="" type="email"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1">Cantidad de accesos (máx. 4)</label>
+<select class="w-full h-11 px-space-sm rounded-xl bg-surface-container-lowest text-on-surface font-body-sm text-body-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary">
+<option value="1">1 boleto</option>
+<option value="2">2 boletos</option>
+<option value="3">3 boletos</option>
+<option value="4">4 boletos</option>
+</select>
+</div>
+<div class="pt-space-sm flex items-center justify-end gap-space-sm">
+<button class="px-space-md h-11 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md" onclick="closeTicketModal()" type="button">
+            Cancelar
+          </button>
+<button class="px-space-lg h-11 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform" type="submit">
+            Confirmar Reserva
+          </button>
+</div>
+</form>
+</div>
+</div>
+<!-- INLINE JAVASCRIPT FOR MICRO-INTERACTIONS -->
+<script>
+    let isLiked = false;
+    function toggleLike() {
+      isLiked = !isLiked;
+      const heartIcon = document.getElementById('heartIcon');
+      const likeBtn = document.getElementById('likeBtn');
+      if (isLiked) {
+        heartIcon.textContent = 'favorite';
+        heartIcon.style.fontVariationSettings = "'FILL' 1";
+        likeBtn.classList.add('text-primary');
+      } else {
+        heartIcon.textContent = 'favorite_border';
+        heartIcon.style.fontVariationSettings = "'FILL' 0";
+      }
+    }
+
+    function shareVenue() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Foro Alicia · Cultura Viva CDMX',
+          text: 'Conoce la cartelera y actividades en Foro Alicia, Roma Norte.',
+          url: window.location.href,
+        }).catch(() => {});
+      } else {
+        alert('Enlace copiado al portapapeles: Foro Alicia en Roma Norte');
+      }
+    }
+
+    function openTicketModal(title, price, date) {
+      document.getElementById('modalEventTitle').textContent = title;
+      document.getElementById('modalEventPrice').textContent = price;
+      document.getElementById('modalEventTotal').textContent = price;
+      document.getElementById('modalEventDate').textContent = date;
+      const modal = document.getElementById('ticketModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeTicketModal() {
+      const modal = document.getElementById('ticketModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleTicketSubmit(e) {
+      e.preventDefault();
+      alert('¡Reserva comunitaria confirmada! Te hemos enviado tu pase digital con código de ingreso a tu correo.');
+      closeTicketModal();
+    }
+  </script>
+</div></main><footer class="w-full bg-cultural-surface dark:bg-dark-surface-alt transition-colors duration-200 pt-space-3xl pb-space-2xl"><div class="max-w-[1280px] mx-auto px-margin md:px-margin-tablet lg:px-margin-desktop"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl pb-space-2xl"><div class="lg:col-span-2 flex flex-col items-start"><div class="flex items-center gap-space-xs mb-space-sm"><img alt="Logo.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XmqC-ZrECzlozX7us0aRAAD6nJSW8Dve4h6iLp5YB5b3JSGy7OCvy0c82m84TpBJlKTvtMKf0AWQJ9Cn31uFcDulC17xvwJwBDhHVjB5IL5_EL18XcxEHH7aWZ95BC1E-gWmpcOH7c-qtFfjtDRJEMrF8ToUFviYYwrETgzng1LfvBPbj6Hb5Dx_69k-qIgwJyb0nyY13EvrnisKDT1mRAj_mj8gCzMih5i8YiPhfD_bO7dfkwz6Ndq2U7IoMjgHpHkO3ImqLZ"/><span class="font-headline-sm text-title-card tracking-tight text-primary">Cuicoyan</span></div><p class="font-body-md text-body-md text-text-secondary max-w-sm mb-space-lg">Donde la ciudad encuentra su escenario. Plataforma comunitaria para la difusión, resonancia y tejido del arte vivo en la Ciudad de México.</p><div class="flex items-center gap-space-xs"><a aria-label="Canal de audio e identidad sonora" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">podcasts</span></a><a aria-label="Agenda y mapa vivo" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">map</span></a><a aria-label="Comunidad y red territorial" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">hub</span></a><a aria-label="Boletín de novedades culturales" class="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="#"><span class="material-symbols-outlined text-[20px]">mail</span></a></div></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Explora</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="eventos" href="#">Eventos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="artistas" href="#">Artistas</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros" href="#">Foros</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="mapa-cultural" href="#">Mapa cultural</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="explorar" href="#">Por categoría</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Participa</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="para-creadores" href="#para-creadores">Para artistas y colectivos</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="foros-y-espacios" href="#">Para foros y espacios</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="convocatorias" href="#">Convocatorias</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="unete" href="#">Registro de proyectos</a></div><div class="flex flex-col gap-space-xs"><h4 class="font-title-card text-title-card text-on-surface mb-space-xs">Información</h4><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="sobre-cuicoyan" href="#">Sobre Cuicoyan</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="manifiesto" href="#">Manifiesto</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="accesibilidad" href="#">Accesibilidad</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="terminos" href="#">Términos de servicio</a><a class="font-body-sm text-body-sm text-text-secondary hover:text-primary transition-colors py-1" data-path="privacidad" href="#">Aviso de privacidad</a></div></div><div class="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-text-secondary"><p>© 2025 Cuicoyan. Plataforma de cultura viva de la Ciudad de México.</p><p class="text-center md:text-right font-label-md text-label-md text-on-surface-variant">Cuicoyan es una plataforma desarrollada sobre la infraestructura digital de Ollin.</p></div></div></footer></body></html>
