@@ -27,6 +27,13 @@ async function materializePages(pages, destinationRoot) {
     const pageName = path.basename(relative, '.html');
     const outputDirectory = pageDirectory === 'inicio' && pageName === 'inicio' ? destinationRoot : path.join(destinationRoot, pageDirectory);
     await mkdir(outputDirectory, { recursive: true });
-    await cp(page, path.join(outputDirectory, 'index.html'));
+    const outputPage = path.join(outputDirectory, 'index.html');
+    await cp(page, outputPage);
+    const pageHtml = await readFile(outputPage, 'utf8');
+    if (!pageHtml.includes('rel="icon"')) {
+      const relativeRoot = path.relative(outputDirectory, destinationRoot).replaceAll(path.sep, '/') || '.';
+      const favicon = `${relativeRoot}/public/favicon.svg`;
+      await writeFile(outputPage, pageHtml.replace('</head>', `<link rel="icon" type="image/svg+xml" href="${favicon}"></head>`));
+    }
   }
 }
