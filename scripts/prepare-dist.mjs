@@ -32,8 +32,8 @@ async function materializePages(pages, destinationRoot) {
     const pageHtml = await readFile(outputPage, 'utf8');
     if (!pageHtml.includes('rel="icon"')) {
       const relativeRoot = path.relative(outputDirectory, destinationRoot).replaceAll(path.sep, '/') || '.';
-      const favicon = `${relativeRoot}/public/favicon.svg`;
-      await writeFile(outputPage, pageHtml.replace('</head>', `<link rel="icon" type="image/svg+xml" href="${favicon}"></head>`));
+      const favicon = `${relativeRoot}/public/cuicoyan-logo.png`;
+      await writeFile(outputPage, pageHtml.replace('</head>', `<link rel="icon" type="image/png" href="${favicon}"></head>`));
     }
   }
 }
