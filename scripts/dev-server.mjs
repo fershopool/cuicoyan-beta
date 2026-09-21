@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const web = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const selected = process.argv[2] || 'frontend';
 const root = path.join(web, selected);
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
+const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
 const server = http.createServer(async (request, response) => {
   const clean = decodeURIComponent((request.url || '/').split('?')[0]);
   const candidate = clean.endsWith('/') ? `${clean}index.html` : clean;

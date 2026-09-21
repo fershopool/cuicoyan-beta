@@ -12,3 +12,16 @@ Assets de demostración generados para acercar la interfaz al lenguaje editorial
 | `frontend/src/assets/cuicoyan/venue-foro-alicia.webp` | 1400 × 877 | Tarjetas de Foro Alicia | ImageGen; foro cultural independiente al atardecer con escenario, audiencia, plantas y luces cálidas; sin texto ni marcas. |
 
 Formato final: WebP optimizado para web. Las imágenes se cargan como elementos `<img>` reales con `alt`, `loading="lazy"` fuera del hero y dimensiones controladas por CSS; no se usan como sustituto de la interfaz completa.
+
+## Cartografía integrada
+
+La vista Mapa cultural consume los recursos locales de `frontend/src/assets/cartografia/`:
+
+- `mapas/cdmx.pmtiles`: mapa vectorial de CDMX basado en Protomaps / OpenStreetMap.
+- `estilos/cuicoyan-style.local.json`: estilo cartográfico de Cuicoyan.
+- `limites/`: alcaldías, máscara exterior y leyenda `Próximamente`.
+- `recursos/vendor/`: MapLibre GL JS, lector PMTiles y sus estilos locales.
+- `recursos/basemaps-assets-main/`: glifos y sprites requeridos por el estilo.
+- `manifest.json`: procedencia, versiones, licencia y suma de verificación de la fuente cartográfica.
+
+La interfaz muestra la atribución de OpenStreetMap mediante el control de MapLibre. Los puntos de los espacios culturales son demostrativos y permanecen marcados como `Punto conceptual · por verificar` hasta contar con coordenadas aprobadas.
