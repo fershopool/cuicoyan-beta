@@ -7,7 +7,7 @@ const source = path.join(web, 'frontend');
 const dist = path.join(web, 'dist');
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
-await cp(source, dist, { recursive: true, filter: (entry) => !entry.includes(`${path.sep}node_modules${path.sep}`) && !entry.endsWith(`${path.sep}dist`) });
+await cp(source, dist, { recursive: true, filter: (entry) => path.basename(entry) !== '.DS_Store' && !entry.includes(`${path.sep}node_modules${path.sep}`) && !entry.endsWith(`${path.sep}dist`) });
 await materializePages(path.join(source, 'src/pages'), dist);
 await rm(path.join(dist, 'src/pages'), { recursive: true, force: true });
 const baseUrl = process.env.VITE_BASE_URL || '/';
