@@ -38,7 +38,7 @@ La interfaz muestra la atribución de OpenStreetMap mediante el control de MapLi
 | `quetzal.webp` | Ficha de Raíces del Viento (recorte con transparencia por color) | `Light/Perfil_Artista` |
 | `foro-alicia-hero.webp` | Cabecera de la ficha de Foro Alicia | `Light/Perfil_ForoCultural` |
 | `evento-hero.webp` | Cabecera de “Fandango con la plaza” | `Light/Evento` |
-| `palacio-mapa.webp` | Ilustración del encabezado del Mapa cultural | `Light/MapaCultural` |
+| `palacio-mapa-{light,dark}.svg` | Ilustración vectorial (Bellas Artes) del encabezado del Mapa cultural; sustituye a `palacio-mapa.webp` | `Light/MapaCultural` |
 | `fav-*.webp` | Miniaturas y banner de Favoritos | `Light/Favoritos` |
 
 Los datos demostrativos (eventos, artistas, direcciones de tres foros) se alinearon con el texto visible en los mockups y siguen marcados como `isDemo`.
