@@ -12,6 +12,8 @@ import { mapView } from './components/map.js';
 import { renderArtistsPage, renderFavoritesPage, renderMapPage, renderArtistProfile, renderVenueProfile, renderEventDetail, renderEventsPage, renderVenuesPage, renderExplorePage, mapBlock } from './components/app-pages.js';
 import { joinForm } from './components/join-form.js';
 import { renderProfileEditor } from './components/profile-editor.js';
+import { renderVenueEditor } from './components/venue-editor.js';
+import { TEST_EDIT_ACCESS } from './config/test-access.js';
 import { apiRequest, clearSession, consumeAuthRedirect, invitationId, setPassword } from './services/auth.service.js';
 
 consumeAuthRedirect();
@@ -67,7 +69,7 @@ function renderHome() {
   }
   const categorySection = section('home-cats', [el('div', { className: 'section-heading' }, [el('span', { className: 'eyebrow', text: 'Explora a tu manera' }), el('h2', { text: '¿Qué te gustaría vivir?' }), el('p', { className: 'only-desktop', text: 'Empieza por lo que te mueve. Puedes cambiar de categoría, fecha o zona en cualquier momento.' })]), el('div', { className: 'cat-row', attrs: { role: 'group', 'aria-label': 'Categorías culturales' } }, chips), el('div', { className: 'intentions only-desktop' }, [['Cerca de ti','cerca'],['Este fin de semana','fin-de-semana'],['Entrada libre','libre'],['Para ir en familia','familia'],['Tradición','tradicion'],['Escena independiente','independiente']].map(([label,value]) => el('a', { className: 'chip', href: `${routes.explorar}?intencion=${value}`, text: label }))), el('p', { className: 'only-desktop', style: 'margin-top:1rem' }, [el('a', { className: 'button ghost', href: `${routes.explorar}#categorias`, text: 'Ver todas las categorías →' })])]);
   const eventsSection = section('home-agenda', [el('div', { className: 'agenda-head' }, [el('div', { className: 'section-heading' }, [el('span', { className: 'eyebrow', text: 'Agenda local' }), el('h2', {}, [el('span', { className: 'only-app', text: 'Próximos eventos' }), el('span', { className: 'only-desktop', text: 'Planes para encontrarte con la ciudad.' })]), el('p', { className: 'only-desktop', text: 'Explora una selección de música, danza, teatro y encuentros que están por suceder.' })]), eventCount]), eventList, el('p', { className: 'demo-note', text: 'Los registros de esta agenda son demostrativos y deben verificarse antes de publicar.' }), el('div', { className: 'only-desktop', style: 'margin-top:1.4rem' }, [linkButton('Ver todos los eventos', routes.eventos, true)])]);
-  const homeMap = mapBlock(venues.slice(0, 4), 'venue-alicia');
+  const homeMap = mapBlock(onMap().slice(0, 4), 'venue-alicia');
   const mapSection = section('paper home-map', [sectionHeading('Mapa cultural', 'La cultura también se descubre caminando.', 'Ubica foros, eventos y espacios culturales por zona. Empieza en CDMX y acerca el mapa a tu barrio.'), el('div', { className: 'map-layout' }, [el('div', { className: 'place-rows' }, [...homeMap.rows, linkButton('Abrir mapa cultural', routes.mapa)]), homeMap.shell])]);
   const artistsSection = section('', [sectionHeading('Personas y colectivos', 'Artistas que están creando.', 'Conoce las voces, cuerpos, ideas y proyectos que mantienen en movimiento la cultura de la ciudad.'), demoNotice(), el('div', { className: 'grid grid-4' }, artists.slice(0, 4).map(artistCard)), el('div', { style: 'margin-top:1.4rem' }, [linkButton('Conocer artistas', routes.artistas, true)])]);
   const venuesSection = section('alt', [sectionHeading('Espacios culturales', 'Foros que hacen ciudad.', 'Encuentra escenarios, centros culturales y espacios independientes; conoce su programación y cómo llegar.'), demoNotice(), el('div', { className: 'cards' }, venues.slice(0, 3).map(venueCard)), el('div', { style: 'margin-top:1.4rem' }, [linkButton('Explorar foros', routes.foros, true)])]);
@@ -129,7 +131,9 @@ function renderDetail(type) {
   return renderVenueProfile(item, { events });
 }
 
-function renderMap() { renderMapPage(venues); }
+// Los foros que desmarcan «publicar» en su editor no aparecen en el mapa.
+function onMap() { return venues.filter((venue) => venue.mapVisible !== false); }
+function renderMap() { renderMapPage(onMap()); }
 
 function renderFavorites() { renderFavoritesPage({ events, artists, venues }); }
 
@@ -192,14 +196,22 @@ function renderProfile() {
       onLogout: () => { clearSession(); window.location.href = routes.home; },
     }));
   }).catch(() => {
-    // Sin sesión o sin API: editores de demostración (artista / foro). ponytail: quitar al conectar la base de datos.
-    const kind = new URLSearchParams(window.location.search).get('tipo') === 'foro' ? 'foro' : 'artista';
-    const venue = venues.find((item) => item.slug === 'foro-alicia') || venues[0];
-    const artist = kind === 'foro'
-      ? { slug: venue.slug, name: venue.name, discipline: 'Foro cultural', tagline: venue.zone, bio: (venue.description || '').slice(0, 160), longBio: venue.description, eyebrow: 'Foro cultural · CDMX' }
-      : artists.find((item) => item.slug === 'raices-del-viento') || artists[0];
-    const switcher = el('nav', { className: 'pe-switch', attrs: { 'aria-label': 'Tipo de perfil de prueba' } }, [['artista', 'Artista'], ['foro', 'Foro cultural']].map(([value, label]) => el('a', { href: `${routes.perfil}?tipo=${value}`, text: label, attrs: value === kind ? { 'aria-current': 'page' } : {} })));
-    mount(renderProfileEditor({ artist, profileId: `${kind}-${artist.slug}`.replace(/^artista-/, ''), remote: false, switcher }));
+    // Sin sesión o sin API: editores de demostración (artista / foro) de cualquier registro. ponytail: quitar al conectar la base de datos.
+    if (!TEST_EDIT_ACCESS) { mount(el('main', { id: 'contenido', className: 'app-page' }, [el('div', { className: 'app-wrap' }, [el('h1', { text: 'Edición no disponible' }), el('p', { className: 'muted', text: 'Inicia sesión para editar tu perfil.' }), linkButton('Volver al inicio', routes.home)])])); return; }
+    const query = new URLSearchParams(window.location.search);
+    const kind = query.get('tipo') === 'foro' ? 'foro' : 'artista';
+    const list = kind === 'foro' ? venues : artists;
+    const record = list.find((item) => item.slug === query.get('id')) || list.find((item) => item.slug === (kind === 'foro' ? 'foro-alicia' : 'raices-del-viento')) || list[0];
+    const go = (type, id) => { window.location.href = `${routes.perfil}?tipo=${type}${id ? `&id=${encodeURIComponent(id)}` : ''}`; };
+    const picker = el('select', { id: 'pe-record', onchange: (event) => go(kind, event.target.value) }, list.map((item) => el('option', { value: item.slug, text: item.name })));
+    picker.value = record.slug;
+    const switcher = el('div', { className: 'pe-switch-row' }, [
+      el('nav', { className: 'pe-switch', attrs: { 'aria-label': 'Tipo de perfil de prueba' } }, [['artista', 'Artista'], ['foro', 'Foro cultural']].map(([value, label]) => el('a', { href: `${routes.perfil}?tipo=${value}`, text: label, attrs: value === kind ? { 'aria-current': 'page' } : {} }))),
+      el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'pe-record', text: kind === 'foro' ? 'Foro a editar' : 'Artista a editar' }), picker]),
+    ]);
+    // El editor parte de los datos originales (`_base`), no de los ya editados.
+    const original = record._base || record;
+    mount(kind === 'foro' ? renderVenueEditor({ venue: original, switcher }) : renderProfileEditor({ artist: original, profileId: record.slug, remote: false, switcher }));
   });
 }
 function renderCalls() { const calls = getCalls(); return pageFrame({ eyebrow: 'Oportunidades', title: 'Convocatorias culturales.', description: 'Una lista de ejemplo preparada para recibir información verificada.', children: [section('', [demoNotice(), el('div', { className: 'grid grid-3' }, calls.map((call) => el('article', { className: 'detail-panel' }, [el('span', { className: 'demo-label', text: 'Demostración' }), el('h3', { text: call.title }), el('p', { className: 'muted', text: call.description }), el('strong', { text: call.status }), el('button', { className: 'button secondary', type: 'button', disabled: true, text: 'Postulación próximamente' })])))]) ] }); }

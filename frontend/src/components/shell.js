@@ -3,11 +3,12 @@ import { routes, routeForPath, withBase } from '../config/routes.js';
 import { environment } from '../config/environment.js';
 import { getPreferences, savePreferences } from '../services/preferences.service.js';
 import { icon } from './icons.js';
+import { TEST_EDIT_ACCESS } from '../config/test-access.js';
 
 const nav = [
   ['Inicio', routes.home, 'home'], ['Explorar', routes.explorar, 'explorar'], ['Eventos', routes.eventos, 'eventos'],
   ['Artistas', routes.artistas, 'artistas'], ['Foros', routes.foros, 'foros'], ['Mapa', routes.mapa, 'mapa'],
-  ['Para creadores', routes.creadores, 'creadores'], ['Perfil', routes.perfil, 'perfil'], // ponytail: acceso temporal de pruebas; quitar al conectar la base de datos
+  ['Para creadores', routes.creadores, 'creadores'], ...(TEST_EDIT_ACCESS ? [['Perfil', routes.perfil, 'perfil']] : []), // ponytail: acceso temporal de pruebas (config/test-access.js); quitar al conectar la base de datos
   ['Sobre Cuicoyan', routes.sobre, 'sobre'],
 ];
 
