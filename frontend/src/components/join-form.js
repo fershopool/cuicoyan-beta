@@ -5,11 +5,27 @@ import { environment } from '../config/environment.js';
 const ALCALDIAS = ['Álvaro Obregón', 'Azcapotzalco', 'Benito Juárez', 'Coyoacán', 'Cuajimalpa', 'Cuauhtémoc', 'Gustavo A. Madero', 'Iztacalco', 'Iztapalapa', 'Magdalena Contreras', 'Miguel Hidalgo', 'Milpa Alta', 'Tláhuac', 'Tlalpan', 'Venustiano Carranza', 'Xochimilco', 'Fuera de CDMX'];
 const DISCIPLINAS = ['Huapango', 'Fandango', 'Danza', 'Teatro', 'Música', 'Talleres', 'Artes marciales', 'Cultura urbana', 'Otra'];
 
+const REDES = [
+  { name: 'Instagram', base: 'https://instagram.com/', placeholder: '@tuusuario' },
+  { name: 'Facebook', base: 'https://facebook.com/', placeholder: 'Tu página o enlace' },
+  { name: 'TikTok', base: 'https://tiktok.com/@', placeholder: '@tuusuario' },
+  { name: 'YouTube', base: 'https://youtube.com/@', placeholder: '@tucanal o enlace' },
+  { name: 'Sitio web u otra red', base: '', placeholder: 'https://…' },
+];
+
+// Convierte «@usuario», «usuario» o «sitio.com» en un enlace completo; devuelve '' si no es válido.
+function toLink(value, base) {
+  const v = value.trim();
+  if (!v) return '';
+  const raw = /^https?:\/\//i.test(v) ? v : /^(www\.)?[\w-]+(\.[\w-]+)+(\/|$)/i.test(v) && !v.startsWith('@') ? `https://${v}` : base ? `${base}${v.replace(/^@/, '')}` : `https://${v}`;
+  try { return /^[\w.-]+$/.test(new URL(raw).hostname.replace(/\./g, '')) ? new URL(raw).href : ''; } catch { return ''; }
+}
+
 // `name` es la etiqueta que aparece como fila en el correo; `title` marca el dato que va en el asunto.
 const contacto = [
   { name: 'Nombre de contacto', label: 'Tu nombre', required: true, autocomplete: 'name' },
   { name: 'email', label: 'Correo de contacto', type: 'email', required: true, autocomplete: 'email' },
-  { name: 'Teléfono o WhatsApp', label: 'Teléfono o WhatsApp (opcional)', type: 'tel', autocomplete: 'tel' },
+  { name: 'Celular (WhatsApp)', label: 'Número de celular (WhatsApp)', type: 'tel', required: true, autocomplete: 'tel', placeholder: '10 dígitos, ej. 55 1234 5678' },
 ];
 
 export const ROLES = {
@@ -21,7 +37,7 @@ export const ROLES = {
       { name: 'Disciplinas', label: 'Disciplinas', checks: DISCIPLINAS, required: true, wide: true },
       { name: 'Alcaldía o zona', label: 'Alcaldía o zona donde te presentas', options: ALCALDIAS, required: true, zone: true },
       { name: 'Descripción', label: 'Cuéntanos sobre tu proyecto', area: true, required: true, wide: true, max: 800 },
-      { name: 'Enlaces', label: 'Sitio web o redes (opcional)', placeholder: 'https:// o @usuario', wide: true },
+      { name: 'Redes sociales', label: 'Tus redes sociales (agrega al menos una)', redes: true, wide: true },
       { name: 'Próximas fechas', label: 'Próximas fechas o presentaciones (opcional)', area: true, wide: true, max: 500 },
     ],
   },
@@ -37,7 +53,7 @@ export const ROLES = {
       { name: 'Horario', label: 'Horario de atención (opcional)', placeholder: 'Ej. Mar a dom, 16:00 a 23:00' },
       { name: 'Accesibilidad', label: 'Accesibilidad (opcional)', placeholder: 'Rampas, baños, lengua de señas…' },
       { name: 'Descripción', label: 'Cuéntanos sobre el espacio', area: true, required: true, wide: true, max: 800 },
-      { name: 'Enlaces', label: 'Sitio web o redes (opcional)', placeholder: 'https:// o @usuario', wide: true },
+      { name: 'Redes sociales', label: 'Tus redes sociales (agrega al menos una)', redes: true, wide: true },
     ],
   },
 };
@@ -51,7 +67,12 @@ function folio(letter) {
 function field(spec, id) {
   const base = { id, name: spec.name, required: !!spec.required, autocomplete: spec.autocomplete || 'off' };
   let control;
-  if (spec.checks) {
+  if (spec.redes) {
+    control = el('div', { className: 'social-grid' }, REDES.map((red, index) => el('label', { className: 'social-input' }, [
+      el('span', { text: red.name }),
+      el('input', { type: 'text', name: `red-${index}`, maxLength: 200, placeholder: red.placeholder, autocomplete: 'off', inputMode: 'url' }),
+    ])));
+  } else if (spec.checks) {
     control = el('div', { className: 'chip-options', attrs: { role: 'group', 'aria-labelledby': `${id}-label` } }, spec.checks.map((option) => el('label', {}, [el('input', { type: 'checkbox', name: spec.name, value: option }), el('span', { text: option })])));
   } else if (spec.options) {
     control = el('select', base, [el('option', { value: '', text: 'Selecciona una opción' }), ...spec.options.map((option) => el('option', { value: option, text: option }))]);
@@ -61,7 +82,7 @@ function field(spec, id) {
     control = el('input', { ...base, type: spec.type || 'text', maxLength: 200, placeholder: spec.placeholder || '', min: spec.min });
   }
   return el('div', { className: `field${spec.wide ? ' wide' : ''}` }, [
-    el('label', { htmlFor: spec.checks ? undefined : id, id: `${id}-label`, text: spec.label }),
+    el('label', { htmlFor: spec.checks || spec.redes ? undefined : id, id: `${id}-label`, text: spec.label }),
     control,
   ]);
 }
@@ -109,6 +130,12 @@ export function joinForm(initialRole, onRoleChange) {
         if (!form.querySelector(`input[name="${spec.name}"]:checked`)) { status.textContent = `Elige al menos una opción en «${spec.label}».`; return; }
       }
       if (!form.checkValidity()) { form.reportValidity(); return; }
+      const phone = form.elements['Celular (WhatsApp)'].value.replace(/\D/g, '');
+      if (!/^(52)?1?\d{10}$/.test(phone)) { status.textContent = 'Escribe un número de celular válido de 10 dígitos.'; form.elements['Celular (WhatsApp)'].focus(); return; }
+      const links = REDES.map((red, index) => ({ red, raw: form.elements[`red-${index}`].value, link: toLink(form.elements[`red-${index}`].value, red.base) }));
+      const bad = links.find((item) => item.raw.trim() && !item.link);
+      if (bad) { status.textContent = `Revisa el enlace de ${bad.red.name}.`; return; }
+      if (!links.some((item) => item.link)) { status.textContent = 'Agrega al menos una red social o sitio web.'; return; }
 
       const data = Object.fromEntries(new FormData(form));
       const code = folio(role.letter);
@@ -118,6 +145,7 @@ export function joinForm(initialRole, onRoleChange) {
         Folio: code, 'Tipo de registro': role.label, 'Fecha de envío': new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }),
       };
       [...role.fields, ...contacto].forEach((spec) => {
+        if (spec.redes) { links.forEach((item) => { payload[item.red.name] = item.link || '—'; }); return; }
         payload[spec.name] = spec.checks ? [...form.querySelectorAll(`input[name="${spec.name}"]:checked`)].map((input) => input.value).join(', ') : (data[spec.name] || '').trim() || '—';
       });
       Object.assign(payload, {

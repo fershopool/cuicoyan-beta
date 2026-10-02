@@ -520,3 +520,13 @@ h3 { font-weight: 700; letter-spacing: -.025em; }
   .event-grid .card-media-image { width: 100%; }
   .event-grid .card-media::after { background: linear-gradient(0deg, var(--surface), transparent 60%); }
 }
+
+/* Redes sociales vinculadas */
+.social-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.social-input { display: grid; gap: .3rem; }
+.social-input > span { color: var(--muted); font-size: .76rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.social-input:nth-child(1) > span { color: #E1306C; }
+.social-input:nth-child(2) > span { color: #4C8DFF; }
+.social-input:nth-child(3) > span { color: var(--turquoise); }
+.social-input:nth-child(4) > span { color: var(--red); }
+@media (max-width: 620px) { .social-grid { grid-template-columns: 1fr; } }
