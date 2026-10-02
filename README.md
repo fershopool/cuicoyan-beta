@@ -21,6 +21,7 @@ Para GitHub Pages actual, la build usa `/cuicoyan-site/` y publica en [fershopoo
 - HTML, CSS y JavaScript nativo por módulos; no hay CDN ni fuentes remotas.
 - Tema, intereses y favoritos se guardan localmente bajo `cuicoyan:v1`; no se almacenan datos personales.
 - Los formularios de registro de `/unete/` envían cada solicitud por correo al equipo vía FormSubmit; ver `docs/formulario-registro.md` (activación, formato del asunto y filtros de Gmail).
+- La interfaz sigue los mockups de `Mockups/`: modo app (≤ 900 px) con dock inferior y escenas por categoría, y adaptación de escritorio. Los estilos de esa capa viven en `frontend/src/styles/mockup.css` (se carga después de `app.css`); los iconos, en `components/icons.js`; las pantallas de app, en `components/app-pages.js`.
 - Tipografías de marca (Bricolage Grotesque y Manrope) autoalojadas en `src/assets/fonts`.
 - Las rutas tienen `noindex,nofollow` mientras se verifica contenido, derechos y textos legales.
 

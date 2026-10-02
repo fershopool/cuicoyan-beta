@@ -25,3 +25,20 @@ La vista Mapa cultural consume los recursos locales de `frontend/src/assets/cart
 - `manifest.json`: procedencia, versiones, licencia y suma de verificación de la fuente cartográfica.
 
 La interfaz muestra la atribución de OpenStreetMap mediante el control de MapLibre. Los puntos de los espacios culturales son demostrativos y permanecen marcados como `Punto conceptual · por verificar` hasta contar con coordenadas aprobadas.
+
+## Recortes de los mockups (interfaz tipo app)
+
+`frontend/src/assets/mockup/` se genera recortando las pantallas de `Mockups/Light` y `Mockups/Dark` (exportadas a ~941 px de ancho) y retocando los botones/precios que venían incrustados en la imagen. Sustituir por las ilustraciones originales en alta resolución antes de producción.
+
+| Archivo | Uso | Origen |
+|---|---|---|
+| `hero-{todos,huapango,teatro}-{light,dark}.webp` | Escena del encabezado móvil de Inicio (cambia con la categoría) | `Inicio_normal`, `Inicio_Huapango`, `Inicio_Teatro` |
+| `ev-{sones,fandango,cuentos}-{light,dark}.webp` | Imagen derecha de las tarjetas de evento | `Inicio_normal`, `Inicio_Huapango`, `Inicio_Teatro` |
+| `avatar-*.webp` | Avatares de artistas (Artistas, Favoritos, fichas) | `Light/Artistas` |
+| `quetzal.webp` | Ficha de Raíces del Viento (recorte con transparencia por color) | `Light/Perfil_Artista` |
+| `foro-alicia-hero.webp` | Cabecera de la ficha de Foro Alicia | `Light/Perfil_ForoCultural` |
+| `evento-hero.webp` | Cabecera de “Fandango con la plaza” | `Light/Evento` |
+| `palacio-mapa.webp` | Ilustración del encabezado del Mapa cultural | `Light/MapaCultural` |
+| `fav-*.webp` | Miniaturas y banner de Favoritos | `Light/Favoritos` |
+
+Los datos demostrativos (eventos, artistas, direcciones de tres foros) se alinearon con el texto visible en los mockups y siguen marcados como `isDemo`.

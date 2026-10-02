@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, open, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,9 +19,24 @@ const server = http.createServer(async (request, response) => {
   let file;
   let data;
 
+  const range = /^bytes=(\d*)-(\d*)$/.exec(request.headers.range || '');
   for (const candidateFile of files) {
     if (candidateFile !== root && !candidateFile.startsWith(`${root}${path.sep}`)) continue;
     try {
+      if (range) {
+        // PMTiles necesita peticiones Range (igual que el hosting estático); se lee solo el tramo pedido.
+        const { size } = await stat(candidateFile);
+        const start = range[1] === '' ? Math.max(size - Number(range[2]), 0) : Number(range[1]);
+        const end = range[1] === '' || range[2] === '' ? size - 1 : Math.min(Number(range[2]), size - 1);
+        if (start > end || start >= size) { response.writeHead(416, { 'Content-Range': `bytes */${size}` }); response.end(); return; }
+        const handle = await open(candidateFile);
+        const chunk = Buffer.alloc(end - start + 1);
+        await handle.read(chunk, 0, chunk.length, start);
+        await handle.close();
+        response.writeHead(206, { 'Content-Type': mime[path.extname(candidateFile)] || 'application/octet-stream', 'Cache-Control': 'no-store', 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${start}-${end}/${size}`, 'Content-Length': chunk.length });
+        response.end(chunk);
+        return;
+      }
       data = await readFile(candidateFile);
       file = candidateFile;
       break;
@@ -29,7 +44,8 @@ const server = http.createServer(async (request, response) => {
   }
 
   if (!data) { response.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' }); response.end('<h1>404</h1>'); return; }
-  response.writeHead(200, { 'Content-Type': mime[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
+  const headers = { 'Content-Type': mime[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store', 'Accept-Ranges': 'bytes' };
+  response.writeHead(200, { ...headers, 'Content-Length': data.length });
   response.end(data);
 });
 const port = Number(process.env.PORT || 4173);
