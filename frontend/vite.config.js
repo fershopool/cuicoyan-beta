@@ -26,4 +26,4 @@ const pages = [
   ['terminos-index', 'terminos/terminos'],
 ];
 
-export default defineConfig({ root: '.', base: '/', build: { outDir: '../dist-vite', emptyOutDir: true, rollupOptions: { input: Object.fromEntries(pages.map(([name, page]) => [name, resolve(process.cwd(), `src/pages/${page}.html`)])) } } });
+export default defineConfig({ root: '.', base: process.env.VITE_BASE_URL || '/cuicoyan-site/', build: { outDir: '../dist-vite', emptyOutDir: true, rollupOptions: { input: Object.fromEntries(pages.map(([name, page]) => [name, resolve(process.cwd(), `src/pages/${page}.html`)])) } } });

@@ -10,8 +10,12 @@ await mkdir(dist, { recursive: true });
 await cp(source, dist, { recursive: true, filter: (entry) => path.basename(entry) !== '.DS_Store' && !entry.includes(`${path.sep}node_modules${path.sep}`) && !entry.endsWith(`${path.sep}dist`) });
 await materializePages(path.join(source, 'src/pages'), dist);
 await rm(path.join(dist, 'src/pages'), { recursive: true, force: true });
-const baseUrl = process.env.VITE_BASE_URL || '/';
-await writeFile(path.join(dist, 'src/config/site-base.js'), `export const siteBase = ${JSON.stringify(baseUrl)};\n`);
+const baseUrl = process.env.VITE_BASE_URL || '/cuicoyan-site/';
+const cuicoyanApiUrl = process.env.VITE_CUICOYAN_API_URL || '';
+const cuicoyanAllowedOrigins = process.env.VITE_CUICOYAN_ALLOWED_ORIGINS || 'https://fershopool.github.io';
+const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || '';
+await writeFile(path.join(dist, 'src/config/site-base.js'), `export const siteBase = ${JSON.stringify(baseUrl)};\nexport const cuicoyanApiUrl = ${JSON.stringify(cuicoyanApiUrl)};\nexport const cuicoyanAllowedOrigins = ${JSON.stringify(cuicoyanAllowedOrigins)};\nexport const supabaseUrl = ${JSON.stringify(supabaseUrl)};\nexport const supabaseAnonKey = ${JSON.stringify(supabaseAnonKey)};\n`);
 // Evita publicar el manifiesto de desarrollo de npm en el hosting estático.
 await rm(path.join(dist, 'package.json'), { force: true });
 await rm(path.join(dist, 'vite.config.js'), { force: true });
