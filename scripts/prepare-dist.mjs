@@ -36,8 +36,8 @@ async function materializePages(pages, destinationRoot) {
     const pageHtml = await readFile(outputPage, 'utf8');
     if (!pageHtml.includes('rel="icon"')) {
       const relativeRoot = path.relative(outputDirectory, destinationRoot).replaceAll(path.sep, '/') || '.';
-      const icons = ['light', 'dark'].map((mode) => `<link rel="icon" type="image/png" sizes="64x64" href="${relativeRoot}/public/icon-${mode}-64.png?v=3" media="(prefers-color-scheme: ${mode})">`).join('');
-      await writeFile(outputPage, pageHtml.replace('</head>', `${icons}<link rel="apple-touch-icon" href="${relativeRoot}/public/apple-touch-icon.png?v=3"></head>`));
+      const icons = ['light', 'dark'].map((mode) => `<link rel="icon" type="image/png" sizes="64x64" href="${relativeRoot}/public/icon-${mode}-64.png?v=4" media="(prefers-color-scheme: ${mode})">`).join('');
+      await writeFile(outputPage, pageHtml.replace('</head>', `${icons}<link rel="apple-touch-icon" href="${relativeRoot}/public/apple-touch-icon.png?v=4"></head>`));
     }
   }
 }
