@@ -11,6 +11,7 @@ import { icon, emblem } from './components/icons.js';
 import { mapView } from './components/map.js';
 import { renderArtistsPage, renderFavoritesPage, renderMapPage, renderArtistProfile, renderVenueProfile, renderEventDetail, renderEventsPage, renderVenuesPage, renderExplorePage, mapBlock } from './components/app-pages.js';
 import { joinForm } from './components/join-form.js';
+import { renderProfileEditor } from './components/profile-editor.js';
 import { apiRequest, clearSession, consumeAuthRedirect, invitationId, setPassword } from './services/auth.service.js';
 
 consumeAuthRedirect();
@@ -23,6 +24,10 @@ const mockupStyles = document.createElement('link');
 mockupStyles.rel = 'stylesheet';
 mockupStyles.href = new URL('./styles/mockup.css', import.meta.url);
 document.head.append(mockupStyles);
+const editorStyles = document.createElement('link');
+editorStyles.rel = 'stylesheet';
+editorStyles.href = new URL('./styles/profile-editor.css', import.meta.url);
+document.head.append(editorStyles);
 
 let events = getEvents();
 const artists = getArtists();
@@ -55,7 +60,7 @@ function renderHome() {
   const chips = categories.map((category) => { const chip = el('button', { className: 'cat-chip', type: 'button', dataset: { cat: category.slug }, style: `--chip-color:var(--${category.color === 'brand' ? 'primary' : category.color})` }, [icon(category.slug === 'todos' ? 'all' : category.slug, { size: 24, className: 'cat-icon' }), el('span', { text: category.label })]); chip.addEventListener('click', () => { home.category = category.slug; paintHome(); announce(`Categoría ${category.label}`); }); return chip; });
   function paintHome() {
     const shown = home.category === 'todos' ? events : events.filter((event) => (event.categorySlugs || []).includes(home.category));
-    eventList.replaceChildren(...(shown.length ? shown.map(eventCard) : [el('div', { className: 'empty-state' }, [el('h3', { text: 'Aún no hay eventos en esta categoría' }), el('p', { className: 'muted', text: 'Prueba otra disciplina o revisa toda la agenda.' })])]));
+    eventList.replaceChildren(...(shown.length ? shown.slice(0, 4).map(eventCard) : [el('div', { className: 'empty-state' }, [el('h3', { text: 'Aún no hay eventos en esta categoría' }), el('p', { className: 'muted', text: 'Prueba otra disciplina o revisa toda la agenda.' })])]));
     eventCount.replaceChildren(`${shown.length} evento${shown.length === 1 ? '' : 's'}`, icon('chevron', { size: 18 }));
     chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip.dataset.cat === home.category)));
     const mainNode = document.getElementById('contenido'); if (mainNode) { mainNode.dataset.scene = scenes[home.category] || 'todos'; mainNode.dataset.cat = home.category; }
@@ -173,42 +178,29 @@ function renderInvitation() {
 }
 function renderProfile() {
   const statusLabels = { draft: 'Borrador', pending_review: 'En revisión', published: 'Publicado', rejected: 'Rechazado', suspended: 'Suspendido' };
-  const state = el('div', { id: 'profile-state', className: 'detail-panel' }, [el('p', { className: 'muted', text: 'Cargando tu perfil…' })]);
-  const main = pageFrame({ eyebrow: 'Mi perfil', title: 'Edita tu ficha cultural.', description: 'Solo puedes editar los campos editoriales de los perfiles vinculados a tu cuenta.', children: [section('', [state])] });
+  const mount = (main) => { ($('#contenido') || $('#app')).replaceWith(main); };
+  mount(el('main', { id: 'contenido', className: 'app-page' }, [el('div', { className: 'app-wrap' }, [el('p', { className: 'muted', text: 'Cargando tu perfil…' })])]));
   void apiRequest('/api/cuicoyan/me/profile').then((body) => {
     const profile = body?.data?.profiles?.[0];
-    if (!profile) { state.replaceChildren(el('p', { className: 'notice', text: 'No hay un perfil activo para esta cuenta.' })); return; }
-    const locked = profile.status === 'suspended';
-    const form = el('form', { className: 'account-form' }, [
-      el('span', { className: 'badge', text: profile.profile_type === 'cultural_forum' ? 'Foro cultural' : 'Artista' }),
-      el('p', { className: 'muted', text: `Estado: ${statusLabels[profile.status] || profile.status}` }),
-      el('label', { text: 'Nombre público', attrs: { for: 'profile-name' } }),
-      el('input', { id: 'profile-name', name: 'display_name', value: profile.display_name, maxlength: '160', required: true, disabled: locked }),
-      el('label', { text: 'Descripción', attrs: { for: 'profile-description' } }),
-      el('textarea', { id: 'profile-description', name: 'description', maxlength: '5000', rows: '7', disabled: locked }, [profile.description || '']),
-      el('label', { text: 'Sitio web', attrs: { for: 'profile-website' } }),
-      el('input', { id: 'profile-website', name: 'website_url', type: 'url', value: profile.website_url || '', maxlength: '500', disabled: locked }),
-      el('label', { text: 'Correo de contacto público', attrs: { for: 'profile-email' } }),
-      el('input', { id: 'profile-email', name: 'contact_email', type: 'email', value: profile.contact_email || '', maxlength: '320', disabled: locked }),
-      el('p', { id: 'profile-error', className: 'form-error', attrs: { role: 'alert' } }),
-      el('div', { className: 'hero-actions' }, [el('button', { className: 'button', type: 'submit', text: 'Guardar cambios', disabled: locked }), !locked && (profile.status === 'draft' || profile.status === 'rejected') ? el('button', { className: 'button secondary', id: 'submit-review', type: 'button', text: 'Enviar a revisión' }) : null]),
-      el('button', { className: 'button ghost', id: 'profile-logout', type: 'button', text: 'Cerrar sesión en este navegador' })
-    ]);
-    const error = $('#profile-error', form);
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault(); error.textContent = '';
-      try { await apiRequest('/api/cuicoyan/me/profile', { method: 'PATCH', body: JSON.stringify({ profile_id: profile.id, display_name: form.display_name.value, description: form.description.value, website_url: form.website_url.value, contact_email: form.contact_email.value }) }); announce('Perfil guardado'); }
-      catch (requestError) { error.textContent = requestError.message || 'No se pudo guardar el perfil.'; }
-    });
-    $('#submit-review', form)?.addEventListener('click', async () => {
-      error.textContent = '';
-      try { await apiRequest('/api/cuicoyan/me/profile/submit', { method: 'POST', body: JSON.stringify({ profile_id: profile.id }) }); announce('Perfil enviado a revisión'); renderProfile(); }
-      catch (requestError) { error.textContent = requestError.message || 'No se pudo enviar el perfil.'; }
-    });
-    $('#profile-logout', form).addEventListener('click', () => { clearSession(); window.location.href = routes.home; });
-    state.replaceChildren(form);
-  }).catch((error) => state.replaceChildren(el('p', { className: 'notice', text: error.message || 'Inicia sesión desde una invitación válida.' })));
-  return main;
+    if (!profile) throw new Error('Sin perfil');
+    const artist = { slug: profile.id, name: profile.display_name, bio: (profile.description || '').slice(0, 160), longBio: profile.description || '', website: profile.website_url || '', email: profile.contact_email || '' };
+    const canSubmit = profile.status === 'draft' || profile.status === 'rejected';
+    mount(renderProfileEditor({
+      artist, profileId: profile.id, remote: true, status: statusLabels[profile.status] || profile.status,
+      onRemoteSave: (d) => apiRequest('/api/cuicoyan/me/profile', { method: 'PATCH', body: JSON.stringify({ profile_id: profile.id, display_name: d.name, description: d.longBio, website_url: d.website, contact_email: d.email }) }),
+      onSubmitReview: canSubmit ? async () => { try { await apiRequest('/api/cuicoyan/me/profile/submit', { method: 'POST', body: JSON.stringify({ profile_id: profile.id }) }); announce('Perfil enviado a revisión'); renderProfile(); } catch (error) { announce(error.message || 'No se pudo enviar el perfil.'); } } : null,
+      onLogout: () => { clearSession(); window.location.href = routes.home; },
+    }));
+  }).catch(() => {
+    // Sin sesión o sin API: editores de demostración (artista / foro). ponytail: quitar al conectar la base de datos.
+    const kind = new URLSearchParams(window.location.search).get('tipo') === 'foro' ? 'foro' : 'artista';
+    const venue = venues.find((item) => item.slug === 'foro-alicia') || venues[0];
+    const artist = kind === 'foro'
+      ? { slug: venue.slug, name: venue.name, discipline: 'Foro cultural', tagline: venue.zone, bio: (venue.description || '').slice(0, 160), longBio: venue.description, eyebrow: 'Foro cultural · CDMX' }
+      : artists.find((item) => item.slug === 'raices-del-viento') || artists[0];
+    const switcher = el('nav', { className: 'pe-switch', attrs: { 'aria-label': 'Tipo de perfil de prueba' } }, [['artista', 'Artista'], ['foro', 'Foro cultural']].map(([value, label]) => el('a', { href: `${routes.perfil}?tipo=${value}`, text: label, attrs: value === kind ? { 'aria-current': 'page' } : {} })));
+    mount(renderProfileEditor({ artist, profileId: `${kind}-${artist.slug}`.replace(/^artista-/, ''), remote: false, switcher }));
+  });
 }
 function renderCalls() { const calls = getCalls(); return pageFrame({ eyebrow: 'Oportunidades', title: 'Convocatorias culturales.', description: 'Una lista de ejemplo preparada para recibir información verificada.', children: [section('', [demoNotice(), el('div', { className: 'grid grid-3' }, calls.map((call) => el('article', { className: 'detail-panel' }, [el('span', { className: 'demo-label', text: 'Demostración' }), el('h3', { text: call.title }), el('p', { className: 'muted', text: call.description }), el('strong', { text: call.status }), el('button', { className: 'button secondary', type: 'button', disabled: true, text: 'Postulación próximamente' })])))]) ] }); }
 function renderInfo(kind) { const content = { sobre: ['Sobre Cuicoyan', 'Una plataforma cultural para descubrir, conectar y compartir la vida cultural de CDMX.', 'Cuicoyan reúne eventos, artistas, foros y territorio en una experiencia de exploración clara. Esta entrega es un staging estático: no representa una operación activa ni afirma alianzas, cifras o infraestructura.'], ayuda: ['Centro de ayuda', 'Respuestas breves para recorrer el prototipo.', ''], accesibilidad: ['Accesibilidad', 'El sitio está construido con la accesibilidad como criterio de diseño.', 'Trabajamos para ofrecer navegación por teclado, foco visible, contraste AA, alternativa textual del mapa y respeto a reduced motion. El canal para reportar barreras queda pendiente de configuración.'], privacidad: ['Aviso de privacidad', 'Documento de staging pendiente de validación legal.', 'Esta versión no crea cuentas ni incorpora analítica. Si llenas un formulario de registro, tus datos se envían por correo al equipo de Cuicoyan (mediante el servicio FormSubmit) solo para revisar tu solicitud; no se publican. Tema, intereses y favoritos se guardan localmente en tu navegador y puedes borrarlos desde onboarding. Antes de publicar se requiere responsable, versión y texto legal aprobado.'], terminos: ['Términos y convivencia', 'Texto de staging pendiente de aprobación.', 'El contenido demostrativo no constituye una cartelera, promesa de disponibilidad ni contrato de compra. No hay pagos, reservas, boletos, cuentas ni publicaciones remotas en esta entrega.'] }; const [title, desc, body] = content[kind]; const children = [section('', [kind === 'ayuda' ? el('div', { className: 'faq' }, getHelp().map((item) => el('details', {}, [el('summary', { text: item.question }), el('p', { text: item.answer })]))) : el('div', { className: 'prose' }, [demoNotice(), el('p', { text: body }), kind === 'privacidad' || kind === 'terminos' ? el('p', { className: 'muted', text: 'Versión de staging · sin publicación legal definitiva.' }) : null])])]; return pageFrame({ eyebrow: kind === 'sobre' ? 'El lugar del canto' : 'Información', title, description: desc, children }); }

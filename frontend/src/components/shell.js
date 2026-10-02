@@ -7,7 +7,8 @@ import { icon } from './icons.js';
 const nav = [
   ['Inicio', routes.home, 'home'], ['Explorar', routes.explorar, 'explorar'], ['Eventos', routes.eventos, 'eventos'],
   ['Artistas', routes.artistas, 'artistas'], ['Foros', routes.foros, 'foros'], ['Mapa', routes.mapa, 'mapa'],
-  ['Para creadores', routes.creadores, 'creadores'], ['Sobre Cuicoyan', routes.sobre, 'sobre'],
+  ['Para creadores', routes.creadores, 'creadores'], ['Perfil', routes.perfil, 'perfil'], // ponytail: acceso temporal de pruebas; quitar al conectar la base de datos
+  ['Sobre Cuicoyan', routes.sobre, 'sobre'],
 ];
 
 function link(label, href, key, current) { return el('a', { href, text: label, attrs: current === key ? { 'aria-current': 'page' } : {} }); }

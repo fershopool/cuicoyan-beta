@@ -7,6 +7,8 @@ import { favoriteButton, eventDateParts, eventArtKeys, eventImageUrl, venueImage
 import { getFavorites, isFavorite, toggleFavorite } from '../services/favorites.service.js';
 import { getCategories, getVenueById, getArtistById } from '../services/content.service.js';
 import { mapView } from './map.js';
+import { profileHero } from './profile-editor.js';
+import { getProfileDraft } from '../services/profile-draft.service.js';
 
 const mount = (main) => { $('#app').replaceWith(main); return main; };
 const labelOf = () => Object.fromEntries(getCategories().map((category) => [category.slug, category.label]));
@@ -193,12 +195,13 @@ export function renderMapPage(venues) {
 /* ------------------------------------------------------------------ Fichas */
 export function renderArtistProfile(artist, { events }) {
   const next = events.filter((event) => event.id === artist.nextEventId || (event.artistIds || []).includes(artist.id));
+  const custom = getProfileDraft(artist.slug, artist);
   const quetzal = artist.slug === 'raices-del-viento';
   const art = quetzal ? el('img', { className: 'profile-quetzal', src: asset('quetzal'), alt: '', decoding: 'async' }) : el('span', { className: 'profile-portrait' }, [avatar(artist)]);
-  const hero = el('section', { className: 'profile-hero', dataset: { tone: artist.tone || 'pink' } }, [el('div', { className: 'profile-copy' }, [el('span', { className: 'eyebrow', text: 'Artes vivas · CDMX' }), el('h1', { text: artist.name }), el('p', { className: 'profile-tags' }, [artist.discipline, ' • ', artist.tagline]), el('p', { className: 'profile-short', text: artist.bio })]), art, favoriteButton('artist', artist.id, artist.name)]);
-  const bio = el('section', { className: 'profile-block' }, [sectionTitle('flower', 'Biografía'), el('p', { className: 'profile-bio', text: artist.longBio || artist.bio })]);
+  const hero = custom ? profileHero(artist, custom).node : el('section', { className: 'profile-hero', dataset: { tone: artist.tone || 'pink' } }, [el('div', { className: 'profile-copy' }, [el('span', { className: 'eyebrow', text: 'Artes vivas · CDMX' }), el('h1', { text: artist.name }), el('p', { className: 'profile-tags' }, [artist.discipline, ' • ', artist.tagline]), el('p', { className: 'profile-short', text: artist.bio })]), art, favoriteButton('artist', artist.id, artist.name)]);
+  const bio = el('section', { className: 'profile-block' }, [sectionTitle('flower', 'Biografía'), el('p', { className: 'profile-bio', text: (custom?.longBio) || artist.longBio || artist.bio })]);
   const dates = el('section', { className: 'profile-block' }, [sectionTitle('calendar', 'Próximas fechas', seeAll(routes.eventos)), next.length ? el('div', { className: 'event-rows' }, next.map(eventRow)) : el('p', { className: 'muted', text: 'Aún no hay fechas confirmadas.' })]);
-  wrap('profile-page', [backLink('Regresar', routes.artistas), hero, bio, dates, isDemo(artist) ? demoNote('Perfil demostrativo: no se muestran contacto, redes ni métricas hasta contar con autorización.') : null]);
+  wrap('profile-page', [backLink('Regresar', routes.artistas), hero, custom?.sections.bio === false ? null : bio, custom?.sections.dates === false ? null : dates, isDemo(artist) ? demoNote('Perfil demostrativo: no se muestran contacto, redes ni métricas hasta contar con autorización.') : null, isDemo(artist) ? el('a', { className: 'button secondary', href: routes.perfil, text: 'Editar perfil' }) : null]);
 }
 
 export function renderVenueProfile(venue, { events }) {
