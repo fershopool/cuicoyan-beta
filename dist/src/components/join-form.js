@@ -34,26 +34,35 @@ export const ROLES = {
     fields: [
       { name: 'Nombre artístico o del colectivo', label: 'Nombre artístico o del colectivo', required: true, title: true },
       { name: 'Tipo de proyecto', label: 'Tipo de proyecto', options: ['Artista individual', 'Colectivo', 'Compañía', 'Taller o escuela'], required: true },
-      { name: 'Disciplinas', label: 'Disciplinas', checks: DISCIPLINAS, required: true, wide: true },
+      { name: 'Integrantes', label: 'Número de integrantes (opcional)', type: 'number', min: 1 },
+      { name: 'Trayectoria', label: 'Años de trayectoria', options: ['Menos de 1 año', '1 a 3 años', '4 a 10 años', 'Más de 10 años'], required: true },
+      { name: 'Disciplinas', label: 'Disciplinas', checks: DISCIPLINAS, required: true, wide: true, cat: true },
+      { name: 'Género o estilo', label: 'Género o estilo (opcional)', placeholder: 'Ej. son jarocho, danza contemporánea…' },
       { name: 'Alcaldía o zona', label: 'Alcaldía o zona donde te presentas', options: ALCALDIAS, required: true, zone: true },
+      { name: 'Disponibilidad', label: 'Disponibilidad para presentarte (opcional)', checks: ['Entre semana', 'Fines de semana', 'Fuera de CDMX'], wide: true },
+      { name: 'Requerimientos técnicos', label: 'Requerimientos técnicos (opcional)', area: true, wide: true, max: 500, placeholder: 'Sonido, iluminación, espacio mínimo, backline…' },
       { name: 'Descripción', label: 'Cuéntanos sobre tu proyecto', area: true, required: true, wide: true, max: 800 },
-      { name: 'Redes sociales', label: 'Tus redes sociales (agrega al menos una)', redes: true, wide: true },
+      { name: 'Material', label: 'Enlace a video o portafolio (opcional)', placeholder: 'https://…', wide: true },
       { name: 'Próximas fechas', label: 'Próximas fechas o presentaciones (opcional)', area: true, wide: true, max: 500 },
+      { name: 'Redes sociales', label: 'Tus redes sociales (agrega al menos una)', redes: true, wide: true },
     ],
   },
   foro: {
     tag: 'FORO', letter: 'F', label: 'Foro o espacio', cta: 'Enviar registro de espacio',
     fields: [
       { name: 'Nombre del espacio', label: 'Nombre del foro o espacio', required: true, title: true },
-      { name: 'Tipo de espacio', label: 'Tipo de espacio', options: ['Foro independiente', 'Centro cultural', 'Teatro', 'Galería o museo', 'Casa de cultura', 'Plaza o espacio abierto', 'Otro'], required: true },
-      { name: 'Dirección', label: 'Dirección', required: true, wide: true, autocomplete: 'street-address' },
+      { name: 'Tipo de espacio', label: 'Tipo de espacio', options: ['Foro independiente', 'Centro cultural', 'Teatro', 'Galería o museo', 'Casa de cultura', 'Plaza o espacio abierto', 'Otro'], required: true, cat: true },
+      { name: 'Dirección', label: 'Dirección completa', required: true, wide: true, autocomplete: 'street-address' },
       { name: 'Alcaldía o zona', label: 'Alcaldía', options: ALCALDIAS, required: true, zone: true },
-      { name: 'Aforo aproximado', label: 'Aforo aproximado (opcional)', type: 'number', min: 1 },
+      { name: 'Aforo aproximado', label: 'Aforo aproximado (personas)', type: 'number', min: 1, required: true },
       { name: 'Programación', label: 'Qué se presenta en tu espacio', checks: DISCIPLINAS, required: true, wide: true },
+      { name: 'Frecuencia de programación', label: 'Frecuencia de programación', options: ['Diaria', 'Varias veces por semana', 'Semanal', 'Quincenal', 'Mensual', 'Ocasional'], required: true },
+      { name: 'Convocatorias a artistas', label: '¿Reciben propuestas de artistas?', options: ['Sí', 'No', 'Por evaluar'], required: true },
+      { name: 'Servicios y equipamiento', label: 'Servicios y equipamiento (opcional)', checks: ['Escenario', 'Sonido', 'Iluminación', 'Camerinos', 'Cafetería o bar', 'Estacionamiento', 'Taquilla'], wide: true },
       { name: 'Horario', label: 'Horario de atención (opcional)', placeholder: 'Ej. Mar a dom, 16:00 a 23:00' },
       { name: 'Accesibilidad', label: 'Accesibilidad (opcional)', placeholder: 'Rampas, baños, lengua de señas…' },
       { name: 'Descripción', label: 'Cuéntanos sobre el espacio', area: true, required: true, wide: true, max: 800 },
-      { name: 'Redes sociales', label: 'Tus redes sociales (agrega al menos una)', redes: true, wide: true },
+      { name: 'Redes sociales', label: 'Redes sociales del espacio (agrega al menos una)', redes: true, wide: true },
     ],
   },
 };
@@ -141,8 +150,10 @@ export function joinForm(initialRole, onRoleChange) {
       const code = folio(role.letter);
       const zone = data[role.fields.find((item) => item.zone).name] || '';
       const title = data[role.fields.find((item) => item.title).name].trim();
+      const catSpec = role.fields.find((item) => item.cat);
+      const cat = (catSpec.checks ? form.querySelector(`input[name="${catSpec.name}"]:checked`)?.value : data[catSpec.name]) || 'General';
       const payload = {
-        Folio: code, 'Tipo de registro': role.label, 'Fecha de envío': new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }),
+        Folio: code, 'Tipo de registro': role.label, 'Categoría principal': cat, 'Fecha de envío': new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }),
       };
       [...role.fields, ...contacto].forEach((spec) => {
         if (spec.redes) { links.forEach((item) => { payload[item.red.name] = item.link || '—'; }); return; }
@@ -150,7 +161,7 @@ export function joinForm(initialRole, onRoleChange) {
       });
       Object.assign(payload, {
         Consentimiento: 'Aceptado',
-        _subject: `[CUICOYAN][${role.tag}] ${title} · ${zone} · ${code}`,
+        _subject: `[CUICOYAN][${role.tag}][${cat}] ${title} · ${zone} · ${code}`,
         _template: 'table',
         _captcha: 'false',
         _replyto: payload.email,
