@@ -53,7 +53,7 @@ test('el botón de login apunta a /auth/login y la invitación quita el token de
 
 test('Turnstile: widget en el formulario, token enviado, CSP solo abre challenges.cloudflare.com', () => {
   assert.match(src('components/join-form.js'), /turnstileWidget\(\)/);
-  assert.match(src('components/join-form.js'), /turnstile_token: captcha\.token\(\)/);
+  assert.match(src('components/join-form.js'), /turnstileToken: captcha\.token\(\)/);
   assert.match(src('components/turnstile.js'), /challenges\.cloudflare\.com\/turnstile\/v0\/api\.js/);
   const html = src('pages/unete/unete.html');
   assert.match(html, /script-src 'self' https:\/\/challenges\.cloudflare\.com;/);

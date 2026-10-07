@@ -2,6 +2,7 @@ import { el, announce } from '../utils/dom.js';
 import { routes } from '../config/routes.js';
 import { environment } from '../config/environment.js';
 import { turnstileWidget } from './turnstile.js';
+import { buildContactRequest, sendContactRequest } from '../services/contact-request.js';
 
 const ALCALDIAS = ['Álvaro Obregón', 'Azcapotzalco', 'Benito Juárez', 'Coyoacán', 'Cuajimalpa', 'Cuauhtémoc', 'Gustavo A. Madero', 'Iztacalco', 'Iztapalapa', 'Magdalena Contreras', 'Miguel Hidalgo', 'Milpa Alta', 'Tláhuac', 'Tlalpan', 'Venustiano Carranza', 'Xochimilco', 'Fuera de CDMX'];
 const DISCIPLINAS = ['Huapango', 'Fandango', 'Danza', 'Teatro', 'Música', 'Talleres', 'Artes marciales', 'Cultura urbana', 'Otra'];
@@ -155,28 +156,21 @@ export function joinForm(initialRole, onRoleChange) {
       const title = data[role.fields.find((item) => item.title).name].trim();
       const catSpec = role.fields.find((item) => item.cat);
       const cat = (catSpec.checks ? form.querySelector(`input[name="${catSpec.name}"]:checked`)?.value : data[catSpec.name]) || 'General';
-      const payload = {
+      const fields = {
         Folio: code, 'Tipo de registro': role.label, 'Categoría principal': cat, 'Fecha de envío': new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' }),
       };
       [...role.fields, ...contacto].forEach((spec) => {
-        if (spec.redes) { links.forEach((item) => { payload[item.red.name] = item.link || '—'; }); return; }
-        payload[spec.name] = spec.checks ? [...form.querySelectorAll(`input[name="${spec.name}"]:checked`)].map((input) => input.value).join(', ') : (data[spec.name] || '').trim() || '—';
+        if (spec.redes) { links.forEach((item) => { fields[item.red.name] = item.link || '—'; }); return; }
+        fields[spec.name] = spec.checks ? [...form.querySelectorAll(`input[name="${spec.name}"]:checked`)].map((input) => input.value).join(', ') : (data[spec.name] || '').trim() || '—';
       });
-      Object.assign(payload, {
-        Consentimiento: 'Aceptado',
-        turnstile_token: captcha.token(),
-        _subject: `[CUICOYAN][${role.tag}][${cat}] ${title} · ${zone} · ${code}`,
-        _template: 'table',
-        _captcha: 'false',
-        _replyto: payload.email,
-        _autoresponse: `Hola ${payload['Nombre de contacto']}: recibimos tu registro en Cuicoyan (folio ${code}). Lo revisaremos y te escribiremos a este correo. Enviarlo no garantiza su publicación.`,
+      fields.Consentimiento = 'Aceptado';
+      const payload = buildContactRequest({
+        roleKey, name: fields['Nombre de contacto'], email: fields.email, organization: title, fields, turnstileToken: captcha.token(),
       });
 
       submit.disabled = true; submit.textContent = 'Enviando…';
       try {
-        const response = await fetch(environment.joinFormEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload) });
-        const body = await response.json().catch(() => ({}));
-        if (!response.ok || String(body.success) === 'false') throw new Error(body.message || 'rechazado');
+        if (!data._honey) await sendContactRequest(payload);
         announce('Registro enviado');
         host.replaceChildren(successPanel(roleKey, code, () => draw(roleKey)));
         host.scrollIntoView({ behavior: 'smooth', block: 'start' });
