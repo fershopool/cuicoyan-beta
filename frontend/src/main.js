@@ -14,9 +14,9 @@ import { joinForm } from './components/join-form.js';
 import { renderProfileEditor } from './components/profile-editor.js';
 import { renderVenueEditor } from './components/venue-editor.js';
 import { TEST_EDIT_ACCESS } from './config/test-access.js';
-import { apiRequest, clearSession, consumeAuthRedirect, invitationId, setPassword } from './services/auth.service.js';
+import { apiRequest, invitationParams, loginUrl, logout, stripInvitationFromUrl } from './services/auth.service.js';
+import { messageFor } from './services/auth-errors.js';
 
-consumeAuthRedirect();
 
 const stylesheet = document.createElement('link');
 stylesheet.rel = 'stylesheet';
@@ -148,36 +148,32 @@ function renderJoin() {
   const main = pageFrame({ eyebrow: 'Participa', title: titles[initial] || 'Únete a Cuicoyan.', description: 'Registra tu proyecto o tu espacio y forma parte del mapa cultural de CDMX.', children: [section('', [el('div', { className: 'join-layout' }, [aside, joinForm(initial, (role) => { const url = new URL(window.location.href); url.searchParams.set('rol', role); history.replaceState(null, '', url); $('.page-hero h1').textContent = titles[role]; })])])] });
   return main;
 }
+// Panel de error accesible: texto fijo (nunca detalle del servidor), role="alert" y una acción clara.
+function authErrorPanel(error, retry) {
+  const kind = error?.kind || 'generic';
+  const actions = [];
+  if (kind === 'session' || (kind === 'idp' && error.phase === 'expired')) actions.push(el('a', { className: 'button', text: 'Iniciar sesión', attrs: { href: loginUrl() } }));
+  if (kind === 'idp' && retry) actions.push(el('button', { className: 'button', type: 'button', text: 'Reintentar', attrs: { onclick: retry } }));
+  return el('div', { className: 'detail-panel' }, [el('p', { className: 'notice', text: messageFor(kind, error?.phase), attrs: { role: 'alert' } }), ...actions]);
+}
 function renderInvitation() {
-  const state = el('div', { id: 'invitation-state', className: 'detail-panel' }, [el('p', { className: 'muted', text: 'Validando invitación…' })]);
-  const main = pageFrame({ eyebrow: 'Invitación privada', title: 'Activa tu acceso a Cuicoyan.', description: 'Usa una contraseña para terminar la invitación y después completa únicamente los datos de tu perfil.', children: [section('', [state])] });
-  const id = invitationId();
-  if (!id) { state.replaceChildren(el('p', { className: 'notice', text: 'La invitación no incluye un identificador válido.' })); return main; }
-  const form = el('form', { className: 'account-form' }, [
-    el('label', { text: 'Nueva contraseña', attrs: { for: 'invite-password' } }),
-    el('input', { id: 'invite-password', name: 'password', type: 'password', minlength: '8', required: true, autocomplete: 'new-password' }),
-    el('label', { text: 'Repite la contraseña', attrs: { for: 'invite-password-confirm' } }),
-    el('input', { id: 'invite-password-confirm', name: 'password_confirm', type: 'password', minlength: '8', required: true, autocomplete: 'new-password' }),
-    el('p', { id: 'invitation-error', className: 'form-error', attrs: { role: 'alert' } }),
-    el('button', { className: 'button', type: 'submit', text: 'Aceptar invitación' })
-  ]);
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const error = $('#invitation-error', form);
-    error.textContent = '';
-    const password = form.password.value;
-    if (password !== form.password_confirm.value) { error.textContent = 'Las contraseñas no coinciden.'; return; }
-    form.querySelector('button').disabled = true;
+  const state = el('div', { id: 'invitation-state', className: 'detail-panel', attrs: { 'aria-live': 'polite' } }, [el('p', { className: 'muted', text: 'Validando invitación…' })]);
+  const main = pageFrame({ eyebrow: 'Invitación privada', title: 'Activa tu acceso a Cuicoyan.', description: 'Inicia sesión con tu cuenta Ollin para vincular tu perfil. Nunca te pediremos una contraseña en esta página.', children: [section('', [state])] });
+  const { id, token } = invitationParams();
+  if (!id || !token) { state.replaceChildren(authErrorPanel({ kind: 'invitation' })); return main; }
+  stripInvitationFromUrl(); // el token vive solo en memoria
+  const button = el('button', { className: 'button', type: 'button', text: 'Aceptar invitación' });
+  const accept = async () => {
+    button.disabled = true;
     try {
-      await setPassword(password);
-      await apiRequest('/api/cuicoyan/me/invitations/accept', { method: 'POST', body: JSON.stringify({ invitation_id: id }) });
+      await apiRequest('/api/cuicoyan/me/invitations/accept', { method: 'POST', body: JSON.stringify({ invitation_id: id, token }) }, { invitation: true });
       window.location.href = routes.perfil;
     } catch (requestError) {
-      error.textContent = requestError.message || 'No se pudo aceptar la invitación.';
-      form.querySelector('button').disabled = false;
+      state.replaceChildren(authErrorPanel(requestError, accept));
     }
-  });
-  state.replaceChildren(form);
+  };
+  button.addEventListener('click', accept);
+  state.replaceChildren(el('p', { text: 'Tu invitación está lista.' }), button);
   return main;
 }
 function renderProfile() {
@@ -192,12 +188,16 @@ function renderProfile() {
     mount(renderProfileEditor({
       artist, profileId: profile.id, remote: true, status: statusLabels[profile.status] || profile.status,
       onRemoteSave: (d) => apiRequest('/api/cuicoyan/me/profile', { method: 'PATCH', body: JSON.stringify({ profile_id: profile.id, display_name: d.name, description: d.longBio, website_url: d.website, contact_email: d.email }) }),
-      onSubmitReview: canSubmit ? async () => { try { await apiRequest('/api/cuicoyan/me/profile/submit', { method: 'POST', body: JSON.stringify({ profile_id: profile.id }) }); announce('Perfil enviado a revisión'); renderProfile(); } catch (error) { announce(error.message || 'No se pudo enviar el perfil.'); } } : null,
-      onLogout: () => { clearSession(); window.location.href = routes.home; },
+      onSubmitReview: canSubmit ? async () => { try { await apiRequest('/api/cuicoyan/me/profile/submit', { method: 'POST', body: JSON.stringify({ profile_id: profile.id }) }); announce('Perfil enviado a revisión'); renderProfile(); } catch (error) { announce(messageFor(error?.kind || 'generic', error?.phase)); } } : null,
+      onLogout: async () => { await logout(); window.location.href = routes.home; },
     }));
-  }).catch(() => {
+  }).catch((error) => {
     // Sin sesión o sin API: editores de demostración (artista / foro) de cualquier registro. ponytail: quitar al conectar la base de datos.
-    if (!TEST_EDIT_ACCESS) { mount(el('main', { id: 'contenido', className: 'app-page' }, [el('div', { className: 'app-wrap' }, [el('h1', { text: 'Edición no disponible' }), el('p', { className: 'muted', text: 'Inicia sesión para editar tu perfil.' }), linkButton('Volver al inicio', routes.home)])])); return; }
+    if (!TEST_EDIT_ACCESS) {
+      const panel = error?.kind ? authErrorPanel(error, renderProfile) : authErrorPanel({ kind: 'session' });
+      mount(el('main', { id: 'contenido', className: 'app-page' }, [el('div', { className: 'app-wrap' }, [el('h1', { text: 'Edición no disponible' }), panel, linkButton('Volver al inicio', routes.home)])]));
+      return;
+    }
     const query = new URLSearchParams(window.location.search);
     const kind = query.get('tipo') === 'foro' ? 'foro' : 'artista';
     const list = kind === 'foro' ? venues : artists;

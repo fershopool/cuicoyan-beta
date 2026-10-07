@@ -8,6 +8,7 @@
     "build": "node ../scripts/prepare-dist.mjs",
     "preview": "node ../scripts/dev-server.mjs dist",
     "check:links": "node ../scripts/check-links.mjs",
-    "check:content": "node ../scripts/check-forbidden-content.mjs"
+    "check:content": "node ../scripts/check-forbidden-content.mjs",
+    "test": "node --test ../tests/auth-ui.test.mjs"
   }
 }

@@ -12,10 +12,9 @@ await materializePages(path.join(source, 'src/pages'), dist);
 await rm(path.join(dist, 'src/pages'), { recursive: true, force: true });
 const baseUrl = process.env.VITE_BASE_URL || '/cuicoyan-site/';
 const cuicoyanApiUrl = process.env.VITE_CUICOYAN_API_URL || '';
-const cuicoyanAllowedOrigins = process.env.VITE_CUICOYAN_ALLOWED_ORIGINS || 'https://fershopool.github.io';
-const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || '';
-await writeFile(path.join(dist, 'src/config/site-base.js'), `export const siteBase = ${JSON.stringify(baseUrl)};\nexport const cuicoyanApiUrl = ${JSON.stringify(cuicoyanApiUrl)};\nexport const cuicoyanAllowedOrigins = ${JSON.stringify(cuicoyanAllowedOrigins)};\nexport const supabaseUrl = ${JSON.stringify(supabaseUrl)};\nexport const supabaseAnonKey = ${JSON.stringify(supabaseAnonKey)};\n`);
+const cuicoyanAllowedOrigins = process.env.VITE_CUICOYAN_ALLOWED_ORIGINS || '';
+const idpFailureGraceSeconds = Number(process.env.VITE_IDP_FAILURE_GRACE_SECONDS || 300);
+await writeFile(path.join(dist, 'src/config/site-base.js'), `export const siteBase = ${JSON.stringify(baseUrl)};\nexport const cuicoyanApiUrl = ${JSON.stringify(cuicoyanApiUrl)};\nexport const cuicoyanAllowedOrigins = ${JSON.stringify(cuicoyanAllowedOrigins)};\nexport const idpFailureGraceSeconds = ${idpFailureGraceSeconds};\n`);
 // Evita publicar el manifiesto de desarrollo de npm en el hosting estático.
 await rm(path.join(dist, 'package.json'), { force: true });
 await rm(path.join(dist, 'vite.config.js'), { force: true });
