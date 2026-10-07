@@ -8,7 +8,7 @@ La API vive en `AAA.Base/Identificador_tlatolli` (puntos 14-17, A, B, C); la web
 
 ## A: invitación de un solo uso
 - `20261008`: `accept_invitation(token_hash)` consume en una sentencia (vigente, perfil activo, email verificado = invitado). TTL 30 min (`CUICOYAN_INVITE_TTL_MINUTES`, máx 24 h). Token solo como hash, en el fragmento `#`; la web lo quita con `replaceState`; `Referrer-Policy: no-referrer`; error único "Invitación no válida".
-- Pendiente: el token de Ollin (`o`) pasa una vez por query en `/auth/login?invite=`.
+- Resuelto (L6): el token de Ollin (`o`) ya no pasa por query; la web hace `POST /auth/invite` (cookie HttpOnly de 5 min) y navega a `/auth/login`.
 
 ## B: Turnstile en `contact_requests`
 - `lib/cuicoyan/turnstile.ts`: origen, rate limit por IP (`CF-Connecting-IP` solo con `TRUST_PROXY=true`), cuerpo máx 16 KB, `siteverify`, falla cerrada. CSP solo abre `challenges.cloudflare.com`.

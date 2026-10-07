@@ -63,6 +63,13 @@ export function clearInvitation() {
   try { store()?.removeItem(INVITE_KEY); } catch { /* ver arriba */ }
 }
 
-export function invitationLoginUrl(ollinToken) {
-  return `/auth/login?${new URLSearchParams({ invite: ollinToken, return_to: '/invitacion/' })}`;
+// L6: el token de Ollin va por POST (cookie HttpOnly de 5 min en el auth-server), nunca en la URL de /auth/login.
+export async function startInvitationLogin(ollinToken) {
+  const response = await fetch('/auth/invite', {
+    method: 'POST', credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json', 'X-Requested-With': environment.csrfHeaderValue },
+    body: JSON.stringify({ invite: ollinToken }),
+  });
+  if (!response.ok) throw new ApiError('invitation');
+  return loginUrl('/invitacion/');
 }

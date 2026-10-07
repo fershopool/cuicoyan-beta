@@ -73,7 +73,13 @@ test('invitación: token en fragmento, se quita de la URL, sobrevive al login y 
   svc.markOllinTokenUsed('TOK');
   window.location.hash = ''; // vuelta del login: sin fragmento
   assert.deepEqual(svc.invitationParams(), { token: 'TOK', ollin: '' });
-  assert.match(svc.invitationLoginUrl('OLL'), /^\/auth\/login\?invite=OLL&return_to=%2Finvitacion%2F$/);
+  const calls = [];
+  globalThis.fetch = async (url, init) => { calls.push({ url, init }); return { ok: true }; };
+  assert.equal(await svc.startInvitationLogin('OLL'), '/auth/login?return_to=%2Finvitacion%2F'); // el token ya no va en la URL
+  assert.equal(calls[0].url, '/auth/invite');
+  assert.equal(calls[0].init.method, 'POST');
+  assert.deepEqual(JSON.parse(calls[0].init.body), { invite: 'OLL' });
+  assert.ok(calls[0].init.headers['X-Requested-With']);
   svc.clearInvitation();
   assert.deepEqual(svc.invitationParams(), { token: '', ollin: '' });
   assert.match(src('pages/invitacion/invitacion.html'), /name="referrer" content="no-referrer"/);
