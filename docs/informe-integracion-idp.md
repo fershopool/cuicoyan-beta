@@ -32,3 +32,9 @@ La API de Cuicoyan NO vive en `Cuicoyan/web`: está en `AAA.Base/Identificador_t
 - `dist/` está versionado y desactualizado: no se reconstruyó; hay 7 archivos de build sin trackear en `dist/` (rm denegado) que puede borrar a mano.
 - `docs/cuicoyan-profile-workflow.md` (repo API) aún describe Supabase Auth; actualizar.
 - Archivos `docs/auditoria-*` preexistentes sin trackear: no se tocaron.
+
+## Cierre B: captcha en `contact_requests`
+- API (`Identificador_tlatolli` 1e7ea2c): `lib/cuicoyan/turnstile.ts` + ruta. Orden: origen, rate limit por IP (`CF-Connecting-IP` solo con `TRUST_PROXY=true`; si no, un solo cubo "untrusted"), cuerpo máx 16 KB, `siteverify` y solo entonces insertar. Falla cerrada (sin secreto, token ausente/inválido/reusado o Turnstile caído: 400 fijo).
+- Web: `components/turnstile.js` en `join-form.js` (envía `turnstile_token`), CSP meta en `pages/unete/unete.html` solo con `challenges.cloudflare.com`. `VITE_TURNSTILE_SITE_KEY` / `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET` por entorno.
+- Verificado: `node --test tests/turnstile.test.mjs` (5 ok, verificación simulada), `tsc --noEmit`, `npm test` de la web (7 ok).
+- Pendiente: el formulario de `/unete` sigue enviando a FormSubmit, no a `/api/cuicoyan/contact-requests`; el captcha solo protege la API hasta cablearlo. Sin `VITE_TURNSTILE_SITE_KEY` el widget no aparece. Rate limit sigue en memoria por proceso.

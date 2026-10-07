@@ -1,6 +1,7 @@
 import { el, announce } from '../utils/dom.js';
 import { routes } from '../config/routes.js';
 import { environment } from '../config/environment.js';
+import { turnstileWidget } from './turnstile.js';
 
 const ALCALDIAS = ['Álvaro Obregón', 'Azcapotzalco', 'Benito Juárez', 'Coyoacán', 'Cuajimalpa', 'Cuauhtémoc', 'Gustavo A. Madero', 'Iztacalco', 'Iztapalapa', 'Magdalena Contreras', 'Miguel Hidalgo', 'Milpa Alta', 'Tláhuac', 'Tlalpan', 'Venustiano Carranza', 'Xochimilco', 'Fuera de CDMX'];
 const DISCIPLINAS = ['Huapango', 'Fandango', 'Danza', 'Teatro', 'Música', 'Talleres', 'Artes marciales', 'Cultura urbana', 'Otra'];
@@ -124,11 +125,12 @@ export function joinForm(initialRole, onRoleChange) {
       el('input', { type: 'checkbox', name: 'consentimiento', required: true }),
       el('span', {}, ['Acepto que Cuicoyan reciba estos datos por correo para revisar mi registro y contactarme. Puedo pedir que los eliminen en cualquier momento. ', el('a', { href: routes.privacidad, text: 'Aviso de privacidad' })]),
     ]);
+    const captcha = turnstileWidget();
     const submit = el('button', { className: 'button', type: 'submit', text: role.cta });
     const form = el('form', { className: 'join-form', attrs: { novalidate: '', 'aria-label': `Registro: ${role.label}` } }, [
       el('div', { className: 'field-grid' }, [...role.fields, ...contacto].map((spec, index) => field(spec, `jf-${roleKey}-${index}`))),
       el('div', { className: 'hp', attrs: { 'aria-hidden': 'true' } }, [honey]),
-      consent, status, submit,
+      consent, captcha.node, status, submit,
     ]);
 
     form.addEventListener('submit', async (event) => {
@@ -146,6 +148,7 @@ export function joinForm(initialRole, onRoleChange) {
       if (bad) { status.textContent = `Revisa el enlace de ${bad.red.name}.`; return; }
       if (!links.some((item) => item.link)) { status.textContent = 'Agrega al menos una red social o sitio web.'; return; }
 
+      if (environment.turnstileSiteKey && !captcha.token()) { status.textContent = 'Completa la verificación de seguridad antes de enviar.'; return; }
       const data = Object.fromEntries(new FormData(form));
       const code = folio(role.letter);
       const zone = data[role.fields.find((item) => item.zone).name] || '';
@@ -161,6 +164,7 @@ export function joinForm(initialRole, onRoleChange) {
       });
       Object.assign(payload, {
         Consentimiento: 'Aceptado',
+        turnstile_token: captcha.token(),
         _subject: `[CUICOYAN][${role.tag}][${cat}] ${title} · ${zone} · ${code}`,
         _template: 'table',
         _captcha: 'false',
@@ -178,7 +182,7 @@ export function joinForm(initialRole, onRoleChange) {
         host.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch {
         status.textContent = 'No pudimos enviar tu registro. Revisa tu conexión e inténtalo de nuevo.';
-        submit.disabled = false; submit.textContent = role.cta;
+        captcha.reset(); submit.disabled = false; submit.textContent = role.cta;
       }
     });
 

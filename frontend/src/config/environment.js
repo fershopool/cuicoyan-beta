@@ -38,6 +38,8 @@ export const environment = {
   externalJoinUrl: import.meta.env?.VITE_EXTERNAL_JOIN_URL || '',
   // Formularios de registro: FormSubmit reenvía cada envío al correo del equipo (sin backend propio).
   joinFormEndpoint: import.meta.env?.VITE_JOIN_FORM_ENDPOINT || 'https://formsubmit.co/ajax/cuicoyan.ollin@gmail.com',
+  // Clave pública (no secreta) de Cloudflare Turnstile.
+  turnstileSiteKey: import.meta.env?.VITE_TURNSTILE_SITE_KEY || '',
   externalContactUrl: import.meta.env?.VITE_EXTERNAL_CONTACT_URL || '',
   // Espejo público (no secreto) de IDP_FAILURE_GRACE_SECONDS del auth-server; solo gobierna el texto de la interfaz.
   idpFailureGraceSeconds: Number(import.meta.env?.VITE_IDP_FAILURE_GRACE_SECONDS || idpFailureGraceSeconds || 300),
