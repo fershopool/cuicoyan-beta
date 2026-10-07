@@ -13,10 +13,10 @@ export function buildContactRequest({ roleKey, name, email, organization, fields
   };
 }
 
-// Mismo origen que la web (o la API configurada); sin cookies ni credenciales: el formulario es anónimo.
+// Mismo origen (ruta relativa salvo que se configure VITE_CUICOYAN_API_URL); la API exige X-Requested-With en todo POST.
 export async function sendContactRequest(body) {
   const response = await fetch(`${environment.cuicoyanApiUrl}/api/cuicoyan/contact-requests`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body),
+    method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-Requested-With': environment.csrfHeaderValue }, body: JSON.stringify(body),
   });
   if (!response.ok) throw new Error('rechazado');
 }
