@@ -25,7 +25,7 @@ La API vive en `AAA.Base/Identificador_tlatolli` (puntos 14-17, A, B, C); la web
 - `/unete` envía `X-Requested-With` (antes 403 real); la web y la API van en el mismo origen (ruta relativa). Test con el chequeo real `hasCuicoyanOrigin` (`lib/cuicoyan/csrf.ts`).
 - CSP: `/unete` con `connect-src` de Turnstile; `/invitacion/` con CSP propia; token guardado caduca a los 10 min.
 - Sin IP fiable (`TRUST_PROXY=false`) el captcha se verifica antes de contar el cubo global (`admitContact`): las peticiones inválidas no lo agotan.
-- Reinvitar revoca las pendientes del mismo perfil y email (pgTAP 24). Hallazgos 5-7: pendientes de anotar (texto no recibido).
+- Reinvitar revoca las pendientes del mismo perfil y email (pgTAP 24). Notas de auditoría: el email verificado depende de que Keycloak entregue `email_verified`; `record_identity_email` (app_rw) acepta cualquier issuer/subject, solo explotable si se compromete el auth-server; 20261009 no es idempotente (policies) ni concilia tablas existentes en Supabase real.
 
 ## Verificado
 - `make g1`: G1 PASS (conformance 15, pgTAP 45). `tests/pg/run.sh`: archivos 14, 16, 17, 20-23 en verde + db.test (4). API: `tsc`, `next build`, `test:cuicoyan` (3), `test:turnstile` (5). Web: `npm test` 11, build, check:links, check:content.
