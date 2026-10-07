@@ -33,12 +33,34 @@ export async function logout() {
   } catch { /* sin red: la cookie caduca sola */ }
 }
 
+// El token de invitación llega en el fragmento (#t=...&o=...): no viaja al servidor ni al Referer. Se quita de la URL
+// y se guarda en sessionStorage solo mientras dura el login; se borra al aceptar o al fallar la invitación.
+const INVITE_KEY = 'cuicoyan_invite';
+const store = () => { try { return window.sessionStorage; } catch { return null; } };
+
 export function invitationParams() {
-  const params = new URLSearchParams(window.location.search);
-  return { id: params.get('invitation_id') || '', token: params.get('token') || '' };
+  const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  if (fragment.get('t')) {
+    try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: fragment.get('t'), o: fragment.get('o') || '' })); } catch { /* sin almacenamiento: queda en memoria */ }
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return { token: fragment.get('t'), ollin: fragment.get('o') || '' };
+  }
+  try {
+    const saved = JSON.parse(store()?.getItem(INVITE_KEY) || 'null');
+    if (saved?.t) return { token: saved.t, ollin: saved.o || '' };
+  } catch { /* almacenamiento corrupto: se ignora */ }
+  return { token: '', ollin: '' };
 }
 
-// El token de un solo uso no debe quedarse en la barra de direcciones ni en el historial.
-export function stripInvitationFromUrl() {
-  window.history.replaceState({}, document.title, window.location.pathname);
+// Tras entregar el token de Ollin al login, deja solo el token de Cuicoyan (el de Ollin es de un solo uso).
+export function markOllinTokenUsed(token) {
+  try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: token, o: '' })); } catch { /* ver arriba */ }
+}
+
+export function clearInvitation() {
+  try { store()?.removeItem(INVITE_KEY); } catch { /* ver arriba */ }
+}
+
+export function invitationLoginUrl(ollinToken) {
+  return `/auth/login?${new URLSearchParams({ invite: ollinToken, return_to: '/invitacion/' })}`;
 }

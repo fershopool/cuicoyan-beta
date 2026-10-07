@@ -41,13 +41,13 @@ test('apiRequest usa cookie same-origin y CSRF; sin Authorization ni almacenamie
 
 test('el código de la web no guarda ni lee tokens ni usa Supabase', () => {
   const files = ['main.js', 'services/auth.service.js', 'services/auth-errors.js', 'config/environment.js'];
-  for (const f of files) assert.doesNotMatch(src(f), /localStorage\.setItem\([^)]*token|sessionStorage|access_token|refresh_token|Bearer|supabase/i, f);
+  for (const f of files) assert.doesNotMatch(src(f), /localStorage\.setItem\([^)]*token|access_token|refresh_token|Bearer|supabase/i, f);
   assert.match(src('services/auth.service.js'), /\/auth\/login/);
 });
 
 test('el botón de login apunta a /auth/login y la invitación quita el token de la URL', () => {
   assert.match(src('main.js'), /loginUrl\(\)/);
-  assert.match(src('main.js'), /stripInvitationFromUrl\(\)/);
+  assert.match(src('services/auth.service.js'), /history\.replaceState/);
   assert.ok(readdirSync(new URL('../frontend/src/services/', import.meta.url)).includes('auth-errors.js'));
 });
 
@@ -60,4 +60,21 @@ test('Turnstile: widget en el formulario, token enviado, CSP solo abre challenge
   assert.match(html, /frame-src https:\/\/challenges\.cloudflare\.com;/);
   assert.doesNotMatch(html, /unsafe-eval|script-src[^;]*unsafe-inline|script-src[^;]*\*/);
   assert.doesNotMatch(src('config/environment.js') + src('components/turnstile.js'), /TURNSTILE_SECRET/);
+});
+
+test('invitación: token en fragmento, se quita de la URL, sobrevive al login y se borra al aceptar', async () => {
+  const mem = new Map();
+  const replaced = [];
+  globalThis.window = { location: { origin: 'https://x.test', pathname: '/invitacion/', search: '', hash: '#t=TOK&o=OLL' }, history: { replaceState: (_s, _t, url) => replaced.push(url) }, sessionStorage: { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v), removeItem: (k) => mem.delete(k) } };
+  globalThis.document = { title: '' };
+  const svc = await import('../frontend/src/services/auth.service.js');
+  assert.deepEqual(svc.invitationParams(), { token: 'TOK', ollin: 'OLL' });
+  assert.deepEqual(replaced, ['/invitacion/']);
+  svc.markOllinTokenUsed('TOK');
+  window.location.hash = ''; // vuelta del login: sin fragmento
+  assert.deepEqual(svc.invitationParams(), { token: 'TOK', ollin: '' });
+  assert.match(svc.invitationLoginUrl('OLL'), /^\/auth\/login\?invite=OLL&return_to=%2Finvitacion%2F$/);
+  svc.clearInvitation();
+  assert.deepEqual(svc.invitationParams(), { token: '', ollin: '' });
+  assert.match(src('pages/invitacion/invitacion.html'), /name="referrer" content="no-referrer"/);
 });

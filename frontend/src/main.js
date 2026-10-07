@@ -14,7 +14,7 @@ import { joinForm } from './components/join-form.js';
 import { renderProfileEditor } from './components/profile-editor.js';
 import { renderVenueEditor } from './components/venue-editor.js';
 import { TEST_EDIT_ACCESS } from './config/test-access.js';
-import { apiRequest, invitationParams, loginUrl, logout, stripInvitationFromUrl } from './services/auth.service.js';
+import { apiRequest, clearInvitation, invitationLoginUrl, invitationParams, loginUrl, logout, markOllinTokenUsed } from './services/auth.service.js';
 import { messageFor } from './services/auth-errors.js';
 
 
@@ -159,16 +159,19 @@ function authErrorPanel(error, retry) {
 function renderInvitation() {
   const state = el('div', { id: 'invitation-state', className: 'detail-panel', attrs: { 'aria-live': 'polite' } }, [el('p', { className: 'muted', text: 'Validando invitación…' })]);
   const main = pageFrame({ eyebrow: 'Invitación privada', title: 'Activa tu acceso a Cuicoyan.', description: 'Inicia sesión con tu cuenta Ollin para vincular tu perfil. Nunca te pediremos una contraseña en esta página.', children: [section('', [state])] });
-  const { id, token } = invitationParams();
-  if (!id || !token) { state.replaceChildren(authErrorPanel({ kind: 'invitation' })); return main; }
-  stripInvitationFromUrl(); // el token vive solo en memoria
+  const { token, ollin } = invitationParams(); // lee el fragmento, lo quita de la URL y lo guarda solo durante el login
+  if (!token) { state.replaceChildren(authErrorPanel({ kind: 'invitation' })); return main; }
+  if (ollin) { markOllinTokenUsed(token); window.location.replace(invitationLoginUrl(ollin)); return main; }
   const button = el('button', { className: 'button', type: 'button', text: 'Aceptar invitación' });
   const accept = async () => {
     button.disabled = true;
     try {
-      await apiRequest('/api/cuicoyan/me/invitations/accept', { method: 'POST', body: JSON.stringify({ invitation_id: id, token }) }, { invitation: true });
+      await apiRequest('/api/cuicoyan/me/invitations/accept', { method: 'POST', body: JSON.stringify({ token }) }, { invitation: true });
+      clearInvitation();
       window.location.href = routes.perfil;
     } catch (requestError) {
+      if (requestError?.kind === 'invitation') clearInvitation();
+      button.disabled = false;
       state.replaceChildren(authErrorPanel(requestError, accept));
     }
   };
