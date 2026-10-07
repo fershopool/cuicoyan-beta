@@ -78,3 +78,28 @@ test('invitación: token en fragmento, se quita de la URL, sobrevive al login y 
   assert.deepEqual(svc.invitationParams(), { token: '', ollin: '' });
   assert.match(src('pages/invitacion/invitacion.html'), /name="referrer" content="no-referrer"/);
 });
+
+test('CSP: /unete permite Turnstile (script, frame y connect); /invitacion tiene CSP sin orígenes externos de script', () => {
+  const unete = src('pages/unete/unete.html');
+  assert.match(unete, /connect-src 'self' https:\/\/challenges\.cloudflare\.com/);
+  assert.match(unete, /frame-src https:\/\/challenges\.cloudflare\.com/);
+  const inv = src('pages/invitacion/invitacion.html');
+  assert.match(inv, /Content-Security-Policy/);
+  assert.match(inv, /script-src 'self';/);
+  assert.doesNotMatch(inv, /cloudflare|unsafe-eval/);
+});
+
+test('el token de invitación guardado caduca a los 10 minutos', async () => {
+  const mem = new Map(); const replaced = [];
+  globalThis.window = { location: { origin: 'https://x.test', pathname: '/invitacion/', search: '', hash: '#t=TOK&o=OLL' }, history: { replaceState: (_s, _t, url) => replaced.push(url) }, sessionStorage: { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v), removeItem: (k) => mem.delete(k) } };
+  globalThis.document = { title: '' };
+  const svc = await import('../frontend/src/services/auth.service.js?exp');
+  svc.invitationParams();
+  window.location.hash = '';
+  const realNow = Date.now;
+  try {
+    Date.now = () => realNow() + 11 * 60 * 1000;
+    assert.deepEqual(svc.invitationParams(), { token: '', ollin: '' });
+    assert.equal(mem.size, 0);
+  } finally { Date.now = realNow; }
+});

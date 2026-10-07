@@ -36,25 +36,27 @@ export async function logout() {
 // El token de invitación llega en el fragmento (#t=...&o=...): no viaja al servidor ni al Referer. Se quita de la URL
 // y se guarda en sessionStorage solo mientras dura el login; se borra al aceptar o al fallar la invitación.
 const INVITE_KEY = 'cuicoyan_invite';
+const INVITE_LIFETIME_MS = 10 * 60 * 1000; // el login dura minutos; pasado ese tiempo el token guardado se descarta
 const store = () => { try { return window.sessionStorage; } catch { return null; } };
 
 export function invitationParams() {
   const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ''));
   if (fragment.get('t')) {
-    try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: fragment.get('t'), o: fragment.get('o') || '' })); } catch { /* sin almacenamiento: queda en memoria */ }
+    try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: fragment.get('t'), o: fragment.get('o') || '', at: Date.now() })); } catch { /* sin almacenamiento: queda en memoria */ }
     window.history.replaceState({}, document.title, window.location.pathname);
     return { token: fragment.get('t'), ollin: fragment.get('o') || '' };
   }
   try {
     const saved = JSON.parse(store()?.getItem(INVITE_KEY) || 'null');
-    if (saved?.t) return { token: saved.t, ollin: saved.o || '' };
+    if (saved?.t && Date.now() - (saved.at || 0) < INVITE_LIFETIME_MS) return { token: saved.t, ollin: saved.o || '' };
+    if (saved) clearInvitation();
   } catch { /* almacenamiento corrupto: se ignora */ }
   return { token: '', ollin: '' };
 }
 
 // Tras entregar el token de Ollin al login, deja solo el token de Cuicoyan (el de Ollin es de un solo uso).
 export function markOllinTokenUsed(token) {
-  try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: token, o: '' })); } catch { /* ver arriba */ }
+  try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: token, o: '', at: Date.now() })); } catch { /* ver arriba */ }
 }
 
 export function clearInvitation() {
