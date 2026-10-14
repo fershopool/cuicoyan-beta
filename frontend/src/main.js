@@ -16,7 +16,7 @@ import { renderVenueEditor } from './components/venue-editor.js';
 import { TEST_EDIT_ACCESS } from './config/test-access.js';
 import { apiRequest, invitationParams, loginUrl, logout, startInvitation } from './services/auth.service.js';
 import { ApiError, messageFor } from './services/auth-errors.js';
-import { adminStatus, registerPasskey, stepUp, listContactRequests, setContactStatus, createInvitation, approveContactRequest, listAccounts, setAccountStatus, listInvitations, revokeInvitation } from './services/admin.service.js';
+import { adminStatus, registerPasskey, stepUp, listContactRequests, setContactStatus, createInvitation, approveContactRequest, inviteApprovedRequest, ollinListText, listAccounts, setAccountStatus, listInvitations, revokeInvitation } from './services/admin.service.js';
 
 
 const stylesheet = document.createElement('link');
@@ -184,7 +184,7 @@ function renderInvitation() {
   return main;
 }
 // Panel de administración (Fase 4c). Todo texto del servidor va con textContent (helper `el`). Sin innerHTML.
-const ADMIN_STATUS_LABELS = { received: 'Recibida', contacted: 'Contactada', converted: 'Convertida', closed: 'Cerrada', spam: 'Spam' };
+const ADMIN_STATUS_LABELS = { received: 'Recibida', contacted: 'Contactada', approved: 'Aprobada · esperando alta de Ollin', converted: 'Convertida', closed: 'Cerrada', spam: 'Spam' };
 const ADMIN_KIND_LABELS = { artista: 'Artista', foro: 'Foro' };
 const ADMIN_ROLE_LABELS = { owner: 'Propietario', editor: 'Editor', admin: 'Administrador', reviewer: 'Revisor' };
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -234,6 +234,29 @@ function adminPanel() {
   };
   filter.addEventListener('change', loadRequests);
 
+  const ollinButton = el('button', { className: 'button secondary', type: 'button', text: 'Copiar lista para Ollin' });
+  const ollinBox = el('div', { attrs: { 'aria-live': 'polite' } });
+  ollinButton.addEventListener('click', async () => {
+    ollinButton.disabled = true;
+    ollinBox.replaceChildren();
+    try {
+      const text = ollinListText(await listContactRequests({ status: 'approved', limit: 100 }));
+      if (!text) { ollinBox.replaceChildren(el('p', { className: 'muted', text: 'No hay solicitudes aprobadas pendientes de alta.' })); return; }
+      const count = text.split('\n').length;
+      const message = `${count} ${count === 1 ? 'alta copiada' : 'altas copiadas'}. Envíalas a Ollin.`;
+      try {
+        await navigator.clipboard.writeText(text);
+        ollinBox.replaceChildren(el('p', { text: message }));
+        announce(message);
+      } catch {
+        const area = el('textarea', { readOnly: true, value: text, attrs: { rows: String(Math.min(count + 1, 12)), 'aria-label': 'Lista de altas para Ollin' } });
+        ollinBox.replaceChildren(el('p', { className: 'notice', text: 'No se pudo copiar automáticamente. Copia el texto manualmente.' }), area);
+        area.select();
+      }
+    } catch (error) { ollinBox.replaceChildren(authErrorPanel(asApiError(error), loadRequests)); }
+    finally { ollinButton.disabled = false; }
+  });
+
   const kind = el('select', { id: 'inv-kind' }, [el('option', { value: 'member', text: 'Miembro de un perfil' }), el('option', { value: 'platform', text: 'Plataforma (administración)' })]);
   const profile = el('input', { id: 'inv-profile', type: 'text', autocomplete: 'off', attrs: { placeholder: '00000000-0000-0000-0000-000000000000', spellcheck: 'false' } });
   const profileField = el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'inv-profile', text: 'Perfil (UUID)' }), profile]);
@@ -272,21 +295,15 @@ function adminPanel() {
     } finally { submit.disabled = false; }
   });
   const approvalBox = el('div', { attrs: { 'aria-live': 'polite' } });
-  const showApproval = (data) => {
-    const days = Math.max(1, Math.round((Number(data.expires_in) || 0) / 86400));
-    const link = el('input', { type: 'text', readOnly: true, value: data.url, attrs: { 'aria-label': 'Enlace de invitación de perfil' } });
-    const copy = el('button', { className: 'button secondary', type: 'button', text: 'Copiar enlace' });
-    copy.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(link.value); announce('Enlace copiado'); } catch { link.select(); announce('Selecciona el enlace y cópialo manualmente'); }
-    });
-    approvalBox.replaceChildren(el('div', { className: 'detail-panel' }, [el('p', { text: 'Solicitud aprobada. Enlace de invitación:' }), link, copy, el('p', { className: 'notice', text: `Se muestra una sola vez. Caduca en ${days} días. Envíala tú al correo del solicitante.` })]));
+  const onApproved = () => {
+    approvalBox.replaceChildren(el('div', { className: 'detail-panel' }, [el('p', { text: 'Aprobada. Envía a Ollin la lista de altas y, cuando confirmen la cuenta, crea la invitación.' })]));
+    void loadRequests();
   };
-  const onApproved = (data) => { showApproval(data); void loadRequests(); };
   void loadRequests();
   const accounts = adminAccounts();
   const invitations = adminInvitations();
   return el('div', { className: 'admin-panel' }, [
-    el('div', { className: 'detail-panel' }, [el('h2', { text: 'Solicitudes de contacto' }), el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'admin-filter', text: 'Estado' }), filter]), approvalBox, box]),
+    el('div', { className: 'detail-panel' }, [el('h2', { text: 'Solicitudes de contacto' }), el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'admin-filter', text: 'Estado' }), filter]), ollinButton, ollinBox, approvalBox, box]),
     el('div', { className: 'detail-panel' }, [el('h2', { text: 'Invitar' }), form, result]),
     accounts.node,
     invitations.node,
@@ -308,13 +325,49 @@ const adminTable = (headers, rows) => el('div', { className: 'admin-table-wrap' 
   el('tbody', {}, rows),
 ])]);
 
+const EDITABLE_STATUSES = ['received', 'contacted', 'closed', 'spam'];
+const inviteErrorNode = (error) => (error?.code === 'not_approved' ? adminNotice('Esta solicitud ya no está pendiente de invitación.') : adminErrorNode(error));
+
 function adminRequestRow(row, { onApproved }) {
   const statusCell = el('td', { text: ADMIN_STATUS_LABELS[row.status] || row.status || '' });
   const approveButton = el('button', { className: 'button secondary', type: 'button', text: 'Aprobar' });
   const approveBox = el('div', { className: 'admin-approve', hidden: true }, [approveFormFor(row, { onApproved })]);
-  const syncApprove = () => { approveButton.hidden = !APPROVABLE_STATUSES.includes(row.status); approveBox.hidden = approveButton.hidden || approveBox.hidden; };
+  const inviteButton = el('button', { className: 'button', type: 'button', text: 'Crear invitación' });
+  const inviteBox = el('div', { className: 'admin-approve', attrs: { 'aria-live': 'polite' }, hidden: true });
+  const syncApprove = () => {
+    approveButton.hidden = !APPROVABLE_STATUSES.includes(row.status);
+    approveBox.hidden = approveButton.hidden || approveBox.hidden;
+    inviteButton.hidden = row.status !== 'approved';
+    inviteBox.hidden = inviteButton.hidden || inviteBox.hidden;
+  };
   approveButton.addEventListener('click', () => { approveBox.hidden = !approveBox.hidden; });
-  const select = el('select', { attrs: { 'aria-label': `Cambiar estado de la solicitud de ${row.requester_name || row.email || ''}` } }, Object.entries(ADMIN_STATUS_LABELS).map(([value, text]) => el('option', { value, text })));
+  const showInvite = (data) => {
+    const days = Math.max(1, Math.round((Number(data.expires_in) || 0) / 86400));
+    const link = el('input', { type: 'text', readOnly: true, value: data.url, attrs: { 'aria-label': 'Enlace de invitación' } });
+    const copy = el('button', { className: 'button secondary', type: 'button', text: 'Copiar enlace' });
+    copy.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(link.value); announce('Enlace copiado'); } catch { link.select(); announce('Selecciona el enlace y cópialo manualmente'); }
+    });
+    inviteBox.hidden = false;
+    inviteBox.replaceChildren(el('p', { text: 'Invitación creada. Enlace:' }), link, copy, el('p', { className: 'notice', text: `Se muestra una sola vez. Caduca en ${days} días. Envíala tú al correo del solicitante.` }));
+  };
+  inviteButton.addEventListener('click', async () => {
+    if (!window.confirm('¿Ollin ya confirmó la cuenta y el rol de esta persona?')) return;
+    inviteButton.disabled = true;
+    inviteBox.replaceChildren();
+    try {
+      const data = await inviteApprovedRequest(row.id);
+      row.status = 'converted';
+      statusCell.textContent = ADMIN_STATUS_LABELS.converted;
+      select.disabled = true;
+      syncApprove();
+      showInvite(data);
+    } catch (error) { inviteBox.hidden = false; inviteBox.replaceChildren(inviteErrorNode(error)); } finally { inviteButton.disabled = false; }
+  });
+  // El select solo ofrece estados que se pueden poner a mano; si la fila está en otro (approved/converted), se muestra como opción deshabilitada.
+  const statusOptions = EDITABLE_STATUSES.map((value) => el('option', { value, text: ADMIN_STATUS_LABELS[value] }));
+  if (!EDITABLE_STATUSES.includes(row.status)) { const current = el('option', { value: row.status, text: ADMIN_STATUS_LABELS[row.status] || row.status }); current.disabled = true; statusOptions.unshift(current); }
+  const select = el('select', { attrs: { 'aria-label': `Cambiar estado de la solicitud de ${row.requester_name || row.email || ''}` } }, statusOptions);
   select.value = row.status;
   select.addEventListener('change', async () => {
     const previous = row.status;
@@ -331,7 +384,7 @@ function adminRequestRow(row, { onApproved }) {
   return el('tr', {}, [
     el('td', { text: row.requester_name || '' }), el('td', { text: row.email || '' }), el('td', { text: ADMIN_KIND_LABELS[row.requested_kind] || row.requested_kind || '' }),
     statusCell, el('td', { text: formatAdminDate(row.created_at) }), el('td', { className: 'admin-msg', text: row.message || '' }),
-    el('td', {}, [select, approveButton, approveBox]),
+    el('td', {}, [select, approveButton, inviteButton, approveBox, inviteBox]),
   ]);
 }
 

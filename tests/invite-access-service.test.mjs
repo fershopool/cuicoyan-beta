@@ -144,8 +144,8 @@ test('invitationParams: no escribe en sessionStorage ni localStorage', async () 
 test('approveContactRequest: POST con el cuerpo de aprobación', async () => {
   const { approveContactRequest } = await adminMod();
   mockFetch(200, { data: { ok: true } });
-  const body = { slug: 'ana-ruiz', display_name: 'Ana Ruiz', ttl_seconds: 3600 };
-  const out = await approveContactRequest('req-1', body);
+  const body = { slug: 'ana-ruiz', display_name: 'Ana Ruiz' };
+  const out = await approveContactRequest('req-1', { ...body, ttl_seconds: 3600 });
   const { url, init } = calls[0];
   assert.equal(url.pathname, '/api/cuicoyan/admin/contact-requests/req-1/approve');
   assert.equal(init.method, 'POST');
@@ -218,7 +218,7 @@ test('revokeInvitation: DELETE con id codificado y devuelve data', async () => {
 test('admin: 401, 403 y 409 se propagan como rechazo', async () => {
   const { approveContactRequest, listAccounts, setAccountStatus, listInvitations, revokeInvitation } = await adminMod();
   const ops = [
-    () => approveContactRequest('r', { slug: 's', display_name: 'd', ttl_seconds: 1 }),
+    () => approveContactRequest('r', { slug: 's', display_name: 'd' }),
     () => listAccounts({ limit: 1 }),
     () => setAccountStatus('p', 'activo'),
     () => listInvitations({ limit: 1 }),

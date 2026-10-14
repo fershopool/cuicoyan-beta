@@ -106,10 +106,25 @@ const pageQuery = ({ limit, offset } = {}) => {
   return qs ? `?${qs}` : '';
 };
 
-export async function approveContactRequest(id, { slug, display_name, ttl_seconds } = {}) {
-  const body = { slug, display_name };
+export async function approveContactRequest(id, { slug, display_name } = {}) {
+  return (await apiRequest(`${ADMIN}/contact-requests/${encodeURIComponent(id)}/approve`, jsonPost({ slug, display_name }))).data;
+}
+
+// Paso 2 (tras confirmar Ollin la cuenta): crea la invitación y devuelve la URL una sola vez.
+export async function inviteApprovedRequest(id, { ttl_seconds } = {}) {
+  const body = {};
   if (ttl_seconds !== undefined) body.ttl_seconds = ttl_seconds;
-  return (await apiRequest(`${ADMIN}/contact-requests/${encodeURIComponent(id)}/approve`, jsonPost(body))).data;
+  return (await apiRequest(`${ADMIN}/contact-requests/${encodeURIComponent(id)}/invite`, jsonPost(body))).data;
+}
+
+// Lista de altas para Ollin: correo, nombre y fecha (UTC) por solicitud aprobada. Sin línea final.
+const ollinField = (value) => String(value ?? '').replace(/\r\n|[\r\n\t]/g, ' ').trim();
+const ollinDate = (value) => { const date = new Date(value); return Number.isNaN(date.getTime()) ? '' : date.toISOString().slice(0, 10); };
+export function ollinListText(rows) {
+  return (rows || [])
+    .filter((row) => row?.status === 'approved' && ollinField(row.email))
+    .map((row) => [ollinField(row.email), ollinField(row.requester_name), ollinDate(row.created_at)].join('\t'))
+    .join('\n');
 }
 
 export async function listAccounts({ limit, offset } = {}) {
