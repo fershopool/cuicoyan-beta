@@ -2,6 +2,7 @@ import { el, $, announce } from '../utils/dom.js';
 import { routes, routeForPath, withBase } from '../config/routes.js';
 import { environment } from '../config/environment.js';
 import { getPreferences, savePreferences } from '../services/preferences.service.js';
+import { logout } from '../services/auth.service.js';
 import { icon } from './icons.js';
 import { TEST_EDIT_ACCESS } from '../config/test-access.js';
 
@@ -49,7 +50,19 @@ export function renderShell(routeKey) {
   document.body.append(dock);
   document.body.append(el('div', { className: 'bg-flora', attrs: { 'aria-hidden': 'true' } }));
   document.body.append(el('div', { id: 'site-live', className: 'sr-only', attrs: { 'aria-live': 'polite', 'aria-atomic': 'true' } }));
+  void mountSessionButton(header);
   setupShell();
+}
+
+// Con sesión abierta (cookie HttpOnly, solo el servidor la ve) aparece «Cerrar sesión» en el encabezado y el menú móvil.
+async function mountSessionButton(header) {
+  try {
+    const res = await fetch(new URL('/auth/me', environment.cuicoyanApiUrl || window.location.origin), { credentials: 'same-origin', headers: { Accept: 'application/json' } });
+    if (!res.ok) return;
+  } catch { return; }
+  const make = () => el('button', { className: 'button ghost', type: 'button', text: 'Cerrar sesión', onclick: async () => { await logout(); window.location.href = routes.home; } });
+  header.querySelector('.header-tools')?.prepend(make());
+  header.querySelector('.mobile-drawer')?.append(make());
 }
 
 function ensureSiteIcon() {
