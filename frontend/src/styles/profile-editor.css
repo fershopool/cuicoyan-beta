@@ -10,13 +10,23 @@
 .pe-pick { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: .4rem; min-height: 40px; padding: 0 .9rem 0 .7rem; border-radius: 999px; background: var(--surface); color: var(--noche); font-size: .85rem; font-weight: 700; cursor: pointer; box-shadow: 0 10px 22px -10px rgb(17 21 46 / 45%); }
 .pe-pick:focus-within, .pe-pick:hover { outline: 2px solid var(--pe-accent); }
 .pe-pick-cover { right: 1rem; bottom: 1rem; }
-.pe-pick-avatar { bottom: 4px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+/* Botón de foto: redondo en la esquina inferior derecha; el texto solo para lectores de pantalla o en hover/foco */
+.pe-pick-avatar { right: 4px; bottom: 4px; width: 44px; height: 44px; min-height: 0; padding: 0; justify-content: center; border-radius: 50%; }
+.pe-pick-avatar > span:not(.ic) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.pe-pick-avatar:hover > span:not(.ic), .pe-pick-avatar:focus-within > span:not(.ic) { position: absolute; right: 0; bottom: calc(100% + 8px); width: auto; height: auto; padding: .3rem .65rem; overflow: visible; clip-path: none; border-radius: 999px; background: var(--noche); color: var(--marfil); white-space: nowrap; }
 
 /* La foto sobresale de la portada (mitad dentro, mitad fuera) */
 .pe-id { position: relative; z-index: 2; display: grid; justify-items: start; gap: .9rem; margin: calc(var(--pe-avatar) / -2) 0 0 1.4rem; }
+/* Posición de la foto (móvil: centro o izquierda; "derecha" se ve como izquierda) */
+.pe-hero[data-avatar-pos="center"] .pe-id { justify-items: center; margin-left: 0; text-align: center; }
+.pe-hero[data-avatar-pos="center"] .pe-copy { justify-items: center; text-align: center; }
 .pe-avatar-wrap { position: relative; width: var(--pe-avatar); height: var(--pe-avatar); flex: none; transition: width .2s ease, height .2s ease; }
 .pe-avatar { display: grid; width: 100%; height: 100%; place-items: center; overflow: hidden; background: var(--surface); box-shadow: 0 18px 34px -14px rgb(17 21 46 / 45%); border: 5px solid var(--surface); border-radius: 50%; }
 .pe-hero[data-ring="true"] .pe-avatar { border: 0; padding: 5px; background: linear-gradient(135deg, var(--pe-accent), #FFB13D 55%, #8A3FFC); }
+/* Con foto propia no hay relleno detrás: un PNG transparente deja ver la portada. El aro se dibuja solo en el borde. */
+.pe-hero[data-photo="true"] .pe-avatar { background: none; }
+.pe-hero[data-photo="true"][data-ring="true"] .pe-avatar { position: relative; }
+.pe-hero[data-photo="true"][data-ring="true"] .pe-avatar::before { content: ''; position: absolute; inset: 0; z-index: 1; padding: 5px; border-radius: inherit; pointer-events: none; background: linear-gradient(135deg, var(--pe-accent), #FFB13D 55%, #8A3FFC); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
 .pe-avatar .avatar { width: 100%; height: 100%; border: 5px solid var(--surface); border-radius: inherit; object-fit: cover; }
 .pe-hero[data-ring="false"] .pe-avatar .avatar { border: 0; }
 .pe-avatar .avatar-initials { font-size: calc(var(--pe-avatar) / 3); }
@@ -31,7 +41,28 @@
 @media (min-width: 701px) {
   .pe-id { grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 1.6rem; margin-left: 2rem; }
   .pe-copy { padding-bottom: .3rem; }
+  .pe-hero[data-avatar-pos="center"] .pe-id { grid-template-columns: minmax(0, 1fr); margin-left: 0; margin-right: 0; }
+  .pe-hero[data-avatar-pos="right"] .pe-id { grid-template-columns: minmax(0, 1fr) auto; justify-items: end; margin-left: 0; margin-right: 2rem; text-align: right; }
+  .pe-hero[data-avatar-pos="right"] .pe-avatar-wrap { grid-column: 2; grid-row: 1; }
+  .pe-hero[data-avatar-pos="right"] .pe-copy { grid-column: 1; grid-row: 1; justify-items: end; text-align: right; }
 }
+
+/* Foto completa (PNG sin recortar): sin círculo ni aro; la figura sale de la portada y su base se funde con el fondo.
+   Mismo solape que la foto normal (la mitad sobre la portada). Va al final para ganar a forma y aro. */
+.pe-hero[data-avatar-full="true"] { padding-bottom: 2.25rem; }
+/* El aura puede salirse del hero a los lados; solo se recorta en el borde de la página (evita scroll horizontal en móvil). */
+.profile-edit-page:has(.pe-hero[data-avatar-full="true"]) { overflow-x: clip; }
+.pe-hero[data-avatar-full="true"] .pe-avatar-wrap { height: calc(var(--pe-avatar) * 1.35); }
+/* La figura sube ~60 % de su alto sobre el borde de la portada; el resto cae sobre los textos. Sin overflow que la recorte: .pe-id va por encima de .pe-cover (z-index 2). */
+.pe-hero[data-avatar-full="true"] .pe-id { margin-top: calc(var(--pe-avatar) * -.81); }
+.pe-hero[data-avatar-full="true"] .pe-avatar { filter: drop-shadow(0 12px 28px color-mix(in srgb, var(--pe-aura, var(--pe-accent)) calc(var(--pe-avatar-glow, 60) * .75%), transparent)); place-items: end center; overflow: visible; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; }
+.pe-hero[data-avatar-full="true"][data-photo="true"] .pe-avatar::before { display: none; }
+/* --pe-avatar-fade (0-100): % del alto que se difumina en la base. --pe-avatar-glow (0-100): intensidad del halo y de la sombra. */
+.pe-hero[data-avatar-full="true"] .pe-avatar .avatar { width: 100%; height: 100%; border: 0; border-radius: 0; object-fit: contain; object-position: center bottom; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--pe-avatar-fade, 45) * 1%), transparent 100%); mask-image: linear-gradient(to bottom, #000 calc(100% - var(--pe-avatar-fade, 45) * 1%), transparent 100%); }
+/* Halo con el color de acento detrás de la figura: sube de tamaño, de desenfoque y de opacidad con --pe-avatar-glow (0 = sin halo) */
+.pe-hero[data-avatar-full="true"] .pe-avatar-wrap::before { content: ''; position: absolute; z-index: -1; inset: 6% -22% 0; border-radius: 50%; pointer-events: none; background: radial-gradient(closest-side, color-mix(in srgb, var(--pe-aura, var(--pe-accent)) 60%, transparent), transparent); filter: blur(calc(6px + var(--pe-avatar-glow, 60) * .14px)); opacity: min(1, calc(var(--pe-avatar-glow, 60) / 100 * 1.4)); transform: scale(calc(.7 + var(--pe-avatar-glow, 60) * .005)); }
+.pe-full[hidden] { display: none; }
+.pe-full .pe-hint { margin: .3rem 0 0; }
 
 /* Formulario */
 .profile-edit-page .app-wrap { padding-bottom: 7rem; }
@@ -67,7 +98,7 @@
 .pe-status { margin-right: auto; color: var(--muted); font-size: .9rem; font-weight: 600; }
 .pe-status.dirty { color: var(--primary); }
 @media (max-width: 900px) { .pe-savebar { bottom: calc(100px + env(safe-area-inset-bottom)); } }
-@media (max-width: 620px) { .pe-grid { grid-template-columns: 1fr; } .pe-custom { grid-template-columns: 1fr; } .pe-savebar .button:not(.ghost) { flex: 1; } .pe-pick > span:not(.ic) { display: none; } .pe-pick { padding: 0 .7rem; } .pe-pick-avatar > span:not(.ic) { display: inline; } }
+@media (max-width: 620px) { .pe-grid { grid-template-columns: 1fr; } .pe-custom { grid-template-columns: 1fr; } .pe-savebar .button:not(.ghost) { flex: 1; } .pe-pick:not(.pe-pick-avatar) > span:not(.ic) { display: none; } .pe-pick:not(.pe-pick-avatar) { padding: 0 .7rem; } }
 
 /* ---- Eventos: 4 en escritorio (2×2) y 2 por fila en móvil ---------------- */
 @media (min-width: 901px) { .ev-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -17,7 +17,8 @@ export const phoneOk = (v) => (!v || (/^\+?[\d\s().-]{7,20}$/.test(v) && v.repla
 export const safeUrl = (v) => (v && urlOk(v) === '' ? v : '');
 
 // Reduce la imagen elegida para que quepa en el almacenamiento del navegador.
-export function readImage(file, maxSide, square) {
+// keepAlpha: con PNG/WebP/GIF exporta PNG para conservar la transparencia (JPEG pintaría de negro lo transparente).
+export function readImage(file, maxSide, square, keepAlpha = false) {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const img = new Image();
@@ -28,7 +29,8 @@ export function readImage(file, maxSide, square) {
       canvas.width = Math.round((square ? side : img.width) * scale); canvas.height = Math.round((square ? side : img.height) * scale);
       const sx = square ? (img.width - side) / 2 : 0; const sy = square ? (img.height - side) / 2 : 0;
       canvas.getContext('2d').drawImage(img, sx, sy, square ? side : img.width, square ? side : img.height, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url); resolve(canvas.toDataURL('image/jpeg', 0.84));
+      const alpha = keepAlpha && /^image\/(png|webp|gif)$/.test(file.type);
+      URL.revokeObjectURL(url); resolve(alpha ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.84));
     };
     img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo leer la imagen')); };
     img.src = url;
@@ -57,6 +59,11 @@ export function profileHero(record, draft, { editable = false, onPickCover, onPi
     const image = $('.pe-cover-img', cover); image.hidden = !d.cover.image; if (d.cover.image) image.src = d.cover.image; else image.removeAttribute('src');
     cover.classList.toggle('no-pattern', !d.cover.pattern);
     node.dataset.shape = d.avatar.shape; node.dataset.ring = String(d.avatar.ring);
+    node.dataset.avatarPos = d.avatar.position || 'left'; node.dataset.photo = String(!!d.avatar.image);
+    node.dataset.avatarFull = String(!!(d.avatar.full && d.avatar.image));
+    node.style.setProperty('--pe-avatar-fade', d.avatar.fade ?? 45);
+    node.style.setProperty('--pe-avatar-glow', d.avatar.glow ?? 60);
+    node.style.setProperty('--pe-aura', d.avatar.glowColor || d.accent);
     face.replaceChildren(d.avatar.image ? el('img', { className: 'avatar', src: d.avatar.image, alt: '' }) : avatar({ slug: record.slug, name: d.name || record.name || '?' }));
     name.textContent = d.name || 'Tu nombre';
     line.textContent = tags(d).filter(Boolean).join(' • ');
@@ -94,8 +101,8 @@ export function formKit(draft, onChange) {
     }
     return field(label, c, wide || area, c.id, out);
   };
-  const range = (path, label, min, max, unit = 'px') => {
-    const out = el('output'); const c = el('input', { id: uid(path), type: 'range', min, max, step: 2, name: path });
+  const range = (path, label, min, max, unit = 'px', step = 2) => {
+    const out = el('output'); const c = el('input', { id: uid(path), type: 'range', min, max, step, name: path });
     const sync = () => { c.value = get(draft, path); out.textContent = `${c.value}${unit}`; };
     c.addEventListener('input', () => { set(draft, path, Number(c.value)); changed(); });
     refreshers.push(sync); sync();
@@ -143,12 +150,18 @@ export function lookCards(kit, draft) {
   const clearCover = clear('Quitar imagen de portada', () => { draft.cover.image = ''; });
   const clearAvatar = clear('Quitar foto de perfil', () => { draft.avatar.image = ''; });
   kit.refreshers.push(() => { clearCover.hidden = !draft.cover.image; clearAvatar.hidden = !draft.avatar.image; });
+  // Solo aplica con foto: la opción aparece al subir una imagen.
+  const fullBox = el('div', { className: 'wide pe-full' }, [toggle('avatar.full', 'Foto completa (sin recortar, se funde con la portada)'), el('p', { className: 'muted pe-hint', text: 'Funciona mejor con un PNG de fondo transparente: la figura sale de la portada.' })]);
+  kit.refreshers.push(() => { fullBox.hidden = !draft.avatar.image; });
+  // Ajustes de la foto completa: solo con foto y «Foto completa» activo.
+  const fullTune = el('div', { className: 'wide pe-full pe-grid' }, [range('avatar.fade', 'Desvanecimiento de la foto', 0, 100, '%', 1), range('avatar.glow', 'Intensidad del aura', 0, 100, '%', 1), color('avatar.glowColor', 'Color del aura')]);
+  kit.refreshers.push(() => { fullTune.hidden = !(draft.avatar.full && draft.avatar.image); });
   return [
     card('image', 'Portada y foto', [
       choices('Fondo de portada', Object.entries(COVER_TONES).map(([value, [name, css]]) => [value, name, css ? `background:${css}` : 'background:conic-gradient(#F21F6D,#FF9D2E,#00C7D4,#8A3FFC,#F21F6D)']), (v) => draft.cover.tone === v, (v) => { draft.cover.tone = v; }, 'swatch'),
       customRow, range('cover.height', 'Altura de la portada', 160, 380), toggle('cover.pattern', 'Mostrar patrón decorativo'), clearCover,
-      range('avatar.size', 'Tamaño de la foto', 110, 240), select('avatar.shape', 'Forma de la foto', [['circle', 'Círculo'], ['blob', 'Orgánica'], ['square', 'Cuadrada']]), toggle('avatar.ring', 'Aro de colores'), clearAvatar,
-    ], 'Usa los botones sobre la vista previa para subir tus imágenes.'),
+      range('avatar.size', 'Tamaño de la foto', 110, 240), select('avatar.shape', 'Forma de la foto', [['circle', 'Círculo'], ['blob', 'Orgánica'], ['square', 'Cuadrada']]), select('avatar.position', 'Posición de la foto', [['left', 'Izquierda'], ['center', 'Centro'], ['right', 'Derecha']]), toggle('avatar.ring', 'Aro de colores'), clearAvatar, fullBox, fullTune,
+    ],'Usa los botones sobre la vista previa para subir tus imágenes.'),
     card('sparkles', 'Estilo', [choices('Color de acento', PALETTE.map((c) => [c, c, `background:${c}`]), (v) => draft.accent === v, (v) => { draft.accent = v; }, 'swatch'), color('accent', 'Color propio'), select('font', 'Tipografía del nombre', Object.entries(FONTS).map(([value, [name]]) => [value, name]))]),
   ];
 }
@@ -171,8 +184,9 @@ export function createEditor({ kind, slug, record, base, saved: stored, heroOpti
     const dirty = isDirty(); saveButton.disabled = discardButton.disabled = !dirty;
     savebarStatus.textContent = dirty ? 'Cambios sin guardar' : 'Sin cambios'; savebarStatus.classList.toggle('dirty', dirty);
   });
-  const pickImage = (path, side, square) => (file) => readImage(file, side, square).then((src) => { set(draft, path, src); kit.changed(); }).catch((e) => announce(e.message));
-  hero = profileHero(record, draft, { ...heroOptions, editable: true, onPickCover: pickImage('cover.image', 1600, false), onPickAvatar: pickImage('avatar.image', 560, true) });
+  const pickImage = (path, side, square, keepAlpha) => (file) => readImage(file, side, square, keepAlpha).then((src) => { set(draft, path, src); kit.changed(); }).catch((e) => announce(e.message));
+  // La foto se guarda completa (sin recorte); el recorte cuadrado lo hace CSS (object-fit: cover) al mostrarla.
+  hero = profileHero(record, draft, { ...heroOptions, editable: true, onPickCover: pickImage('cover.image', 1600, false), onPickAvatar: pickImage('avatar.image', 560, false, true) });
 
   const errorBox = el('p', { className: 'pe-error form-error', attrs: { role: 'alert' } });
   const button = (label, onclick, className = 'button secondary') => el('button', { type: 'button', className, text: label, onclick });

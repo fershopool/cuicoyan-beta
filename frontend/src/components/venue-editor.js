@@ -116,7 +116,7 @@ function mapCard(kit, draft) {
 }
 
 export function renderVenueEditor({ venue, switcher }) {
-  return createEditor({
+  const page = createEditor({
     kind: 'foro', slug: venue.slug, record: venue, base: defaultDraft('foro', venue), saved: getDraft('foro', venue.slug, venue),
     heroOptions: { eyebrow: 'Foro cultural · CDMX', tags: (d) => [VENUE_TYPES.find(([value]) => value === d.type)?.[1], d.zone] },
     heading: { eyebrow: 'Mi foro', title: 'Edita tu foro' }, backHref: routes.foros, backLabel: 'Foros', publicHref: routes.foro(venue.slug), switcher,
@@ -142,4 +142,6 @@ export function renderVenueEditor({ venue, switcher }) {
       ];
     },
   });
+  page.classList.add('venue-edit-page');
+  return page;
 }

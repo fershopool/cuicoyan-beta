@@ -37,7 +37,8 @@ const slugsOf = (labels = []) => labels.map((l) => categories.find((c) => c.labe
 const labelOf = (slug) => categories.find((c) => c.slug === slug)?.label || slug;
 const look = () => ({
   cover: { tone: 'aurora', c1: '#00C7D4', c2: '#F21F6D', angle: 115, image: '', pattern: true, height: 260 },
-  avatar: { image: '', size: 168, shape: 'circle', ring: true },
+  // fade: % del alto de la foto que se difumina en la base; glow: intensidad del halo y de la sombra (0 = ninguno)
+  avatar: { image: '', size: 168, shape: 'circle', ring: true, position: 'left', full: false, fade: 45, glow: 60, glowColor: '#E91662' },
   accent: '#E91662', font: 'moderna',
 });
 

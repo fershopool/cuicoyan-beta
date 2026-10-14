@@ -13,6 +13,7 @@ import { renderArtistsPage, renderFavoritesPage, renderMapPage, renderArtistProf
 import { joinForm } from './components/join-form.js';
 import { renderProfileEditor } from './components/profile-editor.js';
 import { renderVenueEditor } from './components/venue-editor.js';
+import { renderKindPicker } from './components/profile-kind-picker.js';
 import { TEST_EDIT_ACCESS } from './config/test-access.js';
 import { apiRequest, invitationParams, loginUrl, logout, startInvitation } from './services/auth.service.js';
 import { ApiError, messageFor } from './services/auth-errors.js';
@@ -31,6 +32,14 @@ const editorStyles = document.createElement('link');
 editorStyles.rel = 'stylesheet';
 editorStyles.href = new URL('./styles/profile-editor.css', import.meta.url);
 document.head.append(editorStyles);
+const pickerStyles = document.createElement('link');
+pickerStyles.rel = 'stylesheet';
+pickerStyles.href = new URL('./styles/profile-picker.css', import.meta.url);
+document.head.append(pickerStyles);
+const venueEditorStyles = document.createElement('link');
+venueEditorStyles.rel = 'stylesheet';
+venueEditorStyles.href = new URL('./styles/venue-editor.css', import.meta.url);
+document.head.append(venueEditorStyles);
 
 let events = getEvents();
 let artists = getArtists();
@@ -163,10 +172,13 @@ function authErrorPanel(error, retry) {
   if (kind === 'idp' && retry) actions.push(el('button', { className: 'button', type: 'button', text: 'Reintentar', onclick: retry }));
   return el('div', { className: 'detail-panel' }, [el('p', { className: 'notice', text: messageFor(kind, error?.phase), attrs: { role: 'alert' } }), ...actions]);
 }
+let invitationToken = '';
 function renderInvitation() {
   const state = el('div', { id: 'invitation-state', className: 'detail-panel', attrs: { 'aria-live': 'polite' } }, [el('p', { className: 'muted', text: 'Validando invitación…' })]);
   const main = pageFrame({ eyebrow: 'Invitación privada', title: 'Activa tu acceso a Cuicoyan.', description: 'Inicia sesión con tu cuenta Ollin para activar tu acceso. Nunca te pediremos una contraseña en esta página.', children: [section('', [state])] });
-  const { token } = invitationParams(); // lee el fragmento y lo quita de la URL; no se guarda
+  // Lee el fragmento y lo quita de la URL. Solo en memoria: la pantalla se repinta cuando llegan datos remotos
+  // y la segunda lectura ya no encontraría el fragmento.
+  const token = (invitationToken ||= invitationParams().token);
   if (!token) { state.replaceChildren(authErrorPanel({ kind: 'invitation' })); return main; }
   const button = el('button', { className: 'button', type: 'button', text: 'Continuar con Ollin' });
   const start = async () => {
@@ -501,10 +513,29 @@ function renderProfile() {
   void apiRequest('/api/cuicoyan/me/profile').then((body) => {
     const profile = body?.data?.profiles?.[0];
     if (!profile) throw new Error('Sin perfil');
+    // Primer paso: la persona elige artista o foro. La elección viaja en ?tipo= para sobrevivir a recargas.
+    const tipo = new URLSearchParams(window.location.search).get('tipo');
+    if (tipo !== 'artista' && tipo !== 'foro') {
+      mount(renderKindPicker({ onPick: (kind) => { history.replaceState(null, '', `${routes.perfil}?tipo=${kind}`); renderProfile(); } }));
+      return;
+    }
+    const switchLink = el('a', { href: routes.perfil, text: 'Cambiar tipo de perfil' });
+    if (tipo === 'foro') {
+      // ponytail: el guardado remoto del foro aún no existe; por ahora solo borrador local.
+      // TODO: conectar guardado remoto de foros (API) y quitar el aviso y los ajustes de abajo.
+      const venue = { slug: 'nuevo-foro', name: '', description: '', categories: [], zone: '', address: '' };
+      const foroSwitch = el('div', { className: 'profile-kind-switch' }, [switchLink, el('p', { className: 'profile-kind-notice', text: 'El perfil de foro se guarda como borrador en este navegador por ahora.' })]);
+      const page = renderVenueEditor({ venue, switcher: foroSwitch });
+      page.querySelector('.demo-note')?.remove(); // dice «Sin sesión activa», falso con sesión
+      page.querySelector('.pe-head-actions a')?.remove(); // enlace a un perfil público que aún no existe
+      mount(page);
+      return;
+    }
     const artist = { slug: profile.id, name: profile.display_name, bio: (profile.description || '').slice(0, 160), longBio: profile.description || '', website: profile.website_url || '', email: profile.contact_email || '' };
     const canSubmit = profile.status === 'draft' || profile.status === 'rejected';
     mount(renderProfileEditor({
       artist, profileId: profile.id, remote: true, status: statusLabels[profile.status] || profile.status,
+      switcher: el('p', { className: 'profile-kind-switch' }, [switchLink]),
       onRemoteSave: (d) => apiRequest('/api/cuicoyan/me/profile', { method: 'PATCH', body: JSON.stringify({ profile_id: profile.id, display_name: d.name, description: d.longBio, website_url: d.website, contact_email: d.email }) }),
       onSubmitReview: canSubmit ? async () => { try { await apiRequest('/api/cuicoyan/me/profile/submit', { method: 'POST', body: JSON.stringify({ profile_id: profile.id }) }); announce('Perfil enviado a revisión'); renderProfile(); } catch (error) { announce(messageFor(error?.kind || 'generic', error?.phase)); } } : null,
       onLogout: async () => { await logout(); window.location.href = routes.home; },

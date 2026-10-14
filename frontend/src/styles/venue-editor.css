@@ -1,0 +1,92 @@
+/* Editor de foro: alineación de cabecera, horarios, controles y márgenes. Todo bajo .venue-edit-page. */
+
+/* Cabecera: título y acciones centrados verticalmente */
+.venue-edit-page .app-head { align-items: center; flex-wrap: wrap; gap: .8rem 1rem; }
+.venue-edit-page .app-head > div:first-child { min-width: 0; }
+.venue-edit-page .pe-head-actions { flex-wrap: wrap; justify-content: flex-end; gap: .6rem; }
+.venue-edit-page .pe-head-actions > * { display: inline-flex; align-items: center; min-height: 40px; }
+.venue-edit-page .pe-head-actions .badge { padding: 0 .75rem; }
+.venue-edit-page .back-link { margin-bottom: .6rem; }
+
+/* Nota de modo demostración: misma alineación que el resto del texto */
+.venue-edit-page .demo-note { margin: .8rem 0 0; text-align: left; }
+
+/* Formulario: columnas uniformes; Horarios ocupa todo el ancho en escritorio */
+.venue-edit-page .pe-form { gap: 1rem; align-items: stretch; }
+.venue-edit-page .pe-card { display: flex; flex-direction: column; min-width: 0; padding: 1.1rem 1.2rem; }
+.venue-edit-page .pe-card > .pe-grid { flex: 1; align-content: start; }
+.venue-edit-page .pe-card .pe-hint { margin-bottom: .7rem; }
+@media (min-width: 901px) {
+  .venue-edit-page .pe-form > .pe-card:has(.pe-hours) { grid-column: 1 / -1; }
+}
+
+/* Horarios: día | cerrado | desde – hasta, con los controles centrados */
+.venue-edit-page .pe-hours { gap: .5rem; }
+.venue-edit-page .pe-hours-row { grid-template-columns: minmax(4.5rem, 6.5rem) auto minmax(0, 1fr); align-items: center; gap: .5rem 1rem; min-height: 46px; padding: .2rem 0; border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent); }
+.venue-edit-page .pe-hours-row:last-child { border-bottom: 0; }
+.venue-edit-page .pe-hours-row strong { display: flex; align-items: center; min-height: 40px; }
+.venue-edit-page .pe-hours-row .pe-toggle { min-height: 40px; gap: .45rem; font-size: .92rem; white-space: nowrap; }
+.venue-edit-page .pe-hours-times { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: .4rem; min-width: 0; }
+.venue-edit-page .pe-hours-times input { width: 100%; min-height: 42px; }
+.venue-edit-page .pe-hours-times i { font-style: normal; color: var(--muted); text-align: center; }
+.venue-edit-page .pe-hours-times input:disabled { opacity: .55; }
+@media (max-width: 620px) {
+  .venue-edit-page .pe-hours-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .venue-edit-page .pe-hours-times { grid-column: 1 / -1; }
+}
+
+/* Casillas y etiquetas: misma altura de fila, centradas con su texto */
+.venue-edit-page .pe-toggle { min-height: 46px; padding: .2rem 0; gap: .6rem; line-height: 1.3; }
+.venue-edit-page .pe-toggle input { flex: none; margin: 0; }
+.venue-edit-page .pe-checks { min-width: 0; }
+.venue-edit-page .pe-checkgrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 0 1rem; }
+.venue-edit-page .pe-checkgrid .pe-toggle { min-width: 0; min-height: 42px; align-items: center; }
+.venue-edit-page .pe-checkgrid .pe-toggle span { min-width: 0; overflow-wrap: anywhere; }
+
+/* Controles de rango: etiqueta, deslizador y valor en una sola línea centrada */
+.venue-edit-page .pe-range { min-height: 46px; gap: .8rem; }
+.venue-edit-page .pe-range input[type="range"] { flex: 1; min-width: 0; height: 22px; margin: 0; }
+.venue-edit-page .pe-range output { flex: none; text-align: right; }
+
+/* Ubicación: la fila de enlaces y botones se alinea a la izquierda y no se corta */
+.venue-edit-page .pe-map-wrap { gap: .7rem; justify-items: stretch; }
+.venue-edit-page .pe-map-wrap > .button { justify-self: start; }
+.venue-edit-page .pe-map-wrap > small.pe-err { min-height: 0; }
+.venue-edit-page .pe-preview { min-width: 0; }
+.venue-edit-page .pe-preview .map-popup { min-width: 0; overflow-wrap: anywhere; }
+
+/* Botones de la tarjeta de datos y de galería: mismo alto y ancho uniforme */
+.venue-edit-page .pe-account .button, .venue-edit-page .pe-account label.button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.venue-edit-page .pe-gallery + .button, .venue-edit-page .pe-gallery ~ label.button { min-height: 44px; }
+
+/* Barra de guardado: estado a la izquierda, botones a la derecha, mismo alto */
+.venue-edit-page .pe-savebar { align-items: center; flex-wrap: wrap; }
+.venue-edit-page .pe-status { display: flex; align-items: center; min-height: 40px; margin-right: auto; text-align: left; }
+.venue-edit-page .pe-savebar .button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+/* Foco visible en todos los controles interactivos */
+.venue-edit-page .pe-toggle input:focus-visible,
+.venue-edit-page .pe-range input[type="range"]:focus-visible,
+.venue-edit-page .pe-field input:focus-visible,
+.venue-edit-page .pe-field select:focus-visible,
+.venue-edit-page .pe-field textarea:focus-visible,
+.venue-edit-page .pe-hours-times input:focus-visible,
+.venue-edit-page .pe-checkgrid input:focus-visible,
+.venue-edit-page .button:focus-visible,
+.venue-edit-page .back-link:focus-visible,
+.venue-edit-page .pe-chip:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Ancho pequeño: nada desborda ni se corta */
+.venue-edit-page .pe-card, .venue-edit-page .pe-field, .venue-edit-page .pe-hours, .venue-edit-page .pe-hours-row { min-width: 0; max-width: 100%; }
+@media (max-width: 380px) {
+  .venue-edit-page .pe-card { padding: 1rem; }
+  .venue-edit-page .pe-hours-row .pe-toggle { white-space: normal; }
+  .venue-edit-page .pe-head-actions .button { flex: 1 1 100%; justify-content: center; }
+}
+
+/* Casillas dentro de fieldset.pe-field: no heredan el estilo de campo de texto (ancho 100%, relleno, alto 46px) */
+.venue-edit-page .pe-field .pe-toggle input[type="checkbox"] { width: 22px; height: 22px; min-height: 0; padding: 0; margin: 0; flex: none; border-radius: 6px; }
+.venue-edit-page .pe-checkgrid .pe-toggle span { overflow-wrap: break-word; flex: 1 1 auto; }
