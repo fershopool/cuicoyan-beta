@@ -545,3 +545,5 @@ h3 { font-weight: 700; letter-spacing: -.025em; }
 .admin-invite-form { display: grid; gap: .9rem; }
 .admin-invite-form .button { justify-self: start; }
 #inv-url { width: 100%; font: inherit; }
+.admin-approve { display: grid; gap: .6rem; margin-top: .6rem; min-width: 16rem; }
+.admin-table td .button { margin-top: .4rem; }

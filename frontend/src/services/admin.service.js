@@ -96,3 +96,34 @@ export async function createInvitation({ kind, profile_id, role, email, ttl_seco
   if (ttl_seconds !== undefined) body.ttl_seconds = ttl_seconds;
   return (await apiRequest('/api/cuicoyan/invitations', jsonPost(body))).data;
 }
+
+// Parámetros de paginación solo si están definidos (así la query no lleva valores vacíos).
+const pageQuery = ({ limit, offset } = {}) => {
+  const query = new URLSearchParams();
+  if (limit != null) query.set('limit', String(limit));
+  if (offset != null) query.set('offset', String(offset));
+  const qs = query.toString();
+  return qs ? `?${qs}` : '';
+};
+
+export async function approveContactRequest(id, { slug, display_name, ttl_seconds } = {}) {
+  const body = { slug, display_name };
+  if (ttl_seconds !== undefined) body.ttl_seconds = ttl_seconds;
+  return (await apiRequest(`${ADMIN}/contact-requests/${encodeURIComponent(id)}/approve`, jsonPost(body))).data;
+}
+
+export async function listAccounts({ limit, offset } = {}) {
+  return (await apiRequest(`${ADMIN}/accounts${pageQuery({ limit, offset })}`)).data;
+}
+
+export async function setAccountStatus(profileId, status) {
+  return (await apiRequest(`${ADMIN}/accounts/${encodeURIComponent(profileId)}`, { method: 'PATCH', body: JSON.stringify({ status }) })).data;
+}
+
+export async function listInvitations({ limit, offset } = {}) {
+  return (await apiRequest(`${ADMIN}/invitations${pageQuery({ limit, offset })}`)).data;
+}
+
+export async function revokeInvitation(id) {
+  return (await apiRequest(`${ADMIN}/invitations/${encodeURIComponent(id)}`, { method: 'DELETE' })).data;
+}

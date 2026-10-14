@@ -14,9 +14,9 @@ import { joinForm } from './components/join-form.js';
 import { renderProfileEditor } from './components/profile-editor.js';
 import { renderVenueEditor } from './components/venue-editor.js';
 import { TEST_EDIT_ACCESS } from './config/test-access.js';
-import { apiRequest, clearInvitation, invitationParams, loginUrl, logout, markOllinTokenUsed, startInvitationLogin } from './services/auth.service.js';
+import { apiRequest, invitationParams, loginUrl, logout, startInvitation } from './services/auth.service.js';
 import { ApiError, messageFor } from './services/auth-errors.js';
-import { adminStatus, registerPasskey, stepUp, listContactRequests, setContactStatus, createInvitation } from './services/admin.service.js';
+import { adminStatus, registerPasskey, stepUp, listContactRequests, setContactStatus, createInvitation, approveContactRequest, listAccounts, setAccountStatus, listInvitations, revokeInvitation } from './services/admin.service.js';
 
 
 const stylesheet = document.createElement('link');
@@ -160,33 +160,26 @@ function authErrorPanel(error, retry) {
   const kind = error?.kind || 'generic';
   const actions = [];
   if (kind === 'session' || (kind === 'idp' && error.phase === 'expired')) actions.push(el('a', { className: 'button', text: 'Iniciar sesión', attrs: { href: loginUrl() } }));
-  if (kind === 'idp' && retry) actions.push(el('button', { className: 'button', type: 'button', text: 'Reintentar', attrs: { onclick: retry } }));
+  if (kind === 'idp' && retry) actions.push(el('button', { className: 'button', type: 'button', text: 'Reintentar', onclick: retry }));
   return el('div', { className: 'detail-panel' }, [el('p', { className: 'notice', text: messageFor(kind, error?.phase), attrs: { role: 'alert' } }), ...actions]);
 }
 function renderInvitation() {
   const state = el('div', { id: 'invitation-state', className: 'detail-panel', attrs: { 'aria-live': 'polite' } }, [el('p', { className: 'muted', text: 'Validando invitación…' })]);
-  const main = pageFrame({ eyebrow: 'Invitación privada', title: 'Activa tu acceso a Cuicoyan.', description: 'Inicia sesión con tu cuenta Ollin para vincular tu perfil. Nunca te pediremos una contraseña en esta página.', children: [section('', [state])] });
-  const { token, ollin } = invitationParams(); // lee el fragmento, lo quita de la URL y lo guarda solo durante el login
+  const main = pageFrame({ eyebrow: 'Invitación privada', title: 'Activa tu acceso a Cuicoyan.', description: 'Inicia sesión con tu cuenta Ollin para activar tu acceso. Nunca te pediremos una contraseña en esta página.', children: [section('', [state])] });
+  const { token } = invitationParams(); // lee el fragmento y lo quita de la URL; no se guarda
   if (!token) { state.replaceChildren(authErrorPanel({ kind: 'invitation' })); return main; }
-  if (ollin) {
-    markOllinTokenUsed(token);
-    startInvitationLogin(ollin).then((next) => window.location.replace(next), () => { clearInvitation(); state.replaceChildren(authErrorPanel({ kind: 'invitation' })); });
-    return main;
-  }
-  const button = el('button', { className: 'button', type: 'button', text: 'Aceptar invitación' });
-  const accept = async () => {
+  const button = el('button', { className: 'button', type: 'button', text: 'Continuar con Ollin' });
+  const start = async () => {
     button.disabled = true;
     try {
-      await apiRequest('/api/cuicoyan/me/invitations/accept', { method: 'POST', body: JSON.stringify({ token }) }, { invitation: true });
-      clearInvitation();
-      window.location.href = routes.perfil;
+      const redirect = await startInvitation(token);
+      window.location.assign(redirect);
     } catch (requestError) {
-      if (requestError?.kind === 'invitation') clearInvitation();
       button.disabled = false;
-      state.replaceChildren(authErrorPanel(requestError, accept));
+      state.replaceChildren(authErrorPanel(asApiError(requestError)));
     }
   };
-  button.addEventListener('click', accept);
+  button.addEventListener('click', start);
   state.replaceChildren(el('p', { text: 'Tu invitación está lista.' }), button);
   return main;
 }
@@ -235,7 +228,7 @@ function adminPanel() {
       if (!rows.length) { box.replaceChildren(el('p', { className: 'muted', text: 'No hay solicitudes con este filtro.' })); return; }
       box.replaceChildren(el('div', { className: 'admin-table-wrap' }, [el('table', { className: 'admin-table' }, [
         el('thead', {}, [el('tr', {}, ['Nombre', 'Correo', 'Tipo', 'Estado', 'Fecha', 'Mensaje', 'Cambiar estado'].map((text) => el('th', { attrs: { scope: 'col' }, text })))]),
-        el('tbody', {}, rows.map(adminRequestRow)),
+        el('tbody', {}, rows.map((row) => adminRequestRow(row, { onApproved }))),
       ])]));
     } catch (error) { box.replaceChildren(authErrorPanel(asApiError(error), loadRequests)); }
   };
@@ -265,6 +258,7 @@ function adminPanel() {
     try {
       const data = await createInvitation({ kind: kind.value, profile_id: isMember ? profile.value.trim() : undefined, role: role.value, email: email.value.trim() });
       email.value = '';
+      void invitations.load();
       const minutes = Math.max(1, Math.round((Number(data.expires_in) || 0) / 60));
       const copy = el('button', { className: 'button secondary', type: 'button', text: 'Copiar enlace' });
       const link = el('input', { id: 'inv-url', type: 'text', readOnly: true, value: data.url, attrs: { 'aria-label': 'Enlace de invitación' } });
@@ -277,15 +271,49 @@ function adminPanel() {
       result.replaceChildren(apiError.kind === 'generic' ? el('p', { className: 'notice', text: 'No se pudo crear la invitación. Revisa los datos e inténtalo de nuevo.', attrs: { role: 'alert' } }) : authErrorPanel(apiError));
     } finally { submit.disabled = false; }
   });
+  const approvalBox = el('div', { attrs: { 'aria-live': 'polite' } });
+  const showApproval = (data) => {
+    const days = Math.max(1, Math.round((Number(data.expires_in) || 0) / 86400));
+    const link = el('input', { type: 'text', readOnly: true, value: data.url, attrs: { 'aria-label': 'Enlace de invitación de perfil' } });
+    const copy = el('button', { className: 'button secondary', type: 'button', text: 'Copiar enlace' });
+    copy.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(link.value); announce('Enlace copiado'); } catch { link.select(); announce('Selecciona el enlace y cópialo manualmente'); }
+    });
+    approvalBox.replaceChildren(el('div', { className: 'detail-panel' }, [el('p', { text: 'Solicitud aprobada. Enlace de invitación:' }), link, copy, el('p', { className: 'notice', text: `Se muestra una sola vez. Caduca en ${days} días. Envíala tú al correo del solicitante.` })]));
+  };
+  const onApproved = (data) => { showApproval(data); void loadRequests(); };
   void loadRequests();
+  const accounts = adminAccounts();
+  const invitations = adminInvitations();
   return el('div', { className: 'admin-panel' }, [
-    el('div', { className: 'detail-panel' }, [el('h2', { text: 'Solicitudes de contacto' }), el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'admin-filter', text: 'Estado' }), filter]), box]),
+    el('div', { className: 'detail-panel' }, [el('h2', { text: 'Solicitudes de contacto' }), el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'admin-filter', text: 'Estado' }), filter]), approvalBox, box]),
     el('div', { className: 'detail-panel' }, [el('h2', { text: 'Invitar' }), form, result]),
+    accounts.node,
+    invitations.node,
   ]);
 }
 
-function adminRequestRow(row) {
+const APPROVABLE_STATUSES = ['received', 'contacted'];
+const ADMIN_ERROR_MESSAGES = { cannot_change_self: 'No puedes cambiar tu propia cuenta.', slug_taken: 'Ese identificador ya existe, elige otro.', not_approvable: 'Esta solicitud ya fue atendida.' };
+const ACCOUNT_STATUS_LABELS = { active: 'Activa', suspended: 'Suspendida' };
+const INVITATION_KIND_LABELS = { member: 'Miembro de un perfil', platform: 'Plataforma' };
+const INVITATION_STATE_LABELS = { pendiente: 'Pendiente', aceptada: 'Aceptada', revocada: 'Revocada', vencida: 'Vencida' };
+const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const adminNotice = (text) => el('p', { className: 'notice', text, attrs: { role: 'alert' } });
+// Códigos de error del servidor (lista cerrada) con mensaje fijo; el resto cae al panel genérico.
+const adminErrorNode = (error) => (ADMIN_ERROR_MESSAGES[error?.code] ? adminNotice(ADMIN_ERROR_MESSAGES[error.code]) : authErrorPanel(asApiError(error)));
+const slugFromName = (value) => String(value || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 120);
+const adminTable = (headers, rows) => el('div', { className: 'admin-table-wrap' }, [el('table', { className: 'admin-table' }, [
+  el('thead', {}, [el('tr', {}, headers.map((text) => el('th', { attrs: { scope: 'col' }, text })))]),
+  el('tbody', {}, rows),
+])]);
+
+function adminRequestRow(row, { onApproved }) {
   const statusCell = el('td', { text: ADMIN_STATUS_LABELS[row.status] || row.status || '' });
+  const approveButton = el('button', { className: 'button secondary', type: 'button', text: 'Aprobar' });
+  const approveBox = el('div', { className: 'admin-approve', hidden: true }, [approveFormFor(row, { onApproved })]);
+  const syncApprove = () => { approveButton.hidden = !APPROVABLE_STATUSES.includes(row.status); approveBox.hidden = approveButton.hidden || approveBox.hidden; };
+  approveButton.addEventListener('click', () => { approveBox.hidden = !approveBox.hidden; });
   const select = el('select', { attrs: { 'aria-label': `Cambiar estado de la solicitud de ${row.requester_name || row.email || ''}` } }, Object.entries(ADMIN_STATUS_LABELS).map(([value, text]) => el('option', { value, text })));
   select.value = row.status;
   select.addEventListener('change', async () => {
@@ -295,12 +323,121 @@ function adminRequestRow(row) {
       const updated = await setContactStatus(row.id, select.value);
       row.status = updated.status;
       statusCell.textContent = ADMIN_STATUS_LABELS[updated.status] || updated.status;
+      syncApprove();
       announce('Estado actualizado');
     } catch (error) { select.value = previous; announce(asApiError(error).message); } finally { select.disabled = false; }
   });
+  syncApprove();
   return el('tr', {}, [
     el('td', { text: row.requester_name || '' }), el('td', { text: row.email || '' }), el('td', { text: ADMIN_KIND_LABELS[row.requested_kind] || row.requested_kind || '' }),
-    statusCell, el('td', { text: formatAdminDate(row.created_at) }), el('td', { className: 'admin-msg', text: row.message || '' }), el('td', {}, [select]),
+    statusCell, el('td', { text: formatAdminDate(row.created_at) }), el('td', { className: 'admin-msg', text: row.message || '' }),
+    el('td', {}, [select, approveButton, approveBox]),
+  ]);
+}
+
+// Mini formulario de aprobación: el slug propuesto sale del nombre y es editable. La URL se devuelve una sola vez.
+function approveFormFor(row, { onApproved }) {
+  const slug = el('input', { id: `ap-slug-${row.id}`, type: 'text', value: slugFromName(row.requester_name), autocomplete: 'off', spellcheck: false, attrs: { maxlength: '120' } });
+  const name = el('input', { id: `ap-name-${row.id}`, type: 'text', value: row.requester_name || '', autocomplete: 'off', attrs: { maxlength: '160' } });
+  const feedback = el('div', { attrs: { 'aria-live': 'polite' } });
+  const submit = el('button', { className: 'button', type: 'submit', text: 'Crear enlace de invitación' });
+  const form = el('form', { className: 'admin-invite-form' }, [
+    el('div', { className: 'pe-field' }, [el('label', { htmlFor: slug.id, text: 'Identificador del perfil' }), slug]),
+    el('div', { className: 'pe-field' }, [el('label', { htmlFor: name.id, text: 'Nombre del perfil' }), name]),
+    submit, feedback,
+  ]);
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    feedback.replaceChildren();
+    const slugValue = slug.value.trim();
+    const nameValue = name.value.trim();
+    if (slugValue.length < 2 || slugValue.length > 120 || !SLUG_PATTERN.test(slugValue)) { feedback.replaceChildren(adminNotice('Escribe un identificador válido: minúsculas, números y guiones.')); return; }
+    if (!nameValue || nameValue.length > 160) { feedback.replaceChildren(adminNotice('Escribe un nombre de 1 a 160 caracteres.')); return; }
+    submit.disabled = true;
+    try {
+      const data = await approveContactRequest(row.id, { slug: slugValue, display_name: nameValue });
+      onApproved(data);
+    } catch (error) { feedback.replaceChildren(adminErrorNode(error)); } finally { submit.disabled = false; }
+  });
+  return form;
+}
+
+function adminAccounts() {
+  const feedback = el('div', { attrs: { 'aria-live': 'polite' } });
+  const box = el('div', { attrs: { 'aria-live': 'polite' } });
+  const load = async () => {
+    feedback.replaceChildren();
+    box.replaceChildren(el('p', { className: 'muted', text: 'Cargando cuentas…' }));
+    try {
+      const rows = await listAccounts({ limit: 50 });
+      if (!rows.length) { box.replaceChildren(el('p', { className: 'muted', text: 'No hay cuentas.' })); return; }
+      box.replaceChildren(adminTable(['Nombre', 'Correo', 'Estado', 'Rol de plataforma', 'Último acceso', 'Acción'], rows.map((row) => accountRow(row, { onChange: load, feedback }))));
+    } catch (error) { box.replaceChildren(authErrorPanel(asApiError(error), load)); }
+  };
+  void load();
+  return { node: el('div', { className: 'detail-panel' }, [el('h2', { text: 'Cuentas' }), feedback, box]), load };
+}
+
+function accountRow(row, { onChange, feedback }) {
+  const suspended = row.status === 'suspended';
+  const button = el('button', { className: 'button secondary', type: 'button', text: suspended ? 'Reactivar' : 'Suspender' });
+  button.addEventListener('click', async () => {
+    if (!suspended && !window.confirm('¿Suspender esta cuenta? Se cerrarán sus sesiones.')) return;
+    button.disabled = true;
+    feedback.replaceChildren();
+    try {
+      await setAccountStatus(row.profile_id, suspended ? 'active' : 'suspended');
+      announce('Estado de la cuenta actualizado');
+      await onChange();
+    } catch (error) { button.disabled = false; feedback.replaceChildren(adminErrorNode(error)); }
+  });
+  return el('tr', {}, [
+    el('td', { text: row.display_name || '' }), el('td', { text: row.invited_email || '' }),
+    el('td', { text: ACCOUNT_STATUS_LABELS[row.status] || row.status || '' }),
+    el('td', { text: ADMIN_ROLE_LABELS[row.platform_role] || row.platform_role || '—' }),
+    el('td', { text: row.last_seen_at ? formatAdminDate(row.last_seen_at) : '—' }),
+    el('td', {}, [button]),
+  ]);
+}
+
+function invitationStateOf(row) {
+  if (row.consumed_at) return 'aceptada';
+  if (row.revoked_at) return 'revocada';
+  if (new Date(row.expires_at).getTime() <= Date.now()) return 'vencida';
+  return 'pendiente';
+}
+
+function adminInvitations() {
+  const feedback = el('div', { attrs: { 'aria-live': 'polite' } });
+  const box = el('div', { attrs: { 'aria-live': 'polite' } });
+  const load = async () => {
+    feedback.replaceChildren();
+    box.replaceChildren(el('p', { className: 'muted', text: 'Cargando invitaciones…' }));
+    try {
+      const rows = await listInvitations({ limit: 50 });
+      if (!rows.length) { box.replaceChildren(el('p', { className: 'muted', text: 'No hay invitaciones.' })); return; }
+      box.replaceChildren(adminTable(['Correo', 'Tipo', 'Rol', 'Estado', 'Caduca', 'Acción'], rows.map((row) => invitationRow(row, { onChange: load, feedback }))));
+    } catch (error) { box.replaceChildren(authErrorPanel(asApiError(error), load)); }
+  };
+  void load();
+  return { node: el('div', { className: 'detail-panel' }, [el('h2', { text: 'Invitaciones' }), feedback, box]), load };
+}
+
+function invitationRow(row, { onChange, feedback }) {
+  const state = invitationStateOf(row);
+  const revoke = state === 'pendiente' ? el('button', { className: 'button secondary', type: 'button', text: 'Revocar' }) : null;
+  if (revoke) {
+    revoke.addEventListener('click', async () => {
+      revoke.disabled = true;
+      feedback.replaceChildren();
+      try { await revokeInvitation(row.id); announce('Invitación revocada'); await onChange(); }
+      catch (error) { revoke.disabled = false; feedback.replaceChildren(adminErrorNode(error)); }
+    });
+  }
+  return el('tr', {}, [
+    el('td', { text: row.invited_email || '' }), el('td', { text: INVITATION_KIND_LABELS[row.kind] || row.kind || '' }),
+    el('td', { text: ADMIN_ROLE_LABELS[row.role] || row.role || '' }), el('td', { text: INVITATION_STATE_LABELS[state] }),
+    el('td', { text: formatAdminDate(row.expires_at) }), el('td', {}, [revoke]),
   ]);
 }
 
@@ -363,8 +500,21 @@ function renderCurrentRoute() {
   switch (route) {
     case 'home': renderHome(); break; case 'explorar': renderExplore(); break; case 'eventos': renderEvents(); break; case 'evento-detalle': renderDetail('event'); break; case 'artistas': renderArtists(); break; case 'artista-detalle': renderDetail('artist'); break; case 'foros': renderVenues(); break; case 'foro-detalle': renderDetail('venue'); break; case 'mapa': renderMap(); break; case 'favoritos': renderFavorites(); break; case 'onboarding': renderOnboarding(); break; case 'creadores': renderCreators(); break; case 'unete': renderJoin(); break; case 'invitacion': renderInvitation(); break; case 'admin': renderAdmin(); break; case 'perfil': renderProfile(); break; case 'convocatorias': renderCalls(); break; case 'sobre': renderInfo('sobre'); break; case 'ayuda': renderInfo('ayuda'); break; case 'accesibilidad': renderInfo('accesibilidad'); break; case 'privacidad': renderInfo('privacidad'); break; case 'terminos': renderInfo('terminos'); break; default: renderNotFound();
   }
+  showLoginErrorNotice();
   renderFooter();
   if (scrollY > 0) window.scrollTo(0, scrollY);
+}
+
+// Vuelta del login con error (?login=error en cualquier ruta). Sin motivo: el servidor no lo revela.
+function showLoginErrorNotice() {
+  if (new URLSearchParams(window.location.search).get('login') !== 'error') return;
+  const main = document.querySelector('main#contenido');
+  if (!main) return;
+  main.prepend(el('p', { className: 'notice', attrs: { role: 'alert' } }, [
+    'No pudimos iniciar tu sesión. Si aún no tienes acceso, solicítalo en ',
+    el('a', { href: routes.unete, text: 'Únete' }),
+    ' o pide una invitación al equipo de Cuicoyan.',
+  ]));
 }
 
 let remoteCatalogReady = false;

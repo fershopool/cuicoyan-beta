@@ -62,26 +62,24 @@ test('Turnstile: widget en el formulario, token enviado, CSP solo abre challenge
   assert.doesNotMatch(src('config/environment.js') + src('components/turnstile.js'), /TURNSTILE_SECRET/);
 });
 
-test('invitación: token en fragmento, se quita de la URL, sobrevive al login y se borra al aceptar', async () => {
-  const mem = new Map();
+test('invitación: token en fragmento, se quita de la URL y no se guarda; startInvitation devuelve la URL de autorización', async () => {
   const replaced = [];
-  globalThis.window = { location: { origin: 'https://x.test', pathname: '/invitacion/', search: '', hash: '#t=TOK&o=OLL' }, history: { replaceState: (_s, _t, url) => replaced.push(url) }, sessionStorage: { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v), removeItem: (k) => mem.delete(k) } };
+  globalThis.window = { location: { origin: 'https://x.test', pathname: '/invitacion/', search: '', hash: '#t=TOK' }, history: { replaceState: (_s, _t, url) => replaced.push(url) } };
   globalThis.document = { title: '' };
   const svc = await import('../frontend/src/services/auth.service.js');
-  assert.deepEqual(svc.invitationParams(), { token: 'TOK', ollin: 'OLL' });
+  assert.deepEqual(svc.invitationParams(), { token: 'TOK' });
   assert.deepEqual(replaced, ['/invitacion/']);
-  svc.markOllinTokenUsed('TOK');
-  window.location.hash = ''; // vuelta del login: sin fragmento
-  assert.deepEqual(svc.invitationParams(), { token: 'TOK', ollin: '' });
+  window.location.hash = ''; // sin fragmento no hay token: nada se guarda entre visitas
+  assert.deepEqual(svc.invitationParams(), { token: '' });
   const calls = [];
-  globalThis.fetch = async (url, init) => { calls.push({ url, init }); return { ok: true }; };
-  assert.equal(await svc.startInvitationLogin('OLL'), '/auth/login?return_to=%2Finvitacion%2F'); // el token ya no va en la URL
+  globalThis.fetch = async (url, init) => { calls.push({ url, init }); return { ok: true, json: async () => ({ data: { redirect: 'https://idp.test/authorize?x=1' } }) }; };
+  assert.equal(await svc.startInvitation('TOK'), 'https://idp.test/authorize?x=1');
   assert.equal(calls[0].url, '/auth/invite');
   assert.equal(calls[0].init.method, 'POST');
-  assert.deepEqual(JSON.parse(calls[0].init.body), { invite: 'OLL' });
+  assert.deepEqual(JSON.parse(calls[0].init.body), { token: 'TOK', return_to: '/perfil/' });
   assert.ok(calls[0].init.headers['X-Requested-With']);
-  svc.clearInvitation();
-  assert.deepEqual(svc.invitationParams(), { token: '', ollin: '' });
+  globalThis.fetch = async () => ({ ok: false, status: 400, json: async () => ({ code: 'invalid_request' }) });
+  await assert.rejects(svc.startInvitation('MAL'), (e) => e.kind === 'invitation');
   assert.match(src('pages/invitacion/invitacion.html'), /name="referrer" content="no-referrer"/);
 });
 
@@ -93,19 +91,4 @@ test('CSP: /unete permite Turnstile (script, frame y connect); /invitacion tiene
   assert.match(inv, /Content-Security-Policy/);
   assert.match(inv, /script-src 'self';/);
   assert.doesNotMatch(inv, /cloudflare|unsafe-eval/);
-});
-
-test('el token de invitación guardado caduca a los 10 minutos', async () => {
-  const mem = new Map(); const replaced = [];
-  globalThis.window = { location: { origin: 'https://x.test', pathname: '/invitacion/', search: '', hash: '#t=TOK&o=OLL' }, history: { replaceState: (_s, _t, url) => replaced.push(url) }, sessionStorage: { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v), removeItem: (k) => mem.delete(k) } };
-  globalThis.document = { title: '' };
-  const svc = await import('../frontend/src/services/auth.service.js?exp');
-  svc.invitationParams();
-  window.location.hash = '';
-  const realNow = Date.now;
-  try {
-    Date.now = () => realNow() + 11 * 60 * 1000;
-    assert.deepEqual(svc.invitationParams(), { token: '', ollin: '' });
-    assert.equal(mem.size, 0);
-  } finally { Date.now = realNow; }
 });

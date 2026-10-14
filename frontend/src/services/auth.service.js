@@ -24,7 +24,10 @@ export async function apiRequest(path, options = {}, { invitation = false } = {}
   if (response.ok) { idpFailingSince = null; return body; }
   const kind = classifyError(response.status, body, { invitation });
   if (kind === 'idp') idpFailingSince ??= Date.now();
-  throw new ApiError(kind, idpPhase({ failingSince: idpFailingSince, now: Date.now(), graceSeconds: environment.idpFailureGraceSeconds }));
+  const error = new ApiError(kind, idpPhase({ failingSince: idpFailingSince, now: Date.now(), graceSeconds: environment.idpFailureGraceSeconds }));
+  // Solo el código de una lista cerrada del servidor (p. ej. slug_taken); nunca el texto del error.
+  error.code = typeof body?.code === 'string' ? body.code : undefined;
+  throw error;
 }
 
 export async function logout() {
@@ -33,43 +36,28 @@ export async function logout() {
   } catch { /* sin red: la cookie caduca sola */ }
 }
 
-// El token de invitación llega en el fragmento (#t=...&o=...): no viaja al servidor ni al Referer. Se quita de la URL
-// y se guarda en sessionStorage solo mientras dura el login; se borra al aceptar o al fallar la invitación.
-const INVITE_KEY = 'cuicoyan_invite';
-const INVITE_LIFETIME_MS = 10 * 60 * 1000; // el login dura minutos; pasado ese tiempo el token guardado se descarta
-const store = () => { try { return window.sessionStorage; } catch { return null; } };
-
+// El token de invitación llega en el fragmento (#t=...): no viaja al servidor ni al Referer. Se quita de la URL
+// y no se guarda en ningún almacenamiento: vive solo en memoria de la página hasta que se inicia el login.
 export function invitationParams() {
   const fragment = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-  if (fragment.get('t')) {
-    try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: fragment.get('t'), o: fragment.get('o') || '', at: Date.now() })); } catch { /* sin almacenamiento: queda en memoria */ }
-    window.history.replaceState({}, document.title, window.location.pathname);
-    return { token: fragment.get('t'), ollin: fragment.get('o') || '' };
-  }
+  const token = fragment.get('t') || '';
+  if (window.location.hash) window.history.replaceState({}, document.title, `${window.location.pathname}${window.location.search}`);
+  return { token };
+}
+
+// El servidor guarda la invitación en la cookie de flujo y devuelve la URL de autorización del IdP.
+export async function startInvitation(token, returnTo = '/perfil/') {
+  let response;
   try {
-    const saved = JSON.parse(store()?.getItem(INVITE_KEY) || 'null');
-    if (saved?.t && Date.now() - (saved.at || 0) < INVITE_LIFETIME_MS) return { token: saved.t, ollin: saved.o || '' };
-    if (saved) clearInvitation();
-  } catch { /* almacenamiento corrupto: se ignora */ }
-  return { token: '', ollin: '' };
-}
-
-// Tras entregar el token de Ollin al login, deja solo el token de Cuicoyan (el de Ollin es de un solo uso).
-export function markOllinTokenUsed(token) {
-  try { store()?.setItem(INVITE_KEY, JSON.stringify({ t: token, o: '', at: Date.now() })); } catch { /* ver arriba */ }
-}
-
-export function clearInvitation() {
-  try { store()?.removeItem(INVITE_KEY); } catch { /* ver arriba */ }
-}
-
-// L6: el token de Ollin va por POST (cookie HttpOnly de 5 min en el auth-server), nunca en la URL de /auth/login.
-export async function startInvitationLogin(ollinToken) {
-  const response = await fetch('/auth/invite', {
-    method: 'POST', credentials: 'same-origin',
-    headers: { 'Content-Type': 'application/json', 'X-Requested-With': environment.csrfHeaderValue },
-    body: JSON.stringify({ invite: ollinToken }),
-  });
-  if (!response.ok) throw new ApiError('invitation');
-  return loginUrl('/invitacion/');
+    response = await fetch('/auth/invite', {
+      method: 'POST', credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': environment.csrfHeaderValue },
+      body: JSON.stringify({ token, return_to: returnTo }),
+    });
+  } catch {
+    throw new ApiError('invitation');
+  }
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || typeof body?.data?.redirect !== 'string') throw new ApiError('invitation');
+  return body.data.redirect;
 }
