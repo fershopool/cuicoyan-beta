@@ -15,7 +15,8 @@ import { renderProfileEditor } from './components/profile-editor.js';
 import { renderVenueEditor } from './components/venue-editor.js';
 import { TEST_EDIT_ACCESS } from './config/test-access.js';
 import { apiRequest, clearInvitation, invitationParams, loginUrl, logout, markOllinTokenUsed, startInvitationLogin } from './services/auth.service.js';
-import { messageFor } from './services/auth-errors.js';
+import { ApiError, messageFor } from './services/auth-errors.js';
+import { adminStatus, registerPasskey, stepUp, listContactRequests, setContactStatus, createInvitation } from './services/admin.service.js';
 
 
 const stylesheet = document.createElement('link');
@@ -189,6 +190,120 @@ function renderInvitation() {
   state.replaceChildren(el('p', { text: 'Tu invitación está lista.' }), button);
   return main;
 }
+// Panel de administración (Fase 4c). Todo texto del servidor va con textContent (helper `el`). Sin innerHTML.
+const ADMIN_STATUS_LABELS = { received: 'Recibida', contacted: 'Contactada', converted: 'Convertida', closed: 'Cerrada', spam: 'Spam' };
+const ADMIN_KIND_LABELS = { artista: 'Artista', foro: 'Foro' };
+const ADMIN_ROLE_LABELS = { owner: 'Propietario', editor: 'Editor', admin: 'Administrador', reviewer: 'Revisor' };
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const asApiError = (error) => (error instanceof ApiError ? error : new ApiError('generic'));
+const formatAdminDate = (value) => { const date = new Date(value); return Number.isNaN(date.getTime()) ? String(value ?? '') : date.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' }); };
+
+function renderAdmin() {
+  const state = el('div', { id: 'admin-state', className: 'admin-state', attrs: { 'aria-live': 'polite' } });
+  pageFrame({ eyebrow: 'Equipo Cuicoyan', title: 'Panel de administración.', description: 'Solicitudes e invitaciones. Las acciones sensibles requieren verificación con passkey.', children: [section('', [state])] });
+  void loadAdmin(state);
+}
+
+async function loadAdmin(state) {
+  state.replaceChildren(el('p', { className: 'muted', text: 'Verificando acceso…' }));
+  let status;
+  try { status = await adminStatus(); } catch (error) { state.replaceChildren(authErrorPanel(asApiError(error), () => loadAdmin(state))); return; }
+  if (!status.admin) { state.replaceChildren(el('p', { className: 'notice', text: 'Esta cuenta no tiene acceso de administración.', attrs: { role: 'alert' } })); return; }
+  if (status.credentials === 0) { state.replaceChildren(adminGate(state, 'Aún no hay ninguna passkey de administración para esta cuenta.', 'Registrar passkey de administración', () => registerPasskey())); return; }
+  if (!status.verified) { state.replaceChildren(adminGate(state, 'Confirma tu identidad con tu passkey de administración para continuar.', 'Verificar con passkey', () => stepUp())); return; }
+  state.replaceChildren(adminPanel());
+}
+
+function adminGate(state, text, label, action) {
+  const feedback = el('div', { attrs: { 'aria-live': 'polite' } });
+  const button = el('button', { className: 'button', type: 'button', text: label });
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    feedback.replaceChildren();
+    try { await action(); await loadAdmin(state); } catch (error) { button.disabled = false; feedback.replaceChildren(authErrorPanel(asApiError(error))); }
+  });
+  return el('div', { className: 'detail-panel' }, [el('p', { text }), button, feedback]);
+}
+
+function adminPanel() {
+  const filter = el('select', { id: 'admin-filter', attrs: { 'aria-label': 'Filtrar solicitudes por estado' } }, [el('option', { value: '', text: 'Todos los estados' }), ...Object.entries(ADMIN_STATUS_LABELS).map(([value, text]) => el('option', { value, text }))]);
+  const box = el('div', { attrs: { 'aria-live': 'polite' } });
+  const loadRequests = async () => {
+    box.replaceChildren(el('p', { className: 'muted', text: 'Cargando solicitudes…' }));
+    try {
+      const rows = await listContactRequests({ status: filter.value || undefined, limit: 50 });
+      if (!rows.length) { box.replaceChildren(el('p', { className: 'muted', text: 'No hay solicitudes con este filtro.' })); return; }
+      box.replaceChildren(el('div', { className: 'admin-table-wrap' }, [el('table', { className: 'admin-table' }, [
+        el('thead', {}, [el('tr', {}, ['Nombre', 'Correo', 'Tipo', 'Estado', 'Fecha', 'Mensaje', 'Cambiar estado'].map((text) => el('th', { attrs: { scope: 'col' }, text })))]),
+        el('tbody', {}, rows.map(adminRequestRow)),
+      ])]));
+    } catch (error) { box.replaceChildren(authErrorPanel(asApiError(error), loadRequests)); }
+  };
+  filter.addEventListener('change', loadRequests);
+
+  const kind = el('select', { id: 'inv-kind' }, [el('option', { value: 'member', text: 'Miembro de un perfil' }), el('option', { value: 'platform', text: 'Plataforma (administración)' })]);
+  const profile = el('input', { id: 'inv-profile', type: 'text', autocomplete: 'off', attrs: { placeholder: '00000000-0000-0000-0000-000000000000', spellcheck: 'false' } });
+  const profileField = el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'inv-profile', text: 'Perfil (UUID)' }), profile]);
+  kind.addEventListener('change', () => { profileField.hidden = kind.value !== 'member'; });
+  const role = el('select', { id: 'inv-role' }, Object.entries(ADMIN_ROLE_LABELS).map(([value, text]) => el('option', { value, text })));
+  const email = el('input', { id: 'inv-email', type: 'email', autocomplete: 'off', attrs: { required: '' } });
+  const result = el('div', { attrs: { 'aria-live': 'polite' } });
+  const submit = el('button', { className: 'button', type: 'submit', text: 'Crear invitación' });
+  const form = el('form', { className: 'admin-invite-form' }, [
+    el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'inv-kind', text: 'Tipo' }), kind]),
+    profileField,
+    el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'inv-role', text: 'Rol' }), role]),
+    el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'inv-email', text: 'Correo de la persona invitada' }), email]),
+    submit,
+  ]);
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    result.replaceChildren();
+    const isMember = kind.value === 'member';
+    if (isMember && !UUID_PATTERN.test(profile.value.trim())) { result.replaceChildren(el('p', { className: 'notice', text: 'Escribe un perfil válido (UUID).', attrs: { role: 'alert' } })); return; }
+    submit.disabled = true;
+    try {
+      const data = await createInvitation({ kind: kind.value, profile_id: isMember ? profile.value.trim() : undefined, role: role.value, email: email.value.trim() });
+      email.value = '';
+      const minutes = Math.max(1, Math.round((Number(data.expires_in) || 0) / 60));
+      const copy = el('button', { className: 'button secondary', type: 'button', text: 'Copiar enlace' });
+      const link = el('input', { id: 'inv-url', type: 'text', readOnly: true, value: data.url, attrs: { 'aria-label': 'Enlace de invitación' } });
+      copy.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(link.value); announce('Enlace copiado'); } catch { link.select(); announce('Selecciona el enlace y cópialo manualmente'); }
+      });
+      result.replaceChildren(el('div', { className: 'detail-panel' }, [el('p', { text: 'Invitación creada.' }), link, copy, el('p', { className: 'notice', text: `Se muestra una sola vez. Caduca en ${minutes} min.` })]));
+    } catch (error) {
+      const apiError = asApiError(error);
+      result.replaceChildren(apiError.kind === 'generic' ? el('p', { className: 'notice', text: 'No se pudo crear la invitación. Revisa los datos e inténtalo de nuevo.', attrs: { role: 'alert' } }) : authErrorPanel(apiError));
+    } finally { submit.disabled = false; }
+  });
+  void loadRequests();
+  return el('div', { className: 'admin-panel' }, [
+    el('div', { className: 'detail-panel' }, [el('h2', { text: 'Solicitudes de contacto' }), el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'admin-filter', text: 'Estado' }), filter]), box]),
+    el('div', { className: 'detail-panel' }, [el('h2', { text: 'Invitar' }), form, result]),
+  ]);
+}
+
+function adminRequestRow(row) {
+  const statusCell = el('td', { text: ADMIN_STATUS_LABELS[row.status] || row.status || '' });
+  const select = el('select', { attrs: { 'aria-label': `Cambiar estado de la solicitud de ${row.requester_name || row.email || ''}` } }, Object.entries(ADMIN_STATUS_LABELS).map(([value, text]) => el('option', { value, text })));
+  select.value = row.status;
+  select.addEventListener('change', async () => {
+    const previous = row.status;
+    select.disabled = true;
+    try {
+      const updated = await setContactStatus(row.id, select.value);
+      row.status = updated.status;
+      statusCell.textContent = ADMIN_STATUS_LABELS[updated.status] || updated.status;
+      announce('Estado actualizado');
+    } catch (error) { select.value = previous; announce(asApiError(error).message); } finally { select.disabled = false; }
+  });
+  return el('tr', {}, [
+    el('td', { text: row.requester_name || '' }), el('td', { text: row.email || '' }), el('td', { text: ADMIN_KIND_LABELS[row.requested_kind] || row.requested_kind || '' }),
+    statusCell, el('td', { text: formatAdminDate(row.created_at) }), el('td', { className: 'admin-msg', text: row.message || '' }), el('td', {}, [select]),
+  ]);
+}
+
 function renderProfile() {
   const statusLabels = { draft: 'Borrador', pending_review: 'En revisión', published: 'Publicado', rejected: 'Rechazado', suspended: 'Suspendido' };
   const mount = (main) => { ($('#contenido') || $('#app')).replaceWith(main); };
@@ -246,7 +361,7 @@ function renderCurrentRoute() {
   const route = routeForPath();
   renderShell(route);
   switch (route) {
-    case 'home': renderHome(); break; case 'explorar': renderExplore(); break; case 'eventos': renderEvents(); break; case 'evento-detalle': renderDetail('event'); break; case 'artistas': renderArtists(); break; case 'artista-detalle': renderDetail('artist'); break; case 'foros': renderVenues(); break; case 'foro-detalle': renderDetail('venue'); break; case 'mapa': renderMap(); break; case 'favoritos': renderFavorites(); break; case 'onboarding': renderOnboarding(); break; case 'creadores': renderCreators(); break; case 'unete': renderJoin(); break; case 'invitacion': renderInvitation(); break; case 'perfil': renderProfile(); break; case 'convocatorias': renderCalls(); break; case 'sobre': renderInfo('sobre'); break; case 'ayuda': renderInfo('ayuda'); break; case 'accesibilidad': renderInfo('accesibilidad'); break; case 'privacidad': renderInfo('privacidad'); break; case 'terminos': renderInfo('terminos'); break; default: renderNotFound();
+    case 'home': renderHome(); break; case 'explorar': renderExplore(); break; case 'eventos': renderEvents(); break; case 'evento-detalle': renderDetail('event'); break; case 'artistas': renderArtists(); break; case 'artista-detalle': renderDetail('artist'); break; case 'foros': renderVenues(); break; case 'foro-detalle': renderDetail('venue'); break; case 'mapa': renderMap(); break; case 'favoritos': renderFavorites(); break; case 'onboarding': renderOnboarding(); break; case 'creadores': renderCreators(); break; case 'unete': renderJoin(); break; case 'invitacion': renderInvitation(); break; case 'admin': renderAdmin(); break; case 'perfil': renderProfile(); break; case 'convocatorias': renderCalls(); break; case 'sobre': renderInfo('sobre'); break; case 'ayuda': renderInfo('ayuda'); break; case 'accesibilidad': renderInfo('accesibilidad'); break; case 'privacidad': renderInfo('privacidad'); break; case 'terminos': renderInfo('terminos'); break; default: renderNotFound();
   }
   renderFooter();
   if (scrollY > 0) window.scrollTo(0, scrollY);
