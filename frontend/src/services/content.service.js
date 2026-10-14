@@ -84,13 +84,19 @@ function coordinatesFrom(row) {
 function dateLabel(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return 'Fecha por confirmar';
-  return new Intl.DateTimeFormat('es-MX', {
+  // Mismo formato que las fijas ("Sáb 8 de agosto · 6:00 p. m."), en hora de CDMX; eventDateParts lo acorta en las tarjetas.
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('es-MX', {
+    timeZone: 'America/Mexico_City',
     weekday: 'short',
     day: 'numeric',
     month: 'long',
     hour: 'numeric',
     minute: '2-digit',
-  }).format(date);
+    hour12: true,
+  }).formatToParts(date).map((part) => [part.type, part.value]));
+  const weekday = String(parts.weekday).replace('.', '');
+  const period = String(parts.dayPeriod).replace(/[\s\u00a0\u202f]+/g, ' ');
+  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)} ${parts.day} de ${parts.month} · ${parts.hour}:${parts.minute} ${period}`;
 }
 
 export function mapRemoteEvent(row) {

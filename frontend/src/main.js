@@ -121,7 +121,7 @@ function renderVenues() { renderVenuesPage(venues); }
 
 function renderDetail(type) {
   const slug = window.location.pathname.split('/').filter(Boolean).at(-1);
-  const item = type === 'event' ? getEvent(slug) : type === 'artist' ? getArtist(slug) : getVenue(slug);
+  const item = type === 'event' ? (events.find((entry) => entry.slug === slug) || getEvent(slug)) : type === 'artist' ? getArtist(slug) : getVenue(slug);
   if (!item && type !== 'event' && !remoteCatalogReady) {
     // Enlace directo a un artista o foro remoto: esperar a que cargue el catálogo antes de decidir 404.
     pageFrame({ eyebrow: type === 'artist' ? 'Artista' : 'Foro', title: 'Cargando…', description: '', children: [] });
@@ -231,13 +231,24 @@ function renderCalls() { const calls = getCalls(); return pageFrame({ eyebrow: '
 function renderInfo(kind) { const content = { sobre: ['Sobre Cuicoyan', 'Una plataforma cultural para descubrir, conectar y compartir la vida cultural de CDMX.', 'Cuicoyan reúne eventos, artistas, foros y territorio en una experiencia de exploración clara. Esta entrega es un staging estático: no representa una operación activa ni afirma alianzas, cifras o infraestructura.'], ayuda: ['Centro de ayuda', 'Respuestas breves para recorrer el prototipo.', ''], accesibilidad: ['Accesibilidad', 'El sitio está construido con la accesibilidad como criterio de diseño.', 'Trabajamos para ofrecer navegación por teclado, foco visible, contraste AA, alternativa textual del mapa y respeto a reduced motion. El canal para reportar barreras queda pendiente de configuración.'], privacidad: ['Aviso de privacidad', 'Documento de staging pendiente de validación legal.', 'Esta versión no crea cuentas ni incorpora analítica. Si llenas un formulario de registro, tus datos se envían por correo al equipo de Cuicoyan (mediante el servicio FormSubmit) solo para revisar tu solicitud; no se publican. Tema, intereses y favoritos se guardan localmente en tu navegador y puedes borrarlos desde onboarding. Antes de publicar se requiere responsable, versión y texto legal aprobado.'], terminos: ['Términos y convivencia', 'Texto de staging pendiente de aprobación.', 'El contenido demostrativo no constituye una cartelera, promesa de disponibilidad ni contrato de compra. No hay pagos, reservas, boletos, cuentas ni publicaciones remotas en esta entrega.'] }; const [title, desc, body] = content[kind]; const children = [section('', [kind === 'ayuda' ? el('div', { className: 'faq' }, getHelp().map((item) => el('details', {}, [el('summary', { text: item.question }), el('p', { text: item.answer })]))) : el('div', { className: 'prose' }, [demoNotice(), el('p', { text: body }), kind === 'privacidad' || kind === 'terminos' ? el('p', { className: 'muted', text: 'Versión de staging · sin publicación legal definitiva.' }) : null])])]; return pageFrame({ eyebrow: kind === 'sobre' ? 'El lugar del canto' : 'Información', title, description: desc, children }); }
 function renderNotFound() { return pageFrame({ eyebrow: '404', title: 'Esta ruta no está disponible.', description: 'Regresa a Cuicoyan para continuar explorando.', children: [section('', [el('a', { className: 'button', href: routes.home, text: 'Volver al inicio' })]) ] }); }
 
+// Cada pantalla monta su <main> sobre #app. Al repintar (p. ej. cuando llegan datos remotos) se parte de una
+// página limpia: sin esto #app ya no existe, el contenido no se reemplaza y la cabecera se duplica.
+function resetPage() {
+  document.body.querySelectorAll(':scope > .skip-link, :scope > .site-header, :scope > .app-dock, :scope > .bg-flora, :scope > #site-live, :scope > .site-footer').forEach((node) => node.remove());
+  const main = document.querySelector('body > main#contenido');
+  if (main) main.replaceWith(Object.assign(document.createElement('div'), { id: 'app' }));
+}
+
 function renderCurrentRoute() {
+  const scrollY = window.scrollY;
+  resetPage();
   const route = routeForPath();
   renderShell(route);
   switch (route) {
     case 'home': renderHome(); break; case 'explorar': renderExplore(); break; case 'eventos': renderEvents(); break; case 'evento-detalle': renderDetail('event'); break; case 'artistas': renderArtists(); break; case 'artista-detalle': renderDetail('artist'); break; case 'foros': renderVenues(); break; case 'foro-detalle': renderDetail('venue'); break; case 'mapa': renderMap(); break; case 'favoritos': renderFavorites(); break; case 'onboarding': renderOnboarding(); break; case 'creadores': renderCreators(); break; case 'unete': renderJoin(); break; case 'invitacion': renderInvitation(); break; case 'perfil': renderProfile(); break; case 'convocatorias': renderCalls(); break; case 'sobre': renderInfo('sobre'); break; case 'ayuda': renderInfo('ayuda'); break; case 'accesibilidad': renderInfo('accesibilidad'); break; case 'privacidad': renderInfo('privacidad'); break; case 'terminos': renderInfo('terminos'); break; default: renderNotFound();
   }
   renderFooter();
+  if (scrollY > 0) window.scrollTo(0, scrollY);
 }
 
 let remoteCatalogReady = false;
