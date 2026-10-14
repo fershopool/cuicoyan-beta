@@ -206,7 +206,8 @@ function renderProfile() {
     }));
   }).catch((error) => {
     // Sin sesión o sin API: editores de demostración (artista / foro) de cualquier registro. ponytail: quitar al conectar la base de datos.
-    if (!TEST_EDIT_ACCESS) {
+    // Sin sesión (401) se ofrece iniciar sesión; los editores de demostración quedan solo como respaldo si la API no responde.
+    if (!TEST_EDIT_ACCESS || error?.kind === 'session') {
       const panel = error?.kind ? authErrorPanel(error, renderProfile) : authErrorPanel({ kind: 'session' });
       mount(el('main', { id: 'contenido', className: 'app-page' }, [el('div', { className: 'app-wrap' }, [el('h1', { text: 'Edición no disponible' }), panel, linkButton('Volver al inicio', routes.home)])]));
       return;
