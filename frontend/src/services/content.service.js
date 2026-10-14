@@ -4,7 +4,7 @@ import venues from '../data/venues.json' with { type: 'json' };
 import categories from '../data/categories.json' with { type: 'json' };
 import convocatorias from '../data/convocatorias.json' with { type: 'json' };
 import help from '../data/help.json' with { type: 'json' };
-import { isVisible } from '../config/content-status.js';
+import { CONTENT_STATUS, isVisible } from '../config/content-status.js';
 import { environment } from '../config/environment.js';
 import { withDraft } from './profile-draft.service.js';
 
@@ -16,10 +16,13 @@ export const getCategories = () => categories;
 export const getCalls = () => visible(convocatorias);
 export const getHelp = () => visible(help);
 export const getEvent = (slug) => getCachedRemoteEvent(slug) || getEvents().find((item) => item.slug === slug);
-export const getArtist = (slug) => getArtists().find((item) => item.slug === slug);
-export const getVenue = (slug) => getVenues().find((item) => item.slug === slug);
-export const getVenueById = (id) => getVenues().find((item) => item.id === id);
-export const getArtistById = (id) => getArtists().find((item) => item.id === id);
+// Los registros remotos (cargados por main.js) se buscan primero; los fixtures quedan como respaldo.
+let remoteVenueList = [];
+let remoteArtistList = [];
+export const getArtist = (slug) => remoteArtistList.find((item) => item.slug === slug) || getArtists().find((item) => item.slug === slug);
+export const getVenue = (slug) => remoteVenueList.find((item) => item.slug === slug) || getVenues().find((item) => item.slug === slug);
+export const getVenueById = (id) => remoteVenueList.find((item) => item.id === id) || getVenues().find((item) => item.id === id);
+export const getArtistById = (id) => remoteArtistList.find((item) => item.id === id) || getArtists().find((item) => item.id === id);
 
 const REMOTE_EVENT_CACHE_TTL_MS = 5 * 60 * 1000;
 const REMOTE_EVENT_CACHE_MAX_SIZE = 50;
@@ -90,13 +93,14 @@ function dateLabel(value) {
   }).format(date);
 }
 
-function mapRemoteEvent(row) {
+export function mapRemoteEvent(row) {
   const categories = listValue(firstValue(row.category_slugs, row.categories, row.category));
   const venue = row.space || row.venue || {};
   const venueId = firstValue(row.space_id, row.venue_id, venue.space_id, venue.id);
   const venueName = firstValue(row.space_name, row.venue_name, venue.name, 'Sede por confirmar');
   const venueZone = firstValue(row.neighborhood, row.borough, row.zone, venue.neighborhood, venue.borough, venue.zone, 'CDMX');
   const venueAddress = firstValue(row.address, row.space_address, venue.address);
+  const isDemo = row.is_demo === true;
   return {
     id: firstValue(row.event_id, row.id),
     slug: firstValue(row.event_slug, row.slug),
@@ -113,12 +117,12 @@ function mapRemoteEvent(row) {
     venue: venueId ? { id: venueId, slug: firstValue(venue.slug, row.space_slug, venueId), name: venueName, zone: venueZone, address: venueAddress, description: venue.description || venueAddress || 'Sede publicada en Cuicoyan.', categories } : null,
     categorySlugs: categories,
     intentions: [],
-    audience: firstValue(row.audience, row.audience_label, 'Todo público'),
+    audience: firstValue(row.audience_label, 'Todo público'),
     priceLabel: firstValue(row.price_label, row.price, 'Por confirmar'),
     imageTone: 'turquoise',
     imageUrl: row.cover_image_url || '',
-    contentStatus: 'approved',
-    isDemo: false,
+    contentStatus: isDemo ? CONTENT_STATUS.DEMO : CONTENT_STATUS.APPROVED,
+    isDemo,
     source: 'cuicoyan-database',
   };
 }
@@ -179,9 +183,10 @@ export async function loadRemoteEvent(slug) {
   }
 }
 
-function mapRemoteSpace(row) {
-  const categories = listValue(firstValue(row.category_slugs, row.categories, row.category));
+export function mapRemoteSpace(row) {
+  const categories = listValue(row.category_slugs);
   const coordinates = coordinatesFrom(row);
+  const isDemo = row.is_demo === true;
   return {
     id: firstValue(row.space_id, row.venue_id, row.id),
     slug: firstValue(row.space_slug, row.venue_slug, row.slug),
@@ -191,8 +196,26 @@ function mapRemoteSpace(row) {
     description: row.description || 'Espacio cultural publicado en Cuicoyan.',
     categories,
     coordinates,
-    contentStatus: 'approved',
-    isDemo: false,
+    contentStatus: isDemo ? CONTENT_STATUS.DEMO : CONTENT_STATUS.APPROVED,
+    isDemo,
+    source: 'cuicoyan-database',
+  };
+}
+
+export function mapRemoteArtist(row) {
+  const isDemo = row.is_demo === true;
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.display_name,
+    discipline: row.discipline || '',
+    tagline: row.tagline || '',
+    bio: row.description || '',
+    nextEventId: row.next_event_id || '',
+    categorySlugs: listValue(row.category_slugs),
+    tone: 'pink',
+    contentStatus: isDemo ? CONTENT_STATUS.DEMO : CONTENT_STATUS.APPROVED,
+    isDemo,
     source: 'cuicoyan-database',
   };
 }
@@ -205,5 +228,21 @@ export async function loadRemoteSpaces() {
   if (!response.ok) throw new Error(`Cuicoyan API returned ${response.status}`);
   const body = await response.json();
   if (!Array.isArray(body?.data)) return null;
-  return body.data.map(mapRemoteSpace).filter((item) => item.id && item.slug && item.name).map((item) => withDraft('foro', item));
+  remoteVenueList = body.data.map(mapRemoteSpace).filter((item) => item.id && item.slug && item.name).map((item) => withDraft('foro', item));
+  return remoteVenueList;
+}
+
+export async function loadRemoteArtists() {
+  const baseUrl = apiBaseUrl();
+  if (typeof fetch !== 'function') return null;
+  if (!baseUrl) return null;
+  const endpoint = new URL('/api/cuicoyan/profiles', baseUrl);
+  endpoint.searchParams.set('kind', 'artist');
+  endpoint.searchParams.set('limit', '100');
+  const response = await fetch(endpoint, { headers: { Accept: 'application/json' } });
+  if (!response.ok) throw new Error(`Cuicoyan API returned ${response.status}`);
+  const body = await response.json();
+  if (!Array.isArray(body?.data)) return null;
+  remoteArtistList = body.data.map(mapRemoteArtist).filter((item) => item.id && item.slug && item.name).map((item) => withDraft('artista', item));
+  return remoteArtistList;
 }

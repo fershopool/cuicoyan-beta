@@ -9,7 +9,7 @@
     "preview": "node ../scripts/dev-server.mjs dist",
     "check:links": "node ../scripts/check-links.mjs",
     "check:content": "node ../scripts/check-forbidden-content.mjs",
-    "test": "node --test ../tests/auth-ui.test.mjs ../tests/contact-request.test.mjs",
+    "test": "node --test ../tests/auth-ui.test.mjs ../tests/contact-request.test.mjs ../tests/remote-mapping.test.mjs",
     "e2e": "node ../scripts/e2e-idp.mjs",
     "e2e:full": "bash ../scripts/e2e-full.sh"
   }

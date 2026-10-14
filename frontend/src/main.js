@@ -1,7 +1,7 @@
 import { el, $, announce } from './utils/dom.js';
 import { routeForPath, routes, withBase } from './config/routes.js';
 import { readUrlState, goWithState } from './utils/url-state.js';
-import { getEvents, getArtists, getVenues, getCategories, getEvent, getArtist, getVenue, getVenueById, getCalls, getHelp, loadRemoteEvents, loadRemoteEvent, loadRemoteSpaces } from './services/content.service.js';
+import { getEvents, getArtists, getVenues, getCategories, getEvent, getArtist, getVenue, getVenueById, getCalls, getHelp, loadRemoteEvents, loadRemoteEvent, loadRemoteSpaces, loadRemoteArtists } from './services/content.service.js';
 import { searchItems } from './services/search.service.js';
 import { getFavorites, isFavorite, toggleFavorite } from './services/favorites.service.js';
 import { getPreferences, savePreferences, clearPreferences } from './services/preferences.service.js';
@@ -32,7 +32,7 @@ editorStyles.href = new URL('./styles/profile-editor.css', import.meta.url);
 document.head.append(editorStyles);
 
 let events = getEvents();
-const artists = getArtists();
+let artists = getArtists();
 let venues = getVenues();
 const categories = getCategories();
 
@@ -122,6 +122,12 @@ function renderVenues() { renderVenuesPage(venues); }
 function renderDetail(type) {
   const slug = window.location.pathname.split('/').filter(Boolean).at(-1);
   const item = type === 'event' ? getEvent(slug) : type === 'artist' ? getArtist(slug) : getVenue(slug);
+  if (!item && type !== 'event' && !remoteCatalogReady) {
+    // Enlace directo a un artista o foro remoto: esperar a que cargue el catálogo antes de decidir 404.
+    pageFrame({ eyebrow: type === 'artist' ? 'Artista' : 'Foro', title: 'Cargando…', description: '', children: [] });
+    void remoteCatalog.then(() => { if (window.location.pathname.endsWith(`/${slug}`)) renderCurrentRoute(); });
+    return;
+  }
   if (!item) {
     if (type === 'event') { pageFrame({ eyebrow: 'Evento', title: 'Cargando evento…', description: '', children: [] }); void loadRemoteEvent(slug).then((remote) => { if (!window.location.pathname.endsWith(`/${slug}`)) return; remote ? renderCurrentRoute() : renderNotFound(); }); return; }
     return renderNotFound();
@@ -234,6 +240,23 @@ function renderCurrentRoute() {
   renderFooter();
 }
 
+let remoteCatalogReady = false;
+const remoteArtistsLoad = loadRemoteArtists().then((remoteArtists) => {
+  if (!remoteArtists) return;
+  artists = remoteArtists;
+  renderCurrentRoute();
+}).catch(() => {
+  // Artist fixtures remain visible when API is unavailable.
+});
+const remoteVenuesLoad = loadRemoteSpaces().then((remoteSpaces) => {
+  if (!remoteSpaces) return;
+  venues = remoteSpaces;
+  renderCurrentRoute();
+}).catch(() => {
+  // Venue fixtures remain visible when API is unavailable.
+});
+const remoteCatalog = Promise.all([remoteArtistsLoad, remoteVenuesLoad]).then(() => { remoteCatalogReady = true; });
+
 renderCurrentRoute();
 void loadRemoteEvents().then((remoteEvents) => {
   if (!remoteEvents) return;
@@ -241,11 +264,4 @@ void loadRemoteEvents().then((remoteEvents) => {
   renderCurrentRoute();
 }).catch(() => {
   // Fixtures remain visible when API is unavailable.
-});
-void loadRemoteSpaces().then((remoteSpaces) => {
-  if (!remoteSpaces) return;
-  venues = remoteSpaces;
-  renderCurrentRoute();
-}).catch(() => {
-  // Venue fixtures remain visible when API is unavailable.
 });
