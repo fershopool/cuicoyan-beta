@@ -592,3 +592,41 @@ h3 { font-weight: 700; letter-spacing: -.025em; }
 
 /* Enlaces que requieren sesión de Google: ocultos hasta que html[data-session="si"] (ver services/profiles-remote.service.js). */
 html:not([data-session="si"]) [data-session-only] { display: none !important; }
+
+/* Cuenta sin sesión: tarjeta de bienvenida con borde degradado (móvil primero) */
+.account-welcome { display: grid; justify-items: center; gap: .9rem; min-width: 0; margin: 0 0 1.5rem; padding: 1.5rem 1.1rem; text-align: center; border: 1px solid transparent; border-radius: var(--radius-lg); background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--brand-gradient) border-box; box-shadow: var(--shadow-soft); }
+.account-welcome h2 { margin: 0; font-size: 1.5rem; overflow-wrap: anywhere; }
+.account-welcome-logo { width: 72px; height: 72px; object-fit: contain; }
+.account-benefits { display: grid; gap: .6rem; width: 100%; margin: 0; padding: 0; list-style: none; text-align: left; }
+.account-benefits li { display: flex; align-items: flex-start; gap: .7rem; min-width: 0; padding: .7rem .9rem; border-radius: 14px; background: var(--rosa); }
+.account-benefits .ic { flex: none; color: var(--primary); }
+.account-benefits span { min-width: 0; overflow-wrap: anywhere; }
+.button.account-google { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; width: 100%; max-width: 100%; min-height: 52px; white-space: normal; background: var(--surface); color: var(--noche); border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
+.button.account-google:hover { background: var(--surface); color: var(--noche); }
+.account-welcome-note { margin: 0; max-width: 30rem; font-size: .85rem; line-height: 1.5; overflow-wrap: anywhere; }
+
+/* Mis perfiles */
+.account-profiles-list { display: grid; gap: .75rem; }
+.account-profile-card { display: grid; gap: .6rem; min-width: 0; padding: 1rem; border: 1px solid transparent; border-radius: var(--radius-md); background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--brand-gradient) border-box; overflow-wrap: anywhere; }
+.account-profile-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem .75rem; min-width: 0; }
+.account-profile-text { display: grid; min-width: 0; gap: .1rem; }
+.account-badge { --dot: var(--muted-soft); display: inline-flex; align-items: center; min-height: 28px; padding: .2rem .75rem; border-radius: 999px; background: var(--rosa); color: var(--noche); font-size: .8rem; font-weight: 800; white-space: nowrap; }
+.account-badge::before { content: ''; width: 8px; height: 8px; margin-right: .45rem; border-radius: 50%; background: var(--dot); }
+.account-badge[data-tone="pending"] { --dot: var(--maiz); }
+.account-badge[data-tone="published"] { --dot: var(--teal); }
+.account-badge[data-tone="rejected"] { --dot: var(--red); }
+.account-profile-note { margin: 0; padding: .55rem .7rem; border-radius: 10px; background: var(--rosa); font-size: .92rem; overflow-wrap: anywhere; }
+.account-profile-edit { justify-self: start; }
+.account-create-row { display: grid; gap: .75rem; margin-top: 1rem; }
+.account-create-item { display: grid; gap: .4rem; min-width: 0; }
+.button.account-create { width: 100%; max-width: 100%; min-height: 52px; white-space: normal; }
+.account-create-notice { margin: 0; font-size: .9rem; }
+.account-empty { margin: 0; }
+.account-favorites-notice { margin: 0 0 1rem; }
+
+@media (min-width: 621px) {
+  .account-welcome { padding: 2rem; }
+  .account-benefits { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .account-create-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .account-welcome .button.account-google { width: auto; min-width: 16rem; }
+}
