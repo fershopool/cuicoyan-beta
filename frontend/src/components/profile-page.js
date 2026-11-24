@@ -96,7 +96,9 @@ function listPage(kind, list, { missing, mount }) {
 function createMessage(error, kind) {
   if (error?.message === 'limite-alcanzado') return `Ya tienes ${MAX_PER_KIND} perfiles de ${KIND_LABEL[kind]}. Es el máximo por tipo.`;
   if (error?.message === 'sin-sesion') return 'Tu sesión venció. Inicia sesión de nuevo.';
-  return 'No pudimos crear el perfil. Inténtalo de nuevo.';
+  // Detalle técnico visible mientras la beta se prueba: sin él no se puede saber por qué falla la base.
+  const detail = [error?.code, error?.message].filter(Boolean).join(' · ').slice(0, 160);
+  return `No pudimos crear el perfil. Inténtalo de nuevo.${detail ? ` (${detail})` : ''}`;
 }
 
 // Editor del perfil elegido. `saved` = lo que está en la base; `working` = respaldo local no enviado.
