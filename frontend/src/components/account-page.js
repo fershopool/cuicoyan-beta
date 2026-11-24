@@ -64,7 +64,15 @@ function profileForm(session, profile) {
     el('button', { className: 'button', type: 'submit', text: 'Guardar nombre' }),
     status,
   ]);
-  return el('section', { className: 'section-block' }, [el('h2', { text: 'Perfil' }), form]);
+  const avatar = avatarFrom(session);
+  const card = el('div', { className: 'account-card' }, [
+    avatar ? el('img', { className: 'account-card-avatar', src: avatar, alt: '', attrs: { referrerpolicy: 'no-referrer' } }) : null,
+    el('div', { className: 'account-card-text' }, [
+      el('strong', { text: profile?.display_name || displayNameFrom(session) }),
+      session.user?.email ? el('small', { className: 'muted', text: session.user.email }) : null,
+    ]),
+  ]);
+  return el('section', { className: 'section-block' }, [el('h2', { text: 'Perfil' }), card, form]);
 }
 
 function favoritesSection() {

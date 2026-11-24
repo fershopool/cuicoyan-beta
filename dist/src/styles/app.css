@@ -552,3 +552,23 @@ h3 { font-weight: 700; letter-spacing: -.025em; }
 .account-chip { display: inline-flex; align-items: center; gap: .5rem; max-width: 12rem; color: var(--noche); font-weight: 700; text-decoration: none; }
 .account-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .account-avatar { width: 32px; height: 32px; flex: none; border-radius: 50%; object-fit: cover; }
+
+/* Perfil de cuenta · adaptable */
+.account-page-sections, .app-page .section-block { min-width: 0; }
+.app-page .section-block { margin-bottom: 1.5rem; }
+.account-card { display: flex; align-items: center; gap: .9rem; margin-bottom: 1rem; padding: .9rem 1rem; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }
+.account-card-avatar { width: 64px; height: 64px; flex: none; border-radius: 50%; object-fit: cover; }
+.account-card-text { display: grid; min-width: 0; gap: .15rem; }
+.account-card-text strong, .account-card-text small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-favorites { display: grid; gap: .5rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+.account-favorites li { padding: .75rem 1rem; overflow-wrap: anywhere; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.account-form input { font-size: 1rem; } /* 16px: iOS no hace zoom al enfocar */
+@media (max-width: 620px) {
+  /* Cabecera: solo la foto; el nombre y «Cerrar sesión» quedan en el menú */
+  .header-tools .account-chip span { display: none; }
+  .header-tools .account-chip { max-width: none; }
+  .mobile-drawer > .account-chip { display: flex; max-width: none; margin-top: .75rem; padding: .75rem; border: 1px solid var(--border); border-radius: 14px; }
+  .mobile-drawer > .account-chip span { display: block; }
+  .account-form .button, .app-page .section-block > .button { width: 100%; }
+  .account-card-avatar { width: 52px; height: 52px; }
+}
