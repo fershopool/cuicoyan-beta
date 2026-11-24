@@ -4,6 +4,7 @@ import { readUrlState, goWithState } from './utils/url-state.js';
 import { getEvents, getArtists, getVenues, getCategories, getEvent, getArtist, getVenue, getVenueById, getCalls, getHelp, loadRemoteEvents, loadRemoteEvent, loadRemoteSpaces, loadRemoteArtists } from './services/content.service.js';
 import { searchItems } from './services/search.service.js';
 import { getFavorites, isFavorite, toggleFavorite } from './services/favorites.service.js';
+import { renderAccountPage } from './components/account-page.js';
 import { getPreferences, savePreferences, clearPreferences } from './services/preferences.service.js';
 import { renderShell, renderFooter } from './components/shell.js';
 import { eventCard, artistCard, venueCard, eventImageUrl } from './components/cards.js';
@@ -155,8 +156,14 @@ function renderFavorites() { renderFavoritesPage({ events, artists, venues }); }
 
 function renderOnboarding() { const selected = new Set(getPreferences().interests); const form = el('form', { className: 'onboarding' }, [el('span', { className: 'eyebrow', text: 'Preferencias locales' }), el('h1', { text: '¿Qué te gustaría vivir?' }), el('p', { className: 'muted', text: 'Elige intereses para preparar tu exploración. No pedimos correo ni creamos una cuenta.' }), el('div', { className: 'interest-grid' }, categories.slice(1).map((category) => el('label', {}, [el('input', { type: 'checkbox', name: 'interest', value: category.slug, checked: selected.has(category.slug) }), el('span', { text: category.label })]))), el('div', { className: 'hero-actions' }, [el('button', { className: 'button', type: 'submit', text: 'Guardar intereses' }), el('a', { className: 'button secondary', href: routes.explorar, text: 'Omitir' })]), el('button', { className: 'button ghost', type: 'button', text: 'Borrar datos locales' })]); form.addEventListener('submit', (event) => { event.preventDefault(); savePreferences({ interests: [...form.querySelectorAll('input:checked')].map((input) => input.value) }); announce('Intereses guardados en este navegador'); window.location.href = routes.explorar; }); form.querySelector('.button.ghost').addEventListener('click', () => { clearPreferences(); announce('Datos locales borrados'); form.reset(); }); $('#app').replaceWith(el('main', { id: 'contenido' }, [form])); }
 
-function renderCreators() { return pageFrame({ eyebrow: 'Para quienes hacen cultura', title: 'Tu proyecto también encuentra su escenario.', description: 'Una explicación del espacio de participación, sin promesas de alcance, comisión o resultados garantizados.', children: [section('', [el('div', { className: 'benefit-grid' }, [el('article', { className: 'benefit' }, [el('h2', { text: 'Artistas y colectivos' }), el('p', { text: 'Una presencia clara para reunir disciplinas, publicaciones y próximas fechas.' }), el('ul', {}, ['Perfil cultural propio','Eventos y foros relacionados','Información editable cuando exista un canal aprobado'].map((x) => el('li', { text: x }))), el('a', { className: 'button', href: `${routes.unete}?rol=artista`, text: 'Quiero registrar mi proyecto' })]), el('article', { className: 'benefit' }, [el('h2', { text: 'Foros y espacios' }), el('p', { text: 'Una ficha para mostrar qué sucede en tu espacio y cómo se conecta con la ciudad.' }), el('ul', {}, ['Ficha del espacio','Presencia en el mapa conceptual','Programación relacionada'].map((x) => el('li', { text: x }))), el('a', { className: 'button', href: `${routes.unete}?rol=foro`, text: 'Quiero sumar mi espacio' })])]), demoNotice()]) ] }); }
+// MVP beta: sin registro de artistas ni foros, las páginas de alta muestran este aviso (TEST_EDIT_ACCESS=false).
+function comingSoon(eyebrow, title) {
+  return pageFrame({ eyebrow, title, description: "Próximamente: registro de artistas y foros.", children: [section("", [el("p", { className: "notice", text: "Próximamente: registro de artistas y foros." }), linkButton("Volver al inicio", routes.home, true)])] });
+}
+
+function renderCreators() { if (!TEST_EDIT_ACCESS) return comingSoon("Para quienes hacen cultura", "Tu proyecto también encuentra su escenario."); return pageFrame({ eyebrow: 'Para quienes hacen cultura', title: 'Tu proyecto también encuentra su escenario.', description: 'Una explicación del espacio de participación, sin promesas de alcance, comisión o resultados garantizados.', children: [section('', [el('div', { className: 'benefit-grid' }, [el('article', { className: 'benefit' }, [el('h2', { text: 'Artistas y colectivos' }), el('p', { text: 'Una presencia clara para reunir disciplinas, publicaciones y próximas fechas.' }), el('ul', {}, ['Perfil cultural propio','Eventos y foros relacionados','Información editable cuando exista un canal aprobado'].map((x) => el('li', { text: x }))), el('a', { className: 'button', href: `${routes.unete}?rol=artista`, text: 'Quiero registrar mi proyecto' })]), el('article', { className: 'benefit' }, [el('h2', { text: 'Foros y espacios' }), el('p', { text: 'Una ficha para mostrar qué sucede en tu espacio y cómo se conecta con la ciudad.' }), el('ul', {}, ['Ficha del espacio','Presencia en el mapa conceptual','Programación relacionada'].map((x) => el('li', { text: x }))), el('a', { className: 'button', href: `${routes.unete}?rol=foro`, text: 'Quiero sumar mi espacio' })])]), demoNotice()]) ] }); }
 function renderJoin() {
+  if (!TEST_EDIT_ACCESS) return comingSoon("Participa", "Únete a Cuicoyan.");
   const titles = { foro: 'Suma tu espacio a Cuicoyan.', artista: 'Haz resonar tu proyecto.' };
   const steps = [['1', 'Llena el formulario', 'Cuéntanos quién eres y qué haces. Toma unos 3 minutos.'], ['2', 'Revisamos tu registro', 'El equipo verifica la información antes de publicar nada.'], ['3', 'Te escribimos', 'Recibirás respuesta en el correo que compartas.']];
   const aside = el('aside', { className: 'join-aside' }, [el('span', { className: 'badge', text: 'Registro gratuito' }), el('h2', { text: '¿Cómo funciona?' }), el('ol', { className: 'join-steps' }, steps.map(([n, title, copy]) => el('li', {}, [el('span', { text: n, attrs: { 'aria-hidden': 'true' } }), el('div', {}, [el('strong', { text: title }), el('p', { className: 'muted', text: copy })])]))), el('p', { className: 'muted', text: 'No creamos una cuenta ni publicamos tus datos de contacto. Solo usamos tu información para revisar tu registro.' })]);
@@ -576,13 +583,15 @@ function resetPage() {
   if (main) main.replaceWith(Object.assign(document.createElement('div'), { id: 'app' }));
 }
 
+function mountApp(main) { ($('#contenido') || $('#app')).replaceWith(main); }
+
 function renderCurrentRoute() {
   const scrollY = window.scrollY;
   resetPage();
   const route = routeForPath();
   renderShell(route);
   switch (route) {
-    case 'home': renderHome(); break; case 'explorar': renderExplore(); break; case 'eventos': renderEvents(); break; case 'evento-detalle': renderDetail('event'); break; case 'artistas': renderArtists(); break; case 'artista-detalle': renderDetail('artist'); break; case 'foros': renderVenues(); break; case 'foro-detalle': renderDetail('venue'); break; case 'mapa': renderMap(); break; case 'favoritos': renderFavorites(); break; case 'onboarding': renderOnboarding(); break; case 'creadores': renderCreators(); break; case 'unete': renderJoin(); break; case 'invitacion': renderInvitation(); break; case 'admin': renderAdmin(); break; case 'perfil': renderProfile(); break; case 'convocatorias': renderCalls(); break; case 'sobre': renderInfo('sobre'); break; case 'ayuda': renderInfo('ayuda'); break; case 'accesibilidad': renderInfo('accesibilidad'); break; case 'privacidad': renderInfo('privacidad'); break; case 'terminos': renderInfo('terminos'); break; default: renderNotFound();
+    case 'home': renderHome(); break; case 'explorar': renderExplore(); break; case 'eventos': renderEvents(); break; case 'evento-detalle': renderDetail('event'); break; case 'artistas': renderArtists(); break; case 'artista-detalle': renderDetail('artist'); break; case 'foros': renderVenues(); break; case 'foro-detalle': renderDetail('venue'); break; case 'mapa': renderMap(); break; case 'favoritos': renderFavorites(); break; case 'onboarding': renderOnboarding(); break; case 'creadores': renderCreators(); break; case 'unete': renderJoin(); break; case 'invitacion': renderInvitation(); break; case 'admin': renderAdmin(); break; case 'cuenta': renderAccountPage(mountApp); break; case 'perfil': if (TEST_EDIT_ACCESS) renderProfile(); else comingSoon("Mi perfil", "Mi perfil"); break; case 'convocatorias': renderCalls(); break; case 'sobre': renderInfo('sobre'); break; case 'ayuda': renderInfo('ayuda'); break; case 'accesibilidad': renderInfo('accesibilidad'); break; case 'privacidad': renderInfo('privacidad'); break; case 'terminos': renderInfo('terminos'); break; default: renderNotFound();
   }
   showLoginErrorNotice();
   renderFooter();
@@ -600,6 +609,9 @@ function showLoginErrorNotice() {
     ' o pide una invitación al equipo de Cuicoyan.',
   ]));
 }
+
+// Al terminar la sincronización de favoritos con la cuenta, se repinta la ruta para que los corazones y /favoritos/ coincidan.
+window.addEventListener('cuicoyan:favorites-sync', () => renderCurrentRoute());
 
 let remoteCatalogReady = false;
 const remoteArtistsLoad = loadRemoteArtists().then((remoteArtists) => {

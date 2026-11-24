@@ -2,12 +2,17 @@ import { el, $, announce } from '../utils/dom.js';
 import { routes, routeForPath, withBase } from '../config/routes.js';
 import { environment } from '../config/environment.js';
 import { getPreferences, savePreferences } from '../services/preferences.service.js';
+import { getSession, signInWithGoogle, signOut, isConfigured } from '../services/supabase.service.js';
+import { displayNameFrom, avatarFrom } from '../services/supabase-logic.js';
+import { syncFavorites, endFavoritesSession, clearFavorites } from '../services/favorites.service.js';
 import { icon } from './icons.js';
+import { TEST_EDIT_ACCESS } from '../config/test-access.js';
 
 const nav = [
   ['Inicio', routes.home, 'home'], ['Explorar', routes.explorar, 'explorar'], ['Eventos', routes.eventos, 'eventos'],
   ['Artistas', routes.artistas, 'artistas'], ['Foros', routes.foros, 'foros'], ['Mapa', routes.mapa, 'mapa'],
-  ['Para creadores', routes.creadores, 'creadores'], ['Sobre Cuicoyan', routes.sobre, 'sobre'],
+  ['Para creadores', routes.creadores, 'creadores'], ...(TEST_EDIT_ACCESS ? [['Perfil', routes.perfil, 'perfil']] : []), // ponytail: acceso temporal de pruebas (config/test-access.js); quitar al conectar la base de datos
+  ['Sobre Cuicoyan', routes.sobre, 'sobre'],
 ];
 
 function link(label, href, key, current) { return el('a', { href, text: label, attrs: current === key ? { 'aria-current': 'page' } : {} }); }
@@ -47,7 +52,46 @@ export function renderShell(routeKey) {
   document.body.append(dock);
   document.body.append(el('div', { className: 'bg-flora', attrs: { 'aria-hidden': 'true' } }));
   document.body.append(el('div', { id: 'site-live', className: 'sr-only', attrs: { 'aria-live': 'polite', 'aria-atomic': 'true' } }));
+  void mountSessionButton(header);
   setupShell();
+}
+
+// Encabezado con la sesión de Google (Supabase). Sin configuración no aparece nada y la página sigue funcionando.
+async function mountSessionButton(header) {
+  if (!isConfigured()) return;
+  let session;
+  try { session = await getSession(); } catch { return; } // p. ej. CSP de /unete, /invitacion y /admin: sin botón, sin romper
+  paintAccount(header, session);
+  if (!session) return;
+  try {
+    const changed = await syncFavorites(session.user.id);
+    if (changed) window.dispatchEvent(new Event('cuicoyan:favorites-sync'));
+  } catch { /* sin red: favoritos locales */ }
+}
+
+function paintAccount(header, session) {
+  header.querySelectorAll('[data-account]').forEach((node) => node.remove());
+  header.querySelector('.header-tools')?.prepend(...accountNodes(session));
+  header.querySelector('.mobile-drawer')?.append(...accountNodes(session));
+}
+
+function accountNodes(session) {
+  if (!session) {
+    return [el('button', { className: 'button ghost', type: 'button', text: 'Iniciar sesión con Google', dataset: { account: 'in' }, onclick: signIn })];
+  }
+  const name = displayNameFrom(session);
+  const avatar = avatarFrom(session);
+  return [
+    el('a', { className: 'account-chip', href: routes.cuenta, dataset: { account: 'me' }, attrs: { 'aria-label': `Mi cuenta: ${name}` } }, [
+      avatar ? el('img', { className: 'account-avatar', src: avatar, alt: '', attrs: { referrerpolicy: 'no-referrer' } }) : null,
+      el('span', { text: name }),
+    ]),
+    el('button', { className: 'button ghost', type: 'button', text: 'Cerrar sesión', dataset: { account: 'out' }, onclick: async () => { await signOut(); endFavoritesSession(); clearFavorites(); window.location.href = routes.home; } }),
+  ];
+}
+
+function signIn() {
+  signInWithGoogle(`${window.location.origin}${routes.cuenta}`).catch(() => announce('No pudimos iniciar tu sesión. Inténtalo de nuevo.'));
 }
 
 function ensureSiteIcon() {

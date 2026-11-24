@@ -532,3 +532,18 @@ h3 { font-weight: 700; letter-spacing: -.025em; }
 .social-input:nth-child(3) > span { color: var(--turquoise); }
 .social-input:nth-child(4) > span { color: var(--red); }
 @media (max-width: 620px) { .social-grid { grid-template-columns: 1fr; } }
+
+/* Panel de administración (Fase 4c) */
+.admin-panel { display: grid; gap: 1.2rem; }
+.admin-panel [hidden] { display: none !important; }
+.admin-panel h2 { margin: 0; font-size: 1.25rem; }
+.admin-table-wrap { overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.admin-table th, .admin-table td { padding: .55rem .6rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.admin-table th { color: var(--muted); font-size: .76rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.admin-msg { max-width: 28rem; white-space: pre-wrap; }
+.admin-invite-form { display: grid; gap: .9rem; }
+.admin-invite-form .button { justify-self: start; }
+#inv-url { width: 100%; font: inherit; }
+.admin-approve { display: grid; gap: .6rem; margin-top: .6rem; min-width: 16rem; }
+.admin-table td .button { margin-top: .4rem; }

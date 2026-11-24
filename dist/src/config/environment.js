@@ -1,4 +1,4 @@
-import { siteBase, cuicoyanApiUrl, cuicoyanAllowedOrigins, supabaseUrl, supabaseAnonKey } from './site-base.js';
+import { siteBase, cuicoyanApiUrl, cuicoyanAllowedOrigins, idpFailureGraceSeconds } from './site-base.js';
 
 const isProduction = import.meta.env?.PROD === true || import.meta.env?.MODE === 'production';
 
@@ -36,9 +36,11 @@ export const environment = {
   cuicoyanApiUrl: cuicoyanApiBase,
   ollinUrl: import.meta.env?.VITE_OLLIN_URL || '',
   externalJoinUrl: import.meta.env?.VITE_EXTERNAL_JOIN_URL || '',
-  // Formularios de registro: FormSubmit reenvía cada envío al correo del equipo (sin backend propio).
-  joinFormEndpoint: import.meta.env?.VITE_JOIN_FORM_ENDPOINT || 'https://formsubmit.co/ajax/cuicoyan.ollin@gmail.com',
+  // Clave pública (no secreta) de Cloudflare Turnstile.
+  turnstileSiteKey: import.meta.env?.VITE_TURNSTILE_SITE_KEY || '',
   externalContactUrl: import.meta.env?.VITE_EXTERNAL_CONTACT_URL || '',
-  supabaseUrl: import.meta.env?.VITE_SUPABASE_URL || supabaseUrl || '',
-  supabaseAnonKey: import.meta.env?.VITE_SUPABASE_ANON_KEY || supabaseAnonKey || '',
+  // Espejo público (no secreto) de IDP_FAILURE_GRACE_SECONDS del auth-server; solo gobierna el texto de la interfaz.
+  idpFailureGraceSeconds: Number(import.meta.env?.VITE_IDP_FAILURE_GRACE_SECONDS || idpFailureGraceSeconds || 300),
+  // Valor de CSRF_HEADER_VALUE del auth-server (no es un secreto).
+  csrfHeaderValue: import.meta.env?.VITE_OLLIN_CSRF_HEADER || 'ollin-auth',
 };

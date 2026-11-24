@@ -15,6 +15,7 @@ const pages = [
   ['foros-foro-alicia', 'foros/foro-alicia/foro-alicia'],
   ['mapa-index', 'mapa/mapa'],
   ['favoritos-index', 'favoritos/favoritos'],
+  ['cuenta-index', 'cuenta/cuenta'],
   ['onboarding-intereses', 'onboarding/intereses/intereses'],
   ['para-creadores-index', 'para-creadores/para-creadores'],
   ['unete-index', 'unete/unete'],
