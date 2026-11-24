@@ -64,8 +64,10 @@ export async function fetchProfile(userId) {
 export async function saveProfile(userId, { display_name, avatar_url = null }) {
   const sb = await client();
   if (!sb) throw new Error('sin-configurar');
-  const { error } = await sb.from('profiles').upsert({ id: userId, display_name, avatar_url }, { onConflict: 'id' });
+  // update y no upsert: la fila la crea el trigger al registrarse y authenticated no tiene INSERT en profiles.
+  const { data, error } = await sb.from('profiles').update({ display_name, avatar_url }).eq('id', userId).select('id');
   if (error) throw error;
+  if (!data?.length) throw new Error('perfil-no-encontrado');
 }
 
 // public.favorites (user_id, item_type, item_slug). RLS: solo las propias filas.

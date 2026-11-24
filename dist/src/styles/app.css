@@ -547,3 +547,8 @@ h3 { font-weight: 700; letter-spacing: -.025em; }
 #inv-url { width: 100%; font: inherit; }
 .admin-approve { display: grid; gap: .6rem; margin-top: .6rem; min-width: 16rem; }
 .admin-table td .button { margin-top: .4rem; }
+
+/* Cuenta en el encabezado (login con Google) */
+.account-chip { display: inline-flex; align-items: center; gap: .5rem; max-width: 12rem; color: var(--noche); font-weight: 700; text-decoration: none; }
+.account-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-avatar { width: 32px; height: 32px; flex: none; border-radius: 50%; object-fit: cover; }
