@@ -34,6 +34,8 @@ export function renderShell(routeKey) {
     ['Mapa', routes.mapa, 'mapa', 'map'],
     ['Favoritos', routes.favoritos, 'favoritos', 'heart'],
   ];
+  // Acceso a la cuenta en móvil: el botón del encabezado está oculto en pantallas chicas. Sin Supabase configurado no aparece.
+  if (isConfigured()) dockItems.push(['Mi cuenta', routes.cuenta, 'cuenta', 'user']);
   const header = el('header', { className: 'site-header' }, [
     el('div', { className: 'container header-inner' }, [
       el('button', { className: 'icon-button menu-button', id: 'menu-toggle', type: 'button', attrs: { 'aria-label': 'Abrir menú', 'aria-expanded': 'false', 'aria-controls': 'mobile-drawer' } }, [icon('menu', { size: 22 })]),
@@ -46,7 +48,7 @@ export function renderShell(routeKey) {
     ]),
     el('div', { className: 'mobile-drawer', id: 'mobile-drawer', attrs: { hidden: '' } }, [el('nav', { attrs: { 'aria-label': 'Navegación móvil' } }, nav.map(([label, href, key]) => link(label, href, key, current))), el('a', { className: 'button', href: routes.unete, text: 'Únete a Cuicoyan' })]),
   ]);
-  const dock = el('nav', { className: 'app-dock', attrs: { 'aria-label': 'Navegación rápida' } }, dockItems.map(([label, href, key, iconName]) => dockLink(label, href, key, iconName, current)));
+  const dock = el('nav', { className: 'app-dock', attrs: { 'aria-label': 'Navegación rápida', style: `--dock-count:${dockItems.length}` } }, dockItems.map(([label, href, key, iconName]) => dockLink(label, href, key, iconName, current)));
   document.body.prepend(el('a', { className: 'skip-link', href: '#contenido', text: 'Saltar al contenido' }));
   document.body.prepend(header);
   document.body.append(dock);

@@ -5,6 +5,7 @@ import { normalizeText } from '../utils/normalize-text.js';
 import { icon } from './icons.js';
 import { favoriteButton, eventDateParts, eventArtKeys, eventImageUrl, venueImageUrl, asset, avatar } from './cards.js';
 import { getFavorites, isFavorite, toggleFavorite } from '../services/favorites.service.js';
+import { isConfigured, getSession, signInWithGoogle } from '../services/supabase.service.js';
 import { getCategories, getVenueById, getArtistById } from '../services/content.service.js';
 import { mapView } from './map.js';
 import { profileHero, safeUrl } from './profile-kit.js';
@@ -156,6 +157,11 @@ export function renderFavoritesPage({ events, artists, venues }) {
 
   const banner = el('section', { className: 'fav-banner' }, [el('img', { className: 'fav-banner-art', src: asset('fav-banner'), alt: '', decoding: 'async' }), el('span', { className: 'fav-banner-heart', attrs: { 'aria-hidden': 'true' } }, [icon('heart', { size: 76, strokeWidth: 1.2 })]), el('div', { className: 'fav-banner-copy' }, [el('h2', { text: 'Tu colección curada' }), el('p', { text: 'Los artistas, eventos y espacios que te inspiran.' })])]);
   const note = el('p', { className: 'fav-note' }, [icon('phoneDevice', { size: 26 }), 'Tus favoritos se guardan únicamente en este dispositivo.']);
+  // Con Supabase: invita a iniciar sesión para guardarlos en la cuenta, o confirma que ya se guardan ahí.
+  if (isConfigured()) getSession().then((session) => {
+    note.replaceChildren(icon('user', { size: 26 }), session ? 'Tus favoritos se guardan en tu cuenta.' : 'Inicia sesión para guardar tus favoritos en tu cuenta y verlos en cualquier dispositivo.');
+    if (!session) note.append(el('button', { className: 'button ghost', type: 'button', text: 'Iniciar sesión con Google', onclick: () => signInWithGoogle(`${window.location.origin}${routes.cuenta}`).catch(() => announce('No pudimos iniciar tu sesión. Inténtalo de nuevo.')) }));
+  }).catch(() => { /* sin sesión disponible: queda el aviso local */ });
   wrap('favorites-page', [pageHead('Tu selección', 'Favoritos', el('a', { className: 'app-link', href: routes.onboarding }, [icon('settings', { size: 26 }), 'Ajustes'])), el('div', { className: 'fav-pills', attrs: { role: 'group', 'aria-label': 'Tipo de favorito' } }, pills), banner, list, note, demoNote()]);
   paint();
 }

@@ -211,7 +211,7 @@
 
   /* Dock inferior */
   .app-dock {
-    position: fixed; z-index: 40; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); left: 12px; display: grid; grid-template-columns: repeat(4, 1fr); align-items: center;
+    position: fixed; z-index: 40; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); left: 12px; display: grid; grid-template-columns: repeat(var(--dock-count, 4), 1fr); align-items: center;
     padding: 6px; border: 1px solid var(--dock-edge); border-radius: 30px; background: var(--dock-bg); box-shadow: var(--dock-shadow); backdrop-filter: blur(18px);
   }
   .dock-link { display: grid; justify-items: center; gap: 2px; padding: 10px 2px 8px; border-radius: 24px; color: var(--muted); font-size: .76rem; font-weight: 600; text-decoration: none; transition: background .2s ease, color .2s ease; }
@@ -220,6 +220,8 @@
   .dock-link[data-tone="artistas"] .dock-icon { color: var(--turquoise); }
   .dock-link[data-tone="mapa"] .dock-icon { color: var(--purple); }
   .dock-link[data-tone="favoritos"] .dock-icon { color: var(--orange); }
+  .dock-link[data-tone="cuenta"] .dock-icon { color: var(--maiz); }
+  .app-dock[style*="--dock-count:5"] .dock-link { font-size: .68rem; }
   .dock-link[aria-current="page"] {
     margin: -12px 0 -6px; padding: 18px 2px 12px; color: #fff; font-weight: 700;
     background: linear-gradient(165deg, #FF8A3D 0%, #F21F6D 46%, #C80F51 100%);
@@ -646,3 +648,6 @@ body::before, body::after {
 @media (max-width: 900px) { body::before, body::after { width: 22px; background-image: var(--strip), var(--strip-bg); background-repeat: repeat-y, no-repeat; background-position: left top; background-size: 100% auto, 100% 100%; } }
 .bg-flora { position: fixed; z-index: 0; right: -18px; top: calc(var(--header-height) + 4px); display: none; width: 320px; height: min(546px, 92vh); pointer-events: none; background: var(--flora) no-repeat right bottom / contain; }
 @media (min-width: 1280px) { .bg-flora { display: block; } }
+
+.fav-note { flex-wrap: wrap; }
+.fav-note .button { width: 100%; margin-top: .25rem; }
