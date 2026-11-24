@@ -170,9 +170,10 @@ export function lookCards(kit, draft) {
  * Armazón del editor: hero en vivo, tarjetas (`build(kit)`), barra de guardado, datos (exportar/importar/restablecer).
  * `slug` es la clave del borrador en el servicio; `record` el registro original.
  */
-export function createEditor({ kind, slug, record, base, saved: stored, heroOptions, build, backHref, backLabel, heading, publicHref, switcher, remote, note, onRemoteSave, extraCards }) {
+export function createEditor({ kind, slug, record, base, saved: stored, working, heroOptions, build, backHref, backLabel, heading, publicHref, switcher, remote, note, onRemoteSave, extraCards }) {
   let saved = stored || base;
-  const draft = clone(saved);
+  // `working`: cambios locales no enviados a la base (respaldo); se editan encima del último guardado.
+  const draft = clone(working || saved);
   const replace = (next) => { Object.keys(draft).forEach((k) => delete draft[k]); Object.assign(draft, clone(next)); };
   let hero;
   const savebarStatus = el('span', { className: 'pe-status', attrs: { role: 'status' }, text: 'Sin cambios' });
@@ -210,8 +211,11 @@ export function createEditor({ kind, slug, record, base, saved: stored, heroOpti
     if (bad) { errorBox.textContent = 'Revisa los campos marcados antes de guardar.'; bad.focus(); return; }
     saveButton.disabled = true;
     try {
-      if (!saveDraft(kind, slug, draft)) throw new Error('No se pudo guardar: las imágenes pesan demasiado para este navegador. Quita o reduce fotos e inténtalo de nuevo.');
-      if (remote) await onRemoteSave?.(draft);
+      if (remote) {
+        // Con sesión, la base es la fuente de verdad; si falla, la copia queda en este navegador.
+        try { await onRemoteSave?.(draft); removeDraft(kind, slug); }
+        catch (error) { if (!saveDraft(kind, slug, draft)) throw new Error('No se pudo guardar ni en la base ni en este navegador. Inténtalo de nuevo.'); throw new Error(`${error.message || 'No se pudo guardar el perfil.'} Guardamos una copia en este navegador.`); }
+      } else if (!saveDraft(kind, slug, draft)) throw new Error('No se pudo guardar: las imágenes pesan demasiado para este navegador. Quita o reduce fotos e inténtalo de nuevo.');
       saved = clone(draft); kit.changed(); savebarStatus.textContent = 'Guardado ✓'; announce('Perfil guardado');
     } catch (error) { errorBox.textContent = error.message || 'No se pudo guardar el perfil.'; saveButton.disabled = false; }
   });

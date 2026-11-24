@@ -3,7 +3,7 @@ import { el, announce } from '../utils/dom.js';
 import { routes } from '../config/routes.js';
 import { icon } from './icons.js';
 import { getCategories } from '../services/content.service.js';
-import { DAYS, VENUE_TYPES, SERVICES, ACCESS, PIN_ICONS, defaultDraft, getDraft, inBox, validLatLng } from '../services/profile-draft.service.js';
+import { DAYS, VENUE_TYPES, SERVICES, ACCESS, PIN_ICONS, defaultDraft, inBox, validLatLng } from '../services/profile-draft.service.js';
 import { createEditor, lookCards, socialFields, readImage, required, urlOk, emailOk, phoneOk, PALETTE } from './profile-kit.js';
 import { createMarkerElement, paintPin, getMapEngine, loadMapStyle } from './map.js';
 
@@ -115,12 +115,13 @@ function mapCard(kit, draft) {
   return card('map', 'Aparece en el mapa', body, 'Si desmarcas «Publicar», el foro no aparece en el mapa pero conserva su ficha.');
 }
 
-export function renderVenueEditor({ venue, switcher }) {
+// `saved` y `working` como en renderProfileEditor; `note` es el banner de estado.
+export function renderVenueEditor({ venue, switcher, note, saved, working, onRemoteSave }) {
   const page = createEditor({
-    kind: 'foro', slug: venue.slug, record: venue, base: defaultDraft('foro', venue), saved: getDraft('foro', venue.slug, venue),
+    kind: 'foro', slug: venue.slug, record: venue, base: defaultDraft('foro', venue), saved, working,
     heroOptions: { eyebrow: 'Foro cultural · CDMX', tags: (d) => [VENUE_TYPES.find(([value]) => value === d.type)?.[1], d.zone] },
-    heading: { eyebrow: 'Mi foro', title: 'Edita tu foro' }, backHref: routes.foros, backLabel: 'Foros', publicHref: routes.foro(venue.slug), switcher,
-    note: el('p', { className: 'demo-note', text: 'Sin sesión activa: tus cambios se guardan solo en este navegador.' }),
+    heading: { eyebrow: 'Mi foro', title: 'Edita tu foro' }, backHref: routes.foros, backLabel: 'Foros', publicHref: null, switcher,
+    remote: true, onRemoteSave, note,
     build: (kit, draft) => {
       const { text, select, toggle, checkGroup, card } = kit;
       const [coverCard, styleCard] = lookCards(kit, draft);

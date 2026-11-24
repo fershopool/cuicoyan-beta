@@ -5,13 +5,30 @@ import categories from '../data/categories.json' with { type: 'json' };
 import convocatorias from '../data/convocatorias.json' with { type: 'json' };
 import help from '../data/help.json' with { type: 'json' };
 import { CONTENT_STATUS, isVisible } from '../config/content-status.js';
-import { environment } from '../config/environment.js';
 import { withDraft } from './profile-draft.service.js';
+import { fetchPublishedArtists, fetchPublishedVenues } from './published-profiles.service.js';
 
 const visible = (items) => items.filter(isVisible);
+
+// Perfiles aprobados en Supabase, cargados una vez por sesión. Van antes que el contenido demo.
+let publishedArtists = [];
+let publishedVenues = [];
+let publishedLoad = null;
+export function loadPublishedProfiles() {
+  publishedLoad ??= Promise.all([fetchPublishedArtists(), fetchPublishedVenues()])
+    .then(([artistRows, venueRows]) => {
+      publishedArtists = artistRows;
+      publishedVenues = venueRows;
+      return true;
+    })
+    .catch(() => false);
+  return publishedLoad;
+}
+loadPublishedProfiles();
+
 export const getEvents = () => visible(events);
-export const getArtists = () => visible(artists).map((item) => withDraft('artista', item));
-export const getVenues = () => visible(venues).map((item) => withDraft('foro', item));
+export const getArtists = () => [...publishedArtists, ...visible(artists).map((item) => withDraft('artista', item))];
+export const getVenues = () => [...publishedVenues, ...visible(venues).map((item) => withDraft('foro', item))];
 export const getCategories = () => categories;
 export const getCalls = () => visible(convocatorias);
 export const getHelp = () => visible(help);
@@ -49,8 +66,9 @@ function cacheRemoteEvent(slug, value) {
   }
 }
 
+// ponytail: la API remota no existe en la beta; sin base la carga remota devuelve null sin tocar la red. Restaurar al existir la API.
 function apiBaseUrl() {
-  return environment.cuicoyanApiUrl.trim();
+  return '';
 }
 
 function firstValue(...values) {

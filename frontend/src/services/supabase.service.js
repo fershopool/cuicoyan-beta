@@ -20,6 +20,9 @@ function client() {
   return clientPromise;
 }
 
+// Cliente de supabase-js (o null sin configuración). Lo usan los servicios de perfiles.
+export const getClient = async () => client();
+
 // Redirige a Google. `redirectTo` debe estar en la lista de URL permitidas del proyecto de Supabase.
 export async function signInWithGoogle(redirectTo) {
   const sb = await client();

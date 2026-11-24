@@ -6,16 +6,17 @@ import { getSession, signInWithGoogle, signOut, isConfigured } from '../services
 import { displayNameFrom, avatarFrom } from '../services/supabase-logic.js';
 import { syncFavorites, endFavoritesSession, clearFavorites } from '../services/favorites.service.js';
 import { icon } from './icons.js';
-import { TEST_EDIT_ACCESS } from '../config/test-access.js';
 
 const nav = [
   ['Inicio', routes.home, 'home'], ['Explorar', routes.explorar, 'explorar'], ['Eventos', routes.eventos, 'eventos'],
   ['Artistas', routes.artistas, 'artistas'], ['Foros', routes.foros, 'foros'], ['Mapa', routes.mapa, 'mapa'],
-  ['Para creadores', routes.creadores, 'creadores'], ...(TEST_EDIT_ACCESS ? [['Perfil', routes.perfil, 'perfil']] : []), // ponytail: acceso temporal de pruebas (config/test-access.js); quitar al conectar la base de datos
+  ['Para creadores', routes.creadores, 'creadores'], ['Perfil', routes.perfil, 'perfil'],
   ['Sobre Cuicoyan', routes.sobre, 'sobre'],
 ];
 
-function link(label, href, key, current) { return el('a', { href, text: label, attrs: current === key ? { 'aria-current': 'page' } : {} }); }
+// «Perfil» solo se ve con sesión: CSS oculta [data-session-only] mientras html[data-session] no es "si" (profiles-remote.service.js).
+const SESSION_ONLY = new Set(['perfil']);
+function link(label, href, key, current) { return el('a', { href, text: label, attrs: { ...(current === key ? { 'aria-current': 'page' } : {}), ...(SESSION_ONLY.has(key) ? { 'data-session-only': '' } : {}) } }); }
 
 function dockLink(label, href, key, iconName, current) {
   return el('a', { className: 'dock-link', href, dataset: { tone: key }, attrs: current === key ? { 'aria-current': 'page' } : {} }, [

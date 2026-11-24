@@ -4,6 +4,8 @@ import { routes } from '../config/routes.js';
 import { getFavorites } from '../services/favorites.service.js';
 import { isConfigured, getSession, signInWithGoogle, fetchProfile, saveProfile } from '../services/supabase.service.js';
 import { displayNameFrom, avatarFrom } from '../services/supabase-logic.js';
+import { isAdmin, listPending, decide } from '../services/profiles-admin.service.js';
+import { NOTE_MAX, validateDecision, summaryFields, canPreview, formatDate } from '../services/profiles-admin-logic.js';
 
 const TYPE_LABELS = { event: 'Evento', artist: 'Artista', venue: 'Foro' };
 const TYPE_ROUTES = { event: routes.evento, artist: routes.artista, venue: routes.foro };
@@ -30,7 +32,8 @@ async function paint(body) {
     return;
   }
   const profile = await fetchProfile(session.user.id).catch(() => null);
-  body.replaceChildren(page([profileForm(session, profile), favoritesSection()]));
+  const admin = await isAdmin(); // sin admin no existe la sección y no se consulta la lista
+  body.replaceChildren(page([profileForm(session, profile), ...(admin ? [reviewSection()] : []), favoritesSection()]));
 }
 
 function signIn() {
@@ -84,4 +87,89 @@ function favoritesSection() {
     ])))
     : el('p', { className: 'muted', text: 'Aún no tienes favoritos. Explora eventos, artistas y foros.' });
   return el('section', { className: 'section-block' }, [el('h2', { text: 'Mis favoritos' }), list, el('a', { className: 'button secondary', href: routes.favoritos, text: 'Ver todos mis favoritos' })]);
+}
+
+// Solo para administradoras: perfiles pendientes con aprobar o rechazar.
+function reviewSection() {
+  const list = el('div', { className: 'admin-review-list' });
+  const load = async () => {
+    list.replaceChildren(el('p', { className: 'muted', text: 'Cargando perfiles pendientes…' }));
+    try {
+      const rows = await listPending();
+      list.replaceChildren(...(rows.length
+        ? rows.map((row) => reviewCard(row, load))
+        : [el('p', { className: 'muted', text: 'No hay perfiles pendientes de revisión.' })]));
+    } catch {
+      list.replaceChildren(el('p', { className: 'notice', text: 'No pudimos cargar los perfiles pendientes.', attrs: { role: 'alert' } }));
+    }
+  };
+  load();
+  return el('section', { className: 'section-block admin-review', attrs: { 'aria-labelledby': 'admin-review-title' } }, [
+    el('h2', { id: 'admin-review-title', text: 'Revisión de perfiles' }),
+    el('p', { className: 'muted', text: 'Solo visible para administradoras. Aprueba o rechaza los perfiles enviados.' }),
+    list,
+  ]);
+}
+
+let reviewSeq = 0;
+
+function reviewCard(row, reload) {
+  const id = ++reviewSeq;
+  const summary = summaryFields(row);
+  const name = row.name || 'Sin nombre';
+  const message = el('p', { className: 'muted admin-review-message', attrs: { role: 'status' } });
+  const noteInput = el('textarea', { id: `review-note-${id}`, maxLength: NOTE_MAX, rows: 2 });
+  const buttons = [
+    el('button', { className: 'button', type: 'button', text: 'Aprobar', onclick: () => act('published') }),
+    el('button', { className: 'button secondary', type: 'button', text: 'Rechazar', onclick: () => act('rejected') }),
+  ];
+
+  async function act(decision) {
+    const check = validateDecision(row.kind, decision, noteInput.value);
+    if (!check.ok) { message.textContent = check.error; return; }
+    const question = decision === 'published' ? `¿Publicar «${name}»?` : `¿Rechazar «${name}»?`;
+    if (!window.confirm(question)) return;
+    buttons.forEach((button) => { button.disabled = true; });
+    message.textContent = 'Guardando…';
+    try {
+      await decide(row.kind, row.id, decision, noteInput.value);
+      announce(decision === 'published' ? `Perfil «${name}» publicado` : `Perfil «${name}» rechazado`);
+      await reload();
+    } catch {
+      message.textContent = 'No pudimos guardar la decisión. Inténtalo de nuevo.';
+      buttons.forEach((button) => { button.disabled = false; });
+    }
+  }
+
+  const details = [];
+  if (summary.bio) details.push(reviewRow('Presentación', summary.bio));
+  if (summary.place) details.push(reviewRow('Disciplina y zona', summary.place));
+  if (summary.social.length) details.push(reviewRow('Redes', summary.social.join(' · ')));
+  if (summary.website) {
+    details.push(reviewRow('Web', el('a', { href: summary.website, text: summary.website, attrs: { target: '_blank', rel: 'noopener noreferrer' } })));
+  }
+
+  const previewHref = canPreview(row) ? (row.kind === 'artista' ? routes.artista(row.slug) : routes.foro(row.slug)) : null;
+
+  return el('article', { className: 'admin-review-card' }, [
+    el('div', { className: 'admin-review-head' }, [
+      el('h3', { text: name }),
+      el('small', { className: 'muted', text: `${row.kindLabel} · enviado ${formatDate(row.submitted_at) || 'sin fecha'}` }),
+    ]),
+    details.length ? el('dl', { className: 'admin-review-data' }, details) : null,
+    previewHref ? el('a', { className: 'button secondary', href: previewHref, text: 'Ver vista previa', attrs: { rel: 'noopener noreferrer' } }) : null,
+    el('div', { className: 'admin-review-form' }, [
+      el('label', { htmlFor: `review-note-${id}`, text: 'Nota para la persona (obligatoria para rechazar, mínimo 10 caracteres)' }),
+      noteInput,
+      el('div', { className: 'admin-review-actions' }, buttons),
+      message,
+    ]),
+  ]);
+}
+
+function reviewRow(label, value) {
+  return el('div', { className: 'admin-review-row' }, [
+    el('dt', { text: label }),
+    el('dd', {}, [value]),
+  ]);
 }

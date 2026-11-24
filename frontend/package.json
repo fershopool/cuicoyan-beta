@@ -9,7 +9,7 @@
     "preview": "node ../scripts/dev-server.mjs dist",
     "check:links": "node ../scripts/check-links.mjs",
     "check:content": "node ../scripts/check-forbidden-content.mjs",
-    "test": "node --test ../tests/auth-ui.test.mjs ../tests/contact-request.test.mjs ../tests/remote-mapping.test.mjs ../tests/admin-service.test.mjs ../tests/invite-access-service.test.mjs ../tests/admin-two-step-service.test.mjs ../tests/supabase-logic.test.mjs",
+    "test": "node --test ../tests/auth-ui.test.mjs ../tests/contact-request.test.mjs ../tests/remote-mapping.test.mjs ../tests/admin-service.test.mjs ../tests/invite-access-service.test.mjs ../tests/admin-two-step-service.test.mjs ../tests/supabase-logic.test.mjs ../tests/profiles-admin-logic.test.mjs ../tests/published-logic.test.mjs ../tests/profiles-logic.test.mjs",
     "e2e": "node ../scripts/e2e-idp.mjs",
     "e2e:full": "bash ../scripts/e2e-full.sh"
   }

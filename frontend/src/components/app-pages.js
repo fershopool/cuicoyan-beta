@@ -9,7 +9,6 @@ import { isConfigured, getSession, signInWithGoogle } from '../services/supabase
 import { getCategories, getVenueById, getArtistById } from '../services/content.service.js';
 import { mapView } from './map.js';
 import { profileHero, safeUrl } from './profile-kit.js';
-import { TEST_EDIT_ACCESS } from '../config/test-access.js';
 import { DAYS, SERVICES, ACCESS, VENUE_TYPES, SOCIALS } from '../services/profile-draft.service.js';
 
 const mount = (main) => { $('#app').replaceWith(main); return main; };
@@ -214,8 +213,8 @@ export function renderArtistProfile(artist, { events }) {
   wrap('profile-page', [backLink('Regresar', routes.artistas), hero, custom?.sections.bio === false ? null : bio, custom?.sections.dates === false ? null : dates, isDemo(artist) ? demoNote('Perfil demostrativo: no se muestran contacto, redes ni métricas hasta contar con autorización.') : null, editButton('artista', artist)]);
 }
 
-// ponytail: botón de pruebas hacia el editor del registro; se oculta con TEST_EDIT_ACCESS = false.
-const editButton = (kind, record) => (TEST_EDIT_ACCESS ? el('a', { className: 'button secondary', href: `${routes.perfil}?tipo=${kind}&id=${record.slug}`, text: 'Editar perfil' }) : null);
+// Solo con sesión: CSS oculta [data-session-only] sin sesión (profiles-remote.service.js).
+const editButton = (kind, record) => el('a', { className: 'button secondary', href: `${routes.perfil}?tipo=${kind}&id=${record.slug}`, text: 'Editar perfil', attrs: { 'data-session-only': '' } });
 const extLink = (href, label) => el('a', { href, text: label, target: '_blank', rel: 'noopener noreferrer' });
 
 // Filas de «Información del lugar» a partir del borrador del foro.

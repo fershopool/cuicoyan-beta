@@ -1,7 +1,7 @@
 import { el, $, announce } from './utils/dom.js';
 import { routeForPath, routes, withBase } from './config/routes.js';
 import { readUrlState, goWithState } from './utils/url-state.js';
-import { getEvents, getArtists, getVenues, getCategories, getEvent, getArtist, getVenue, getVenueById, getCalls, getHelp, loadRemoteEvents, loadRemoteEvent, loadRemoteSpaces, loadRemoteArtists } from './services/content.service.js';
+import { getEvents, getArtists, getVenues, getCategories, getEvent, getArtist, getVenue, getVenueById, getCalls, getHelp, loadRemoteEvents, loadRemoteEvent, loadRemoteSpaces, loadRemoteArtists, loadPublishedProfiles } from './services/content.service.js';
 import { searchItems } from './services/search.service.js';
 import { getFavorites, isFavorite, toggleFavorite } from './services/favorites.service.js';
 import { renderAccountPage } from './components/account-page.js';
@@ -12,9 +12,8 @@ import { icon, emblem } from './components/icons.js';
 import { mapView } from './components/map.js';
 import { renderArtistsPage, renderFavoritesPage, renderMapPage, renderArtistProfile, renderVenueProfile, renderEventDetail, renderEventsPage, renderVenuesPage, renderExplorePage, mapBlock } from './components/app-pages.js';
 import { joinForm } from './components/join-form.js';
-import { renderProfileEditor } from './components/profile-editor.js';
-import { renderVenueEditor } from './components/venue-editor.js';
-import { renderKindPicker } from './components/profile-kind-picker.js';
+import { renderProfilePage } from './components/profile-page.js';
+import { watchSessionFlag } from './services/profiles-remote.service.js';
 import { TEST_EDIT_ACCESS } from './config/test-access.js';
 import { apiRequest, invitationParams, loginUrl, logout, startInvitation } from './services/auth.service.js';
 import { ApiError, messageFor } from './services/auth-errors.js';
@@ -158,7 +157,7 @@ function renderOnboarding() { const selected = new Set(getPreferences().interest
 
 // MVP beta: sin registro de artistas ni foros, las páginas de alta muestran este aviso (TEST_EDIT_ACCESS=false).
 function comingSoon(eyebrow, title) {
-  return pageFrame({ eyebrow, title, description: "Próximamente: registro de artistas y foros.", children: [section("", [el("p", { className: "notice", text: "Próximamente: registro de artistas y foros." }), linkButton("Volver al inicio", routes.home, true)])] });
+  return pageFrame({ eyebrow, title, description: "Crea tu perfil de artista o foro cultural.", children: [section("", [linkButton("Crear mi perfil", routes.perfil), linkButton("Volver al inicio", routes.home, true)])] });
 }
 
 function renderCreators() { if (!TEST_EDIT_ACCESS) return comingSoon("Para quienes hacen cultura", "Tu proyecto también encuentra su escenario."); return pageFrame({ eyebrow: 'Para quienes hacen cultura', title: 'Tu proyecto también encuentra su escenario.', description: 'Una explicación del espacio de participación, sin promesas de alcance, comisión o resultados garantizados.', children: [section('', [el('div', { className: 'benefit-grid' }, [el('article', { className: 'benefit' }, [el('h2', { text: 'Artistas y colectivos' }), el('p', { text: 'Una presencia clara para reunir disciplinas, publicaciones y próximas fechas.' }), el('ul', {}, ['Perfil cultural propio','Eventos y foros relacionados','Información editable cuando exista un canal aprobado'].map((x) => el('li', { text: x }))), el('a', { className: 'button', href: `${routes.unete}?rol=artista`, text: 'Quiero registrar mi proyecto' })]), el('article', { className: 'benefit' }, [el('h2', { text: 'Foros y espacios' }), el('p', { text: 'Una ficha para mostrar qué sucede en tu espacio y cómo se conecta con la ciudad.' }), el('ul', {}, ['Ficha del espacio','Presencia en el mapa conceptual','Programación relacionada'].map((x) => el('li', { text: x }))), el('a', { className: 'button', href: `${routes.unete}?rol=foro`, text: 'Quiero sumar mi espacio' })])]), demoNotice()]) ] }); }
@@ -514,62 +513,8 @@ function invitationRow(row, { onChange, feedback }) {
 }
 
 function renderProfile() {
-  const statusLabels = { draft: 'Borrador', pending_review: 'En revisión', published: 'Publicado', rejected: 'Rechazado', suspended: 'Suspendido' };
-  const mount = (main) => { ($('#contenido') || $('#app')).replaceWith(main); };
-  mount(el('main', { id: 'contenido', className: 'app-page' }, [el('div', { className: 'app-wrap' }, [el('p', { className: 'muted', text: 'Cargando tu perfil…' })])]));
-  void apiRequest('/api/cuicoyan/me/profile').then((body) => {
-    const profile = body?.data?.profiles?.[0];
-    if (!profile) throw new Error('Sin perfil');
-    // Primer paso: la persona elige artista o foro. La elección viaja en ?tipo= para sobrevivir a recargas.
-    const tipo = new URLSearchParams(window.location.search).get('tipo');
-    if (tipo !== 'artista' && tipo !== 'foro') {
-      mount(renderKindPicker({ onPick: (kind) => { history.replaceState(null, '', `${routes.perfil}?tipo=${kind}`); renderProfile(); } }));
-      return;
-    }
-    const switchLink = el('a', { href: routes.perfil, text: 'Cambiar tipo de perfil' });
-    if (tipo === 'foro') {
-      // ponytail: el guardado remoto del foro aún no existe; por ahora solo borrador local.
-      // TODO: conectar guardado remoto de foros (API) y quitar el aviso y los ajustes de abajo.
-      const venue = { slug: 'nuevo-foro', name: '', description: '', categories: [], zone: '', address: '' };
-      const foroSwitch = el('div', { className: 'profile-kind-switch' }, [switchLink, el('p', { className: 'profile-kind-notice', text: 'El perfil de foro se guarda como borrador en este navegador por ahora.' })]);
-      const page = renderVenueEditor({ venue, switcher: foroSwitch });
-      page.querySelector('.demo-note')?.remove(); // dice «Sin sesión activa», falso con sesión
-      page.querySelector('.pe-head-actions a')?.remove(); // enlace a un perfil público que aún no existe
-      mount(page);
-      return;
-    }
-    const artist = { slug: profile.id, name: profile.display_name, bio: (profile.description || '').slice(0, 160), longBio: profile.description || '', website: profile.website_url || '', email: profile.contact_email || '' };
-    const canSubmit = profile.status === 'draft' || profile.status === 'rejected';
-    mount(renderProfileEditor({
-      artist, profileId: profile.id, remote: true, status: statusLabels[profile.status] || profile.status,
-      switcher: el('p', { className: 'profile-kind-switch' }, [switchLink]),
-      onRemoteSave: (d) => apiRequest('/api/cuicoyan/me/profile', { method: 'PATCH', body: JSON.stringify({ profile_id: profile.id, display_name: d.name, description: d.longBio, website_url: d.website, contact_email: d.email }) }),
-      onSubmitReview: canSubmit ? async () => { try { await apiRequest('/api/cuicoyan/me/profile/submit', { method: 'POST', body: JSON.stringify({ profile_id: profile.id }) }); announce('Perfil enviado a revisión'); renderProfile(); } catch (error) { announce(messageFor(error?.kind || 'generic', error?.phase)); } } : null,
-      onLogout: async () => { await logout(); window.location.href = routes.home; },
-    }));
-  }).catch((error) => {
-    // Sin sesión o sin API: editores de demostración (artista / foro) de cualquier registro. ponytail: quitar al conectar la base de datos.
-    // Sin sesión (401) se ofrece iniciar sesión; los editores de demostración quedan solo como respaldo si la API no responde.
-    if (!TEST_EDIT_ACCESS || error?.kind === 'session') {
-      const panel = error?.kind ? authErrorPanel(error, renderProfile) : authErrorPanel({ kind: 'session' });
-      mount(el('main', { id: 'contenido', className: 'app-page' }, [el('div', { className: 'app-wrap' }, [el('h1', { text: 'Edición no disponible' }), panel, linkButton('Volver al inicio', routes.home)])]));
-      return;
-    }
-    const query = new URLSearchParams(window.location.search);
-    const kind = query.get('tipo') === 'foro' ? 'foro' : 'artista';
-    const list = kind === 'foro' ? venues : artists;
-    const record = list.find((item) => item.slug === query.get('id')) || list.find((item) => item.slug === (kind === 'foro' ? 'foro-alicia' : 'raices-del-viento')) || list[0];
-    const go = (type, id) => { window.location.href = `${routes.perfil}?tipo=${type}${id ? `&id=${encodeURIComponent(id)}` : ''}`; };
-    const picker = el('select', { id: 'pe-record', onchange: (event) => go(kind, event.target.value) }, list.map((item) => el('option', { value: item.slug, text: item.name })));
-    picker.value = record.slug;
-    const switcher = el('div', { className: 'pe-switch-row' }, [
-      el('nav', { className: 'pe-switch', attrs: { 'aria-label': 'Tipo de perfil de prueba' } }, [['artista', 'Artista'], ['foro', 'Foro cultural']].map(([value, label]) => el('a', { href: `${routes.perfil}?tipo=${value}`, text: label, attrs: value === kind ? { 'aria-current': 'page' } : {} }))),
-      el('div', { className: 'pe-field' }, [el('label', { htmlFor: 'pe-record', text: kind === 'foro' ? 'Foro a editar' : 'Artista a editar' }), picker]),
-    ]);
-    // El editor parte de los datos originales (`_base`), no de los ya editados.
-    const original = record._base || record;
-    mount(kind === 'foro' ? renderVenueEditor({ venue: original, switcher }) : renderProfileEditor({ artist: original, profileId: record.slug, remote: false, switcher }));
-  });
+  // Con sesión de Google, /perfil/ crea y edita el perfil en la base (components/profile-page.js).
+  renderProfilePage((main) => { ($('#contenido') || $('#app')).replaceWith(main); });
 }
 function renderCalls() { const calls = getCalls(); return pageFrame({ eyebrow: 'Oportunidades', title: 'Convocatorias culturales.', description: 'Una lista de ejemplo preparada para recibir información verificada.', children: [section('', [demoNotice(), el('div', { className: 'grid grid-3' }, calls.map((call) => el('article', { className: 'detail-panel' }, [el('span', { className: 'demo-label', text: 'Demostración' }), el('h3', { text: call.title }), el('p', { className: 'muted', text: call.description }), el('strong', { text: call.status }), el('button', { className: 'button secondary', type: 'button', disabled: true, text: 'Postulación próximamente' })])))]) ] }); }
 function renderInfo(kind) { const content = { sobre: ['Sobre Cuicoyan', 'Una plataforma cultural para descubrir, conectar y compartir la vida cultural de CDMX.', 'Cuicoyan reúne eventos, artistas, foros y territorio en una experiencia de exploración clara. Esta entrega es un staging estático: no representa una operación activa ni afirma alianzas, cifras o infraestructura.'], ayuda: ['Centro de ayuda', 'Respuestas breves para recorrer el prototipo.', ''], accesibilidad: ['Accesibilidad', 'El sitio está construido con la accesibilidad como criterio de diseño.', 'Trabajamos para ofrecer navegación por teclado, foco visible, contraste AA, alternativa textual del mapa y respeto a reduced motion. El canal para reportar barreras queda pendiente de configuración.'], privacidad: ['Aviso de privacidad', 'Documento de staging pendiente de validación legal.', 'Esta versión no crea cuentas ni incorpora analítica. Si llenas un formulario de registro, tus datos se envían por correo al equipo de Cuicoyan (mediante el servicio FormSubmit) solo para revisar tu solicitud; no se publican. Tema, intereses y favoritos se guardan localmente en tu navegador y puedes borrarlos desde onboarding. Antes de publicar se requiere responsable, versión y texto legal aprobado.'], terminos: ['Términos y convivencia', 'Texto de staging pendiente de aprobación.', 'El contenido demostrativo no constituye una cartelera, promesa de disponibilidad ni contrato de compra. No hay pagos, reservas, boletos, cuentas ni publicaciones remotas en esta entrega.'] }; const [title, desc, body] = content[kind]; const children = [section('', [kind === 'ayuda' ? el('div', { className: 'faq' }, getHelp().map((item) => el('details', {}, [el('summary', { text: item.question }), el('p', { text: item.answer })]))) : el('div', { className: 'prose' }, [demoNotice(), el('p', { text: body }), kind === 'privacidad' || kind === 'terminos' ? el('p', { className: 'muted', text: 'Versión de staging · sin publicación legal definitiva.' }) : null])])]; return pageFrame({ eyebrow: kind === 'sobre' ? 'El lugar del canto' : 'Información', title, description: desc, children }); }
@@ -611,7 +556,9 @@ function showLoginErrorNotice() {
 }
 
 // Al terminar la sincronización de favoritos con la cuenta, se repinta la ruta para que los corazones y /favoritos/ coincidan.
-window.addEventListener('cuicoyan:favorites-sync', () => renderCurrentRoute());
+// No repinta editores ni formularios abiertos: perdería lo escrito sin guardar.
+const canRepaint = () => !['perfil', 'cuenta', 'admin', 'invitacion'].includes(routeForPath()) && !document.querySelector('#contenido form, main form');
+window.addEventListener('cuicoyan:favorites-sync', () => { if (canRepaint()) renderCurrentRoute(); });
 
 let remoteCatalogReady = false;
 const remoteArtistsLoad = loadRemoteArtists().then((remoteArtists) => {
@@ -630,7 +577,10 @@ const remoteVenuesLoad = loadRemoteSpaces().then((remoteSpaces) => {
 });
 const remoteCatalog = Promise.all([remoteArtistsLoad, remoteVenuesLoad]).then(() => { remoteCatalogReady = true; });
 
+watchSessionFlag();
 renderCurrentRoute();
+// Los perfiles aprobados llegan después del primer pintado: vuelve a pintar solo las páginas públicas de lectura.
+void loadPublishedProfiles().then((loaded) => { if (loaded && getArtists().concat(getVenues()).some((item) => !item.isDemo) && canRepaint()) renderCurrentRoute(); });
 void loadRemoteEvents().then((remoteEvents) => {
   if (!remoteEvents) return;
   events = remoteEvents;
