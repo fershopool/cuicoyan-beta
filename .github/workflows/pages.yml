@@ -33,11 +33,17 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
+      - name: Test
+        working-directory: frontend
+        run: npm test && npm run check:content
       - name: Build
         working-directory: frontend
         env:
           VITE_BASE_URL: ${{ env.SITE_BASE }}
         run: npm run build
+      - name: Check links
+        working-directory: frontend
+        run: npm run check:links
       # prepare-dist.mjs escribe la salida en la raiz del repo (dist/), no en frontend/dist
       - name: Write runtime config
         env:

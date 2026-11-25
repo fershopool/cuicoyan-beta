@@ -188,3 +188,5 @@
   .pe-hours-times { grid-column: 1 / -1; }
   .pe-map { height: 260px; }
 }
+.pe-hero { position: relative; }
+.pe-hero > .favorite-button { position: absolute; z-index: 3; top: .8rem; right: .8rem; }

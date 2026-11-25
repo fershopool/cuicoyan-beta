@@ -208,13 +208,14 @@ export function renderArtistProfile(artist, { events }) {
   const quetzal = artist.slug === 'raices-del-viento';
   const art = quetzal ? el('img', { className: 'profile-quetzal', src: asset('quetzal'), alt: '', decoding: 'async' }) : el('span', { className: 'profile-portrait' }, [avatar(artist)]);
   const hero = custom ? profileHero(artist, custom).node : el('section', { className: 'profile-hero', dataset: { tone: artist.tone || 'pink' } }, [el('div', { className: 'profile-copy' }, [el('span', { className: 'eyebrow', text: 'Artes vivas · CDMX' }), el('h1', { text: artist.name }), el('p', { className: 'profile-tags' }, [artist.discipline, ' • ', artist.tagline]), el('p', { className: 'profile-short', text: artist.bio })]), art, favoriteButton('artist', artist.id, artist.name)]);
+  if (custom && !isDemo(artist)) hero.append(favoriteButton('artist', artist.id, artist.name));
   const bio = el('section', { className: 'profile-block' }, [sectionTitle('flower', 'Biografía'), el('p', { className: 'profile-bio', text: (custom?.longBio) || artist.longBio || artist.bio })]);
   const dates = el('section', { className: 'profile-block' }, [sectionTitle('calendar', 'Próximas fechas', seeAll(routes.eventos)), next.length ? el('div', { className: 'event-rows' }, next.map(eventRow)) : el('p', { className: 'muted', text: 'Aún no hay fechas confirmadas.' })]);
   wrap('profile-page', [backLink('Regresar', routes.artistas), hero, custom?.sections.bio === false ? null : bio, custom?.sections.dates === false ? null : dates, isDemo(artist) ? demoNote('Perfil demostrativo: no se muestran contacto, redes ni métricas hasta contar con autorización.') : null, editButton('artista', artist)]);
 }
 
 // Solo con sesión: CSS oculta [data-session-only] sin sesión (profiles-remote.service.js).
-const editButton = (kind, record) => el('a', { className: 'button secondary', href: `${routes.perfil}?tipo=${kind}&id=${record.slug}`, text: 'Editar perfil', attrs: { 'data-session-only': '' } });
+const editButton = (kind, record) => el('a', { className: 'button secondary', href: record.source === 'comunidad' ? `${routes.perfil}?tipo=${kind}` : `${routes.perfil}?tipo=${kind}&id=${record.slug}`, text: 'Editar perfil', attrs: { 'data-session-only': '' } });
 const extLink = (href, label) => el('a', { href, text: label, target: '_blank', rel: 'noopener noreferrer' });
 
 // Filas de «Información del lugar» a partir del borrador del foro.

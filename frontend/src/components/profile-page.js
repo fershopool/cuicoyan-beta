@@ -2,6 +2,7 @@
 import { el, announce } from '../utils/dom.js';
 import { routes } from '../config/routes.js';
 import { isConfigured, getSession, signInWithGoogle, signOut } from '../services/supabase.service.js';
+import { clearFavorites, endFavoritesSession } from '../services/favorites.service.js';
 import { listMine, createProfile, saveProfile, submitForReview, uploadImage, publicUrl } from '../services/profiles-remote.service.js';
 import { STATUS_LABELS, MAX_PER_KIND, canSubmit, canCreate, imageFileName } from '../services/profiles-logic.js';
 import { defaultDraft, normalizeDraft, getDraft } from '../services/profile-draft.service.js';
@@ -48,7 +49,8 @@ function signIn() {
 }
 
 function errorPage(message) {
-  return page([el('h1', { text: 'Mi perfil' }), el('p', { className: 'notice', text: message, attrs: { role: 'alert' } })]);
+  return page([el('h1', { text: 'Mi perfil' }), el('p', { className: 'notice', text: message, attrs: { role: 'alert' } }),
+    el('p', {}, [el('button', { className: 'button', type: 'button', text: 'Reintentar', onclick: () => window.location.reload() }), ' ', el('a', { className: 'button secondary', href: routes.cuenta, text: 'Ir a Mi cuenta' })])]);
 }
 
 // Lista de perfiles del tipo elegido y formulario para crear un borrador nuevo.
@@ -96,9 +98,8 @@ function listPage(kind, list, { missing, mount }) {
 function createMessage(error, kind) {
   if (error?.message === 'limite-alcanzado') return `Ya tienes ${MAX_PER_KIND} perfiles de ${KIND_LABEL[kind]}. Es el máximo por tipo.`;
   if (error?.message === 'sin-sesion') return 'Tu sesión venció. Inicia sesión de nuevo.';
-  // Detalle técnico visible mientras la beta se prueba: sin él no se puede saber por qué falla la base.
-  const detail = [error?.code, error?.message].filter(Boolean).join(' · ').slice(0, 160);
-  return `No pudimos crear el perfil. Inténtalo de nuevo.${detail ? ` (${detail})` : ''}`;
+  console.error('crear perfil', error);
+  return 'No pudimos crear el perfil. Inténtalo de nuevo.';
 }
 
 // Editor del perfil elegido. `saved` = lo que está en la base; `working` = respaldo local no enviado.
@@ -117,13 +118,30 @@ async function editorPage(kind, profile, mount) {
     try {
       const coverPath = await imagePath(kind, id, 'cover', draft.cover.image, profile.coverPath);
       const avatarPath = await imagePath(kind, id, 'avatar', draft.avatar.image, profile.avatarPath);
+      // La galería (foros) se sube al bucket y en `data` queda su URL: en base64 no cabe en la columna.
+      for (const [i, src] of (draft.gallery || []).entries()) {
+        if (src.startsWith('data:')) draft.gallery[i] = await publicUrl(await imagePath(kind, id, `gallery-${i}`, src));
+      }
       const data = { ...draft, cover: { ...draft.cover, image: '' }, avatar: { ...draft.avatar, image: '' } };
       await saveProfile(kind, id, { name: draft.name, data, avatar_path: avatarPath, cover_path: coverPath });
+      // La imagen ya subida queda como URL: el siguiente guardado no la vuelve a subir.
+      if (avatarPath) draft.avatar.image = await publicUrl(avatarPath);
+      if (coverPath) draft.cover.image = await publicUrl(coverPath);
+      Object.assign(profile, { name: draft.name, avatarPath, coverPath });
+      // Editar un perfil publicado lo regresa a revisión: repintar el estado.
+      if (profile.status === 'published') setTimeout(() => renderProfilePage(mount), 0);
     } catch (failure) {
+      if (profile.status === 'pending') throw new Error('Tu perfil está en revisión y no admite cambios por ahora.');
       throw new Error(saveMessage(failure));
     }
   };
   const submit = async () => {
+    if (document.querySelector('.pe-status.dirty')) {
+      const warning = document.querySelector('.profile-status');
+      warning?.querySelector('.form-error')?.remove();
+      warning?.append(el('p', { className: 'form-error', text: 'Tienes cambios sin guardar. Pulsa «Guardar cambios» antes de enviar.', attrs: { role: 'alert' } }));
+      return;
+    }
     try { await submitForReview(kind, id); announce('Perfil enviado a revisión'); }
     catch { announce('No pudimos enviar tu perfil. Inténtalo de nuevo.'); return; }
     renderProfilePage(mount);
@@ -132,7 +150,7 @@ async function editorPage(kind, profile, mount) {
   const switcher = el('p', { className: 'profile-kind-switch' }, [el('a', { href: routes.perfil, text: 'Cambiar tipo de perfil' })]);
   const args = { saved, working, note, switcher, onRemoteSave: save };
   if (kind === 'foro') return renderVenueEditor({ venue: record, ...args });
-  const onLogout = async () => { await signOut(); window.location.href = routes.home; };
+  const onLogout = async () => { await signOut(); endFavoritesSession(); clearFavorites(); window.location.href = routes.home; };
   return renderProfileEditor({ artist: record, profileId: id, onLogout, ...args });
 }
 
@@ -164,7 +182,7 @@ function saveMessage(failure) {
 function statusBanner(profile, hasWorking, onSubmit) {
   const children = [el('p', {}, [el('strong', { text: `Estado: ${STATUS_LABELS[profile.status] || profile.status}` })])];
   if (profile.status === 'rejected' && profile.reviewNote) children.push(el('p', { text: `Motivo de la revisión: ${profile.reviewNote}` }));
-  if (profile.status === 'pending') children.push(el('p', { className: 'muted', text: 'Tu perfil está en revisión antes de publicarse.' }));
+  if (profile.status === 'pending') children.push(el('p', { className: 'muted', text: 'Tu perfil está en revisión antes de publicarse. Hasta que se apruebe o rechace no se pueden guardar cambios (salvo administradoras).' }));
   if (profile.status === 'published') children.push(el('p', { className: 'muted', text: 'Si editas un perfil publicado, vuelve a revisión.' }));
   if (hasWorking) children.push(el('p', { className: 'muted', text: 'Tienes cambios que no llegaron a la base. Se guardaron en este navegador; guarda de nuevo para enviarlos.' }));
   if (canSubmit(profile.status)) children.push(el('button', { className: 'button secondary', type: 'button', text: 'Enviar a revisión', onclick: onSubmit }));

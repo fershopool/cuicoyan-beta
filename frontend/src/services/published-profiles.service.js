@@ -3,7 +3,7 @@
 import { getClient } from './supabase.service.js';
 import { artistFromRow, venueFromRow } from './published-logic.js';
 
-const COLUMNS = 'id,slug,name,data,avatar_path,cover_path,published_at';
+const COLUMNS = 'id,slug,name,status,data,avatar_path,cover_path,published_at';
 const LIMIT = 200;
 const BUCKET = 'profile-media';
 

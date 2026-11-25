@@ -2,6 +2,7 @@
 // Todo texto y URL viene de usuarios: se recorta, se limpia de controles y de < >, y solo se aceptan http/https.
 // Probada en tests/published-logic.test.mjs.
 import categories from '../data/categories.json' with { type: 'json' };
+import { defaultDraft, COVER_TONES } from './profile-draft.service.js';
 
 const CONTROL_CHARS = /[\u0000-\u0009\u000b-\u001f\u007f-\u009f]/g;
 const SLUG = /^[a-z0-9][a-z0-9-]{0,79}$/;
@@ -56,6 +57,29 @@ function validRow(row) {
     && typeof row.slug === 'string' && SLUG.test(row.slug) && cleanText(row.name, 120) !== '';
 }
 
+const HEX = /^#[0-9a-f]{6}$/i;
+// Copia de `raw` solo lo que tenga el mismo tipo que el valor por defecto (el jsonb lo escribe el usuario).
+function sameShape(base, raw) {
+  if (Array.isArray(base)) return Array.isArray(raw) ? raw.filter((v) => typeof v === 'string') : base;
+  if (base && typeof base === 'object') return Object.fromEntries(Object.entries(base).map(([k, v]) => [k, sameShape(v, asObject(raw)[k])]));
+  if (typeof base === 'string' && HEX.test(base)) return HEX.test(raw) ? raw : base; // colores: acaban en CSS
+  if (base === '' && typeof raw === 'number') return raw; // lat/lng
+  return typeof raw === typeof base ? raw : base;
+}
+
+// Diseño y datos que eligió la persona, para pintar su ficha pública. Las imágenes solo salen del bucket.
+function publicDraft(kind, row, mediaUrl) {
+  const draft = sameShape(defaultDraft(kind, { name: cleanText(row.name, 120) }), row.data);
+  if (!Object.hasOwn(COVER_TONES, draft.cover.tone)) draft.cover.tone = 'aurora';
+  draft.cover.image = mediaUrlFrom(row.cover_path, mediaUrl);
+  draft.avatar.image = mediaUrlFrom(row.avatar_path, mediaUrl);
+  if (draft.gallery) {
+    const bucket = typeof mediaUrl === 'function' ? mediaUrl('x').slice(0, -1) : '';
+    draft.gallery = draft.gallery.filter((url) => bucket.startsWith('https://') && url.startsWith(bucket));
+  }
+  return draft;
+}
+
 // Fila de public.artist_profiles -> item de artista. Devuelve null si la fila no es válida.
 export function artistFromRow(row, mediaUrl) {
   if (!validRow(row)) return null;
@@ -76,6 +100,7 @@ export function artistFromRow(row, mediaUrl) {
     contentStatus: 'published',
     isDemo: false,
     source: 'comunidad',
+    draft: publicDraft('artista', row, mediaUrl),
     avatarUrl: mediaUrlFrom(row.avatar_path, mediaUrl),
     coverUrl: mediaUrlFrom(row.cover_path, mediaUrl),
     photo: mediaUrlFrom(row.avatar_path, mediaUrl) || undefined, // lo lee cards.js avatar()
@@ -111,6 +136,9 @@ export function venueFromRow(row, mediaUrl) {
     categories: slugs.map(labelOf),
     categorySlugs: slugs,
     coordinates,
+    mapVisible: map.visible !== false,
+    mapIcon: cleanText(map.icon, 40) || 'flower',
+    mapColor: /^#[0-9a-f]{6}$/i.test(map.color) ? map.color : undefined,
     // Sin coordenadas el punto es conceptual (centro del mapa) hasta verificar la ubicación.
     mapPoint: { x: 50, y: 50, isConceptual: !coordinates },
     website: safeHttpUrl(data.website),
@@ -118,6 +146,7 @@ export function venueFromRow(row, mediaUrl) {
     contentStatus: 'published',
     isDemo: false,
     source: 'comunidad',
+    draft: publicDraft('foro', row, mediaUrl),
     avatarUrl: mediaUrlFrom(row.avatar_path, mediaUrl),
     coverUrl: mediaUrlFrom(row.cover_path, mediaUrl),
     photo: mediaUrlFrom(row.cover_path, mediaUrl) || mediaUrlFrom(row.avatar_path, mediaUrl) || undefined, // lo lee venueImageUrl()

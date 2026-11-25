@@ -3,6 +3,10 @@ import { isConfigured, fetchFavorites, upsertFavorite, deleteFavorite } from './
 
 // Sin sesión: favoritos en localStorage, como antes. Con sesión: además se espejan en public.favorites.
 const KEY = 'cuicoyan:v1:favorites';
+const REMOVED = 'cuicoyan:v1:favorites-removed'; // borrados que no llegaron al servidor
+const idOf = (item) => `${item.type}:${item.id}`;
+function removed() { try { const value = JSON.parse(localStorage.getItem(REMOVED) || '[]'); return Array.isArray(value) ? value : []; } catch { return []; } }
+function setRemoved(value) { try { localStorage.setItem(REMOVED, JSON.stringify(value.slice(-500))); } catch { /* sin almacenamiento */ } }
 let memory = [];
 let remoteUserId = null; // solo en memoria
 
@@ -17,16 +21,21 @@ export function toggleFavorite(type, id) {
   const next = exists ? current.filter((item) => !(item.type === type && item.id === id)) : [...current, { type, id }];
   write(next);
   const row = remoteUserId ? toRemoteFavorite(remoteUserId, { type, id }) : null;
-  if (row) (exists ? deleteFavorite(row) : upsertFavorite(row)).catch(() => { /* sin red: queda en local hasta la siguiente sincronización */ });
+  setRemoved(removed().filter((key) => key !== idOf({ type, id })));
+  // Sin red: el alta se sube en la siguiente sincronización; la baja se anota para repetirla.
+  if (row) (exists ? deleteFavorite(row) : upsertFavorite(row)).catch(() => { if (exists) setRemoved([...removed(), idOf({ type, id })]); });
   return !exists;
 }
 
-export const clearFavorites = () => write([]);
+export const clearFavorites = () => { write([]); setRemoved([]); };
 
 // Con sesión: une lo local con lo remoto y sube lo que falte. Devuelve true si cambió la lista local.
 export async function syncFavorites(userId) {
   if (!userId || !isConfigured()) return false;
-  const remote = fromRemoteRows(await fetchFavorites(userId));
+  const all = fromRemoteRows(await fetchFavorites(userId));
+  const gone = new Set(removed());
+  const remote = all.filter((item) => !gone.has(idOf(item)));
+  await Promise.all(all.filter((item) => gone.has(idOf(item))).map((item) => deleteFavorite(toRemoteFavorite(userId, item)).then(() => setRemoved(removed().filter((key) => key !== idOf(item)))).catch(() => {})));
   remoteUserId = userId;
   const before = JSON.stringify(read());
   const { merged, toUpload } = mergeFavorites(read(), remote);

@@ -19,7 +19,8 @@ async function ownerId(sb) {
 export async function listMine(kind) {
   const { table } = kindConfig(kind);
   const sb = await client();
-  const { data, error } = await sb.from(table).select('*').order('created_at', { ascending: true });
+  // La RLS también deja leer los publicados ajenos: aquí solo los propios.
+  const { data, error } = await sb.from(table).select('*').eq('owner_id', await ownerId(sb)).order('created_at', { ascending: true });
   if (error) throw error;
   return (data || []).map(fromRow);
 }

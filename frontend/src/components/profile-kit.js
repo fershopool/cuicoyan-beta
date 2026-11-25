@@ -199,9 +199,9 @@ export function createEditor({ kind, slug, record, base, saved: stored, working,
     el('div', { className: 'pe-account wide' }, [
       button('Exportar borrador (JSON)', () => { const link = el('a', { href: URL.createObjectURL(new Blob([JSON.stringify(draft, null, 2)], { type: 'application/json' })), download: `cuicoyan-${kind}-${slug}.json` }); document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 1000); }),
       el('label', { className: 'button secondary' }, ['Importar borrador', importInput]),
-      button('Restablecer a los datos originales', () => { if (!window.confirm('Se borrarán los cambios guardados de este registro y volverá a sus datos originales. ¿Continuar?')) return; removeDraft(kind, slug); saved = base; replace(base); kit.changed(); errorBox.textContent = ''; savebarStatus.textContent = 'Datos originales restablecidos'; announce('Datos originales restablecidos'); }, 'button ghost'),
+      remote ? null : button('Restablecer a los datos originales', () => { if (!window.confirm('Se borrarán los cambios guardados de este registro y volverá a sus datos originales. ¿Continuar?')) return; removeDraft(kind, slug); saved = base; replace(base); kit.changed(); errorBox.textContent = ''; savebarStatus.textContent = 'Datos originales restablecidos'; announce('Datos originales restablecidos'); }, 'button ghost'),
     ]),
-  ], 'Útil para pasar los cambios al backend más adelante.');
+  ], 'Guarda una copia de tu perfil en un archivo o recupérala.');
 
   const form = el('form', { className: 'pe-form', attrs: { novalidate: '' } }, [...build(kit, draft), ...(extraCards || []), dataCard, errorBox, el('div', { className: 'pe-savebar' }, [savebarStatus, discardButton, saveButton])]);
   discardButton.addEventListener('click', () => { replace(saved); kit.changed(); errorBox.textContent = ''; announce('Cambios descartados'); });

@@ -129,12 +129,12 @@ export function renderFooter() {
   document.body.append(el('footer', { className: 'site-footer' }, [
     el('div', { className: 'container' }, [
       el('div', { className: 'footer-grid' }, [
-        el('div', { className: 'prose' }, [el('a', { className: 'brand', href: routes.home }, [el('img', { src: relativeAsset('public/cuicoyan-logo.png'), alt: '' }), el('span', { className: 'brand-copy' }, [el('strong', { className: 'brand-name', text: 'Cuicoyan' }), el('small', { className: 'brand-tagline', text: 'Donde la ciudad encuentra su escenario.' })])]), el('p', { className: 'muted', text: 'Una guía para encontrar cultura viva cerca de ti.' }), el('p', { className: 'demo-label', text: 'Staging estático' })]),
+        el('div', { className: 'prose' }, [el('a', { className: 'brand', href: routes.home }, [el('img', { src: relativeAsset('public/cuicoyan-logo.png'), alt: '' }), el('span', { className: 'brand-copy' }, [el('strong', { className: 'brand-name', text: 'Cuicoyan' }), el('small', { className: 'brand-tagline', text: 'Donde la ciudad encuentra su escenario.' })])]), el('p', { className: 'muted', text: 'Una guía para encontrar cultura viva cerca de ti.' }), el('p', { className: 'demo-label', text: 'Versión beta' })]),
         el('nav', { attrs: { 'aria-label': 'Descubrimiento' } }, [el('strong', { text: 'Descubre' }), el('a', { href: routes.explorar, text: 'Explorar' }), el('a', { href: routes.eventos, text: 'Eventos' }), el('a', { href: routes.artistas, text: 'Artistas' }), el('a', { href: routes.foros, text: 'Foros' }), el('a', { href: routes.mapa, text: 'Mapa cultural' })]),
         el('nav', { attrs: { 'aria-label': 'Participación' } }, [el('strong', { text: 'Participa' }), el('a', { href: routes.creadores, text: 'Para creadores' }), el('a', { href: routes.unete, text: 'Únete' }), el('a', { href: routes.convocatorias, text: 'Convocatorias' }), el('a', { href: routes.favoritos, text: 'Favoritos' })]),
         el('nav', { attrs: { 'aria-label': 'Información' } }, [el('strong', { text: 'Cuicoyan' }), el('a', { href: routes.sobre, text: 'Sobre Cuicoyan' }), el('a', { href: routes.ayuda, text: 'Ayuda' }), el('a', { href: routes.accesibilidad, text: 'Accesibilidad' }), el('a', { href: routes.privacidad, text: 'Privacidad' }), el('a', { href: routes.terminos, text: 'Términos' })]),
       ]),
-      el('div', { className: 'footer-bottom' }, [el('span', { text: 'Contenido demostrativo: verifica datos, derechos y canales antes de publicar.' }), ollin ? el('a', { href: ollin, text: 'Conoce a Ollin', attrs: { target: '_blank', rel: 'noopener noreferrer' } }) : el('span', { text: 'Arquitectura por Ollin · enlace pendiente' })]),
+      el('div', { className: 'footer-bottom' }, [el('span', { text: 'Contenido demostrativo: verifica datos, derechos y canales antes de publicar.' }), ollin ? el('a', { href: ollin, text: 'Conoce a Ollin', attrs: { target: '_blank', rel: 'noopener noreferrer' } }) : null]),
     ]),
   ]));
 }

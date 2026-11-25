@@ -117,3 +117,13 @@ test('fila de foro: categorías, punto conceptual sin coordenadas y textos recor
   assert.equal(con.zone, 'CDMX');
   assert.equal(con.avatarUrl, '');
 });
+
+test('la ficha publicada conserva el diseño y descarta lo peligroso', () => {
+  const row = { id: 'a1', slug: 'ana', name: 'Ana', status: 'published', cover_path: 'u/artist/a1/c.jpg', data: { cover: { tone: 'custom', c1: 'red),url(https://x', c2: '#112233', image: 'https://evil/x' }, avatar: { full: true }, categories: 'no' } };
+  const { draft } = artistFromRow(row, (p) => `https://sb/${p}`);
+  assert.equal(draft.cover.c2, '#112233');
+  assert.equal(draft.cover.c1, '#00C7D4');
+  assert.equal(draft.cover.image, 'https://sb/u/artist/a1/c.jpg');
+  assert.equal(draft.avatar.full, true);
+  assert.deepEqual(draft.categories, []);
+});
